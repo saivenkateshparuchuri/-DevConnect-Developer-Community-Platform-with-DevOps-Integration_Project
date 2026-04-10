@@ -26,11 +26,11 @@
    - **Plan**: Free (select Free tier)
 
 ### 3️⃣ Add Environment Variables
-In the Render dashboard, add these variables:
+In the Render dashboard, add these variables using your Atlas connection details:
 ```
 PORT=5000
-MONGO_URI=mongodb+srv://saivenkateshparuchuri2004_db_user:Sai%402004@devconnect.lio1vqz.mongodb.net/?appName=DevConnect
-JWT_SECRET=DevConnect_JWT_Secret_2024_SecureKey_Change_In_Production
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/<database-name>?retryWrites=true&w=majority
+JWT_SECRET=your_secure_jwt_secret_here
 ```
 
 ### 4️⃣ Deploy

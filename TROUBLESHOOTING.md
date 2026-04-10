@@ -21,11 +21,11 @@ In Render dashboard:
 2. Click **Manual Deploy** → **Clear build cache and deploy**
 
 ### 3. Check Environment Variables
-Make sure these are set in Render:
+Make sure these are set in Render using your own Atlas connection details:
 ```
 PORT=5000
-MONGO_URI=mongodb+srv://saivenkateshparuchuri2004_db_user:Sai%402004@devconnect.lio1vqz.mongodb.net/?appName=DevConnect
-JWT_SECRET=DevConnect_JWT_Secret_2024_SecureKey_Change_In_Production
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/<database-name>?retryWrites=true&w=majority
+JWT_SECRET=your_secure_jwt_secret_here
 ```
 
 ### 4. Test Backend Directly
