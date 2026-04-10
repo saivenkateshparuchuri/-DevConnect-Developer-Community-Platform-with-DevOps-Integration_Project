@@ -13,8 +13,11 @@ const app = express();
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5000',
-  'https://developer-community-project-2-la7x.vercel.app'
-];
+  'https://devconnect-backend-unvl.onrender.com',
+  'https://developer-community-project-2-la7x.vercel.app',
+  // Add your Vercel frontend URL here after deployment
+  process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null
+].filter(Boolean);
 
 app.use(cors({
   origin: function(origin, callback) {
