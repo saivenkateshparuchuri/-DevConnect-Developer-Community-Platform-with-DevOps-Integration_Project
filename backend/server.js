@@ -84,6 +84,12 @@ app.get('/api/protected', authMiddleware, async (req, res) => {
   }
 });
 
+// global error handler for uncaught middleware errors
+app.use((err, req, res, next) => {
+  console.error('Unhandled server error:', err);
+  res.status(500).json({ error: 'Server error' });
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
