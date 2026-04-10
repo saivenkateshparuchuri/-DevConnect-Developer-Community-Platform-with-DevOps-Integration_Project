@@ -1,8 +1,8 @@
-# 🚀 DevConnect – Developer Community Platform
+# 🚀 DevConnect: Developer Community Platform with DevOps Integration
 
 A full-stack **MERN** application that enables developers to collaborate, share knowledge, and engage in discussions through posts and comments.
 
-This repository has been reset and configured as a personal project for customization and ownership.
+This repository has been reset and configured as a personal project by Paruchuri Sai Venkatesh.
 
 ---
 
@@ -89,7 +89,7 @@ frontend/
 ### 1️⃣ Clone the repository
 
 ```
-git clone https://github.com/<your-username>/<your-repo>.git
+git clone https://github.com/saivenkateshparuchuri/-DevConnect-Developer-Community-Platform-with-DevOps-Integration_Project.git
 cd Developer_community_project_2-main
 ```
 
@@ -176,7 +176,7 @@ Feel free to fork this repo and submit a pull request.
 ## 📧 Contact
 
 For collaboration or queries:
-📩 [your-email@example.com](mailto:your-email@example.com)
+📩 [saivenkateshparuchuri2004@gmail.com](mailto:saivenkateshparuchuri2004@gmail.com)
 
 ---
 
