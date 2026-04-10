@@ -8,26 +8,25 @@ const seedAdmin = async () => {
   try {
     await connectDB();
 
-    const existingAdmin = await Admin.findOne({ email: 'admin@example.com' });
-    if (existingAdmin) {
-      console.log('Admin already exists.');
-      process.exit();
-    }
+    const hashedPassword = await bcrypt.hash('Sai@2004', 10);
 
-    const hashedPassword = await bcrypt.hash('admin123', 10);
-
-    const admin = new Admin({
-      name: 'Super Admin',
-      email: 'admin@example.com',
+    const adminData = {
+      name: 'Sai Venkatesh Paruchuri',
+      email: 'saivenkateshparuchuri2004@gmail.com',
       password: hashedPassword,
-      role: 'Super Admin'
-    });
+      role: 'Admin'
+    };
 
-    await admin.save();
-    console.log('Super Admin created successfully (admin@example.com / admin123)');
+    const existingAdmin = await Admin.findOneAndUpdate(
+      { email: 'saivenkateshparuchuri2004@gmail.com' },
+      adminData,
+      { upsert: true, new: true }
+    );
+
+    console.log('Admin created/updated successfully (saivenkateshparuchuri2004@gmail.com / Sai@2004)');
     process.exit();
   } catch (error) {
-    console.error('Error creating admin:', error);
+    console.error('Error creating/updating admin:', error);
     process.exit(1);
   }
 };

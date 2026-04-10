@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 const userRoutes = require("./routes/userRoutes");
 
@@ -28,6 +29,9 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static files from the React app build directory
+app.use(express.static(path.join(__dirname, './public')));
 
 // ✅ THEN routes
 const postRoutes = require('./routes/postRoutes');
@@ -77,6 +81,11 @@ app.get('/api/protected', authMiddleware, async (req, res) => {
     console.error("Protected route error:", err);
     res.status(500).json({ error: err.message });
   }
+});
+
+// Catch all handler: send back React's index.html file for client-side routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/index.html'));
 });
 
 // global error handler for uncaught middleware errors
