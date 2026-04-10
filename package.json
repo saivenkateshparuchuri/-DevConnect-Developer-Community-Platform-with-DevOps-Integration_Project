@@ -1,0 +1,11 @@
+{
+  "name": "devconnect-root",
+  "version": "1.0.0",
+  "description": "Root package for DevConnect deployment",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build && cp -r build/* ../backend/public/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
