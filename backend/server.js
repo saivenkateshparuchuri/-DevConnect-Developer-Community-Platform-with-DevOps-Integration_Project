@@ -15,7 +15,8 @@ const allowedOrigins = [
   'http://localhost:5000',
   'https://devconnect-backend-unvl.onrender.com',
   'https://developer-community-project-2-la7x.vercel.app',
-  // Add your Vercel frontend URL here after deployment
+  'https://dev-connect-developer-community-pla.vercel.app',
+  // Add additional Vercel frontend URLs here after deployment
   process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null
 ].filter(Boolean);
 

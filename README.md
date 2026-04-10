@@ -8,8 +8,8 @@ This repository has been reset and configured as a personal project by Paruchuri
 
 ## 🌐 Live Demo
 
-* 🔗 Frontend: Not deployed yet
-* ⚙️ Backend API: Not deployed yet
+* 🔗 Frontend: https://dev-connect-developer-community-pla.vercel.app
+* ⚙️ Backend API: https://devconnect-backend-unvl.onrender.com
 
 ---
 
