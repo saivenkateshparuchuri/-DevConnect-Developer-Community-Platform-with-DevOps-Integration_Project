@@ -10,15 +10,10 @@ const connectDB = require('./config/db');
 const app = express();
 
 // ✅ middleware FIRST
-const allowedOrigins = [
+const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim()) : [
   'http://localhost:3000',
-  'http://localhost:5000',
-  'https://devconnect-backend-unvl.onrender.com',
-  'https://developer-community-project-2-la7x.vercel.app',
-  'https://dev-connect-developer-community-pla.vercel.app',
-  // Add additional Vercel frontend URLs here after deployment
-  process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null
-].filter(Boolean);
+  'http://localhost:5000'
+];
 
 app.use(cors({
   origin: function(origin, callback) {
