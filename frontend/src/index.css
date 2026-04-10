@@ -1,0 +1,204 @@
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Base Premium Utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+.gradient-bg {
+  background: linear-gradient(135deg, #f5f3ff, #ede9fe, #ddd6fe, #c4b5fd);
+  background-size: 200% 200%;
+  animation: gradientFlow 10s ease infinite;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes textGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animated-text {
+  background: linear-gradient(270deg, #6366f1, #8b5cf6, #a855f7, #6366f1);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  animation: textGradient 6s ease infinite;
+  display: inline-block;
+}
+
+.hover-move {
+  transition: transform 0.3s ease;
+  cursor: default;
+}
+
+.hover-move:hover {
+  transform: translateY(-5px) scale(1.02);
+}
+
+.auth-card {
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auth-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.3);
+}
+
+.auth-input {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(14, 165, 233, 0.2);
+  color: #0f172a;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  transition: all 0.2s ease;
+}
+
+.auth-input::placeholder {
+  color: #94a3b8;
+}
+
+.auth-input:focus {
+  background: #ffffff;
+  border-color: #38bdf8;
+  color: #0f172a;
+  box-shadow: 0 0 0 0.25rem rgba(56, 189, 248, 0.25);
+  outline: none;
+}
+
+.btn-glass {
+  background: #6366f1;
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);
+}
+
+.btn-glass:hover {
+  background: #4f46e5;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+}
+
+.btn-outline-glass {
+  background: transparent;
+  color: #6366f1;
+  border: 1.5px solid #6366f1;
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-glass:hover {
+  background: rgba(99, 102, 241, 0.1);
+  color: #4f46e5;
+}
+
+/* Minor UI tweaks for existing components */
+.hover-card:hover {
+  box-shadow: 0 10px 20px -10px rgba(0,0,0,0.1) !important;
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+/* Custom Premium Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Search Bar Refinements */
+.search-bar .input-group-text {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.search-bar .form-control {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  transition: box-shadow 0.2s ease;
+}
+
+.search-bar .form-control:focus {
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  background-color: #fff !important;
+}
+
+/* Admin Dashboard Table Enhancements */
+.table-dark {
+  background-color: #000 !important;
+}
+
+.table-dark thead th {
+  background-color: #111 !important;
+  border-color: #222 !important;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+}
+
+.table-dark td {
+  border-color: #111 !important;
+  vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #111 !important;
+}
+
+/* Page Transitions */
+.fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
