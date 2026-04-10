@@ -2,12 +2,14 @@
 
 A full-stack **MERN** application that enables developers to collaborate, share knowledge, and engage in discussions through posts and comments.
 
+This repository has been reset and configured as a personal project for customization and ownership.
+
 ---
 
 ## 🌐 Live Demo
 
-* 🔗 Frontend: https://developer-community-project-2-la7x.vercel.app
-* ⚙️ Backend API: https://developer-community-project-2.onrender.com
+* 🔗 Frontend: Not deployed yet
+* ⚙️ Backend API: Not deployed yet
 
 ---
 
@@ -87,8 +89,8 @@ frontend/
 ### 1️⃣ Clone the repository
 
 ```
-git clone https://github.com/varun6579/Developer_community_project_2.git
-cd Developer_community_project_2
+git clone https://github.com/<your-username>/<your-repo>.git
+cd Developer_community_project_2-main
 ```
 
 ---
@@ -174,7 +176,7 @@ Feel free to fork this repo and submit a pull request.
 ## 📧 Contact
 
 For collaboration or queries:
-📩 [varuntejbommeraboina@gmail.com](mailto:varuntejbommeraboina@gmail.com)
+📩 [your-email@example.com](mailto:your-email@example.com)
 
 ---
 

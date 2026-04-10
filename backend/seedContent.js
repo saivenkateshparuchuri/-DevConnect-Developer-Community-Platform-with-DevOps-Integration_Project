@@ -24,7 +24,7 @@ const articles = [
   },
   {
     title: "Implementing GraphQL Subscriptions",
-    author: "Varun R.",
+    author: "Community Team",
     readTime: "15 min read",
     category: "Backend",
     description: "Step-by-step guide to building real-time event-driven APIs using Apollo Server and GraphQL subscriptions.",
