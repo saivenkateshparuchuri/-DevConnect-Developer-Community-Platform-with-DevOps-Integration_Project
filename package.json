@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Root package for DevConnect deployment",
   "scripts": {
-    "install": "npm install --prefix backend && npm install --prefix frontend",
-    "postinstall": "npm install --prefix backend && npm install --prefix frontend",
+    "install": "cd backend && npm install && cd ../frontend && npm install",
+    "postinstall": "cd backend && npm install && cd ../frontend && npm install",
     "build": "cd frontend && npm run build && cp -r build/* ../backend/public/",
     "start": "cd backend && npm start"
   },
