@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { io } from "socket.io-client";
 import Layout from "../components/Layout";
 import { getAllUsers, getCurrentUser, getMessages, sendMessage, getConversations } from "../services/api";
 
@@ -10,6 +11,21 @@ function Chat() {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
+  const socketRef = useRef(null);
+  const peerRef = useRef(null);
+  const localStreamRef = useRef(null);
+  const remoteStreamRef = useRef(null);
+  const localVideoRef = useRef(null);
+  const remoteVideoRef = useRef(null);
+  const callModeRef = useRef(null);
+  const callPartnerRef = useRef(null);
+
+  const [callMode, setCallMode] = useState(null);
+  const [incomingCall, setIncomingCall] = useState(null);
+  const [callPartner, setCallPartner] = useState(null);
+  const [callStatus, setCallStatus] = useState("");
+  const [callError, setCallError] = useState(null);
+
   const chatEndRef = useRef(null);
   const pollRef = useRef(null);
   const prevMsgCount = useRef(0);
@@ -156,6 +172,221 @@ function Chat() {
     }
   };
 
+  const SIGNALING_SERVER_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+
+  const cleanupCall = () => {
+    if (peerRef.current) {
+      peerRef.current.close();
+      peerRef.current = null;
+    }
+    if (localStreamRef.current) {
+      localStreamRef.current.getTracks().forEach((track) => track.stop());
+      localStreamRef.current = null;
+    }
+    if (remoteStreamRef.current) {
+      remoteStreamRef.current.getTracks().forEach((track) => track.stop());
+      remoteStreamRef.current = null;
+    }
+    if (localVideoRef.current) localVideoRef.current.srcObject = null;
+    if (remoteVideoRef.current) remoteVideoRef.current.srcObject = null;
+    setCallMode(null);
+    setIncomingCall(null);
+    setCallPartner(null);
+    setCallStatus("");
+    setCallError(null);
+  };
+
+  const startLocalStream = async () => {
+    if (localStreamRef.current) return localStreamRef.current;
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+    localStreamRef.current = stream;
+    if (localVideoRef.current) localVideoRef.current.srcObject = stream;
+    return stream;
+  };
+
+  const createPeerConnection = (targetUserId) => {
+    const pc = new RTCPeerConnection({
+      iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+    });
+
+    pc.onicecandidate = (event) => {
+      if (event.candidate && socketRef.current) {
+        socketRef.current.emit("ice_candidate", {
+          targetUserId,
+          candidate: event.candidate,
+        });
+      }
+    };
+
+    pc.ontrack = (event) => {
+      if (!remoteStreamRef.current) {
+        remoteStreamRef.current = new MediaStream();
+      }
+      if (event.streams && event.streams[0]) {
+        remoteStreamRef.current = event.streams[0];
+      } else {
+        remoteStreamRef.current.addTrack(event.track);
+      }
+      if (remoteVideoRef.current) {
+        remoteVideoRef.current.srcObject = remoteStreamRef.current;
+      }
+    };
+
+    if (localStreamRef.current) {
+      localStreamRef.current.getTracks().forEach((track) => {
+        pc.addTrack(track, localStreamRef.current);
+      });
+    }
+
+    peerRef.current = pc;
+    return pc;
+  };
+
+  const startCall = async () => {
+    if (!activeContact || !currentUser || !socketRef.current) return;
+    setCallError(null);
+    setCallStatus(`Calling ${activeContact.name}...`);
+    setCallPartner(activeContact);
+    setCallMode("calling");
+
+    try {
+      await startLocalStream();
+      const pc = createPeerConnection(activeContact.id);
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+      socketRef.current.emit("call_user", {
+        targetUserId: activeContact.id,
+        callerId: currentUser._id,
+        callerName: currentUser.name,
+        offer,
+      });
+    } catch (err) {
+      console.error("Unable to start call:", err);
+      setCallError("Unable to start call. Please allow camera and microphone access.");
+      cleanupCall();
+    }
+  };
+
+  const acceptCall = async () => {
+    if (!incomingCall || !socketRef.current) return;
+    setCallError(null);
+    setCallStatus(`Connecting with ${incomingCall.callerName}...`);
+
+    try {
+      await startLocalStream();
+      const pc = createPeerConnection(incomingCall.from);
+      await pc.setRemoteDescription(new RTCSessionDescription(incomingCall.offer));
+      const answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+
+      socketRef.current.emit("answer_call", {
+        targetUserId: incomingCall.from,
+        answer,
+      });
+      setCallMode("in-call");
+      setIncomingCall(null);
+    } catch (err) {
+      console.error("Failed to accept call:", err);
+      setCallError("Could not accept call. Please try again.");
+      cleanupCall();
+    }
+  };
+
+  const rejectCall = () => {
+    if (incomingCall && socketRef.current) {
+      socketRef.current.emit("end_call", { targetUserId: incomingCall.from });
+    }
+    cleanupCall();
+  };
+
+  const handleCallAnswered = useCallback(async ({ answer }) => {
+    try {
+      await peerRef.current?.setRemoteDescription(new RTCSessionDescription(answer));
+      setCallMode("in-call");
+      setCallStatus(`In call with ${callPartnerRef.current?.name || "user"}`);
+    } catch (err) {
+      console.error("Error setting remote description:", err);
+      setCallError("Call connection failed.");
+      cleanupCall();
+    }
+  }, []);
+
+  const handleRemoteIceCandidate = useCallback(async ({ candidate }) => {
+    try {
+      if (candidate && peerRef.current) {
+        await peerRef.current.addIceCandidate(candidate);
+      }
+    } catch (err) {
+      console.error("Failed to add remote ICE candidate:", err);
+    }
+  }, []);
+
+  const handleCallEnded = useCallback(() => {
+    setCallStatus("Call ended");
+    cleanupCall();
+  }, []);
+
+  const hangUp = () => {
+    if (callPartner && socketRef.current) {
+      socketRef.current.emit("end_call", { targetUserId: callPartner.id });
+    }
+    cleanupCall();
+  };
+
+  useEffect(() => {
+    callModeRef.current = callMode;
+    callPartnerRef.current = callPartner;
+  }, [callMode, callPartner]);
+
+  useEffect(() => {
+    const socket = io(SIGNALING_SERVER_URL, {
+      transports: ["websocket"],
+      withCredentials: true,
+    });
+
+    socketRef.current = socket;
+
+    socket.on("connect", () => {
+      console.log("Socket connected", socket.id);
+    });
+
+    socket.on("incoming_call", ({ from, callerName, offer }) => {
+      if (callModeRef.current) {
+        socket.emit("end_call", { targetUserId: from });
+        return;
+      }
+      setIncomingCall({ from, callerName, offer });
+      const partner = { id: from, name: callerName };
+      setCallPartner(partner);
+      callPartnerRef.current = partner;
+      setCallMode("incoming");
+      setCallStatus(`${callerName} is calling...`);
+    });
+
+    socket.on("call_answered", handleCallAnswered);
+    socket.on("ice_candidate", handleRemoteIceCandidate);
+    socket.on("call_ended", handleCallEnded);
+    socket.on("user_unavailable", ({ targetUserId }) => {
+      setCallError("The user is unavailable for calls right now.");
+      cleanupCall();
+    });
+
+    socket.on("connect_error", (err) => {
+      console.error("Socket connect error:", err);
+    });
+
+    return () => {
+      cleanupCall();
+      socket.disconnect();
+    };
+  }, [SIGNALING_SERVER_URL, handleCallAnswered, handleRemoteIceCandidate, handleCallEnded]);
+
+  useEffect(() => {
+    if (currentUser && socketRef.current) {
+      socketRef.current.emit("register_user", currentUser._id);
+    }
+  }, [currentUser]);
+
   const formatTime = (dateStr) => {
     if (!dateStr) return "";
     const d = new Date(dateStr);
@@ -179,20 +410,20 @@ function Chat() {
 
   return (
     <Layout>
-      <div className="card shadow-sm border-0 rounded-4 overflow-hidden" style={{ height: "calc(100vh - 180px)" }}>
+      <div className="card shadow-2 border-0 rounded-4 overflow-hidden chat-card" style={{ height: "calc(100vh - 180px)" }}>
         <div className="row g-0 h-100">
 
           {/* Left: Contacts Sidebar — sorted by most recent message */}
-          <div className="col-md-4 border-end bg-light h-100 d-flex flex-column">
-            <div className="p-3 border-bottom bg-white d-flex align-items-center justify-content-between">
-              <h5 className="fw-bold mb-0 text-dark">Messages</h5>
-              <span className="badge bg-primary rounded-pill">{contacts.length}</span>
+          <div className="col-md-4 border-end chat-sidebar h-100 d-flex flex-column">
+            <div className="p-3 chat-sidebar-header d-flex align-items-center justify-content-between">
+              <h5 className="fw-bold mb-0 text-white">Messages</h5>
+              <span className="badge badge-soft-primary rounded-pill">{contacts.length}</span>
             </div>
             <div className="flex-grow-1 overflow-auto">
               {contacts.map((c) => (
                 <div
                   key={c.id}
-                  className={`p-3 d-flex align-items-center gap-3 border-bottom ${activeContact?.id === c.id ? "bg-white border-start border-3 border-primary" : ""}`}
+                  className={`p-3 d-flex align-items-center gap-3 border-bottom chat-contact-item ${activeContact?.id === c.id ? "active-contact" : ""}`}
                   style={{ cursor: "pointer" }}
                   onClick={() => setActiveContact(c)}
                 >
@@ -217,7 +448,7 @@ function Chat() {
                         </span>
                       )}
                     </div>
-                    <span className="text-muted small text-truncate" style={{ maxWidth: "180px", opacity: 0.75 }}>
+                    <span className="text-white-50 small text-truncate" style={{ maxWidth: "180px", opacity: 0.85 }}>
                       {c.lastMessage || "Start a conversation"}
                     </span>
                   </div>
@@ -227,32 +458,93 @@ function Chat() {
           </div>
 
           {/* Right: Chat Window */}
-          <div className="col-md-8 h-100 d-flex flex-column bg-white">
+          <div className="col-md-8 h-100 d-flex flex-column chat-window">
             {activeContact ? (
               <>
                 {/* Chat Header */}
-                <div className="p-3 border-bottom d-flex align-items-center gap-3">
+                <div className="p-3 border-bottom chat-header d-flex align-items-center gap-3">
                   <div
-                    className="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold"
-                    style={{ width: "40px", height: "40px" }}
+                    className="chat-avatar rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                    style={{ width: "42px", height: "42px" }}
                   >
                     {activeContact.avatar}
                   </div>
                   <div>
-                    <h6 className="fw-bold mb-0 text-dark">{activeContact.name}</h6>
-                    <span className="text-success small fw-semibold" style={{ fontSize: "0.75rem" }}>Active now</span>
+                    <h6 className="fw-bold mb-0 text-white">{activeContact.name}</h6>
+                    <span className="status-badge small">Active now</span>
+                  </div>
+                  <div className="ms-auto d-flex gap-2">
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-sm"
+                      onClick={startCall}
+                      disabled={!activeContact || callMode === "calling" || callMode === "in-call"}
+                    >
+                      Call
+                    </button>
+                    {(callMode === "in-call" || callMode === "calling" || callMode === "incoming") && (
+                      <button type="button" className="btn btn-outline-danger btn-sm" onClick={hangUp}>
+                        Hang Up
+                      </button>
+                    )}
                   </div>
                 </div>
 
+                {(callMode || incomingCall) && (
+                  <div className="p-3 border-bottom bg-dark bg-opacity-10 call-panel">
+                    <div className="d-flex flex-column gap-3">
+                      <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+                        <div>
+                          <strong className="text-white">
+                            {callMode === "incoming"
+                              ? `${callPartner?.name || "Someone"} is calling...`
+                              : callMode === "calling"
+                              ? `Calling ${callPartner?.name || "user"}...`
+                              : `In call with ${callPartner?.name || "user"}`}
+                          </strong>
+                          <div className="text-white-50 small mt-1">{callStatus}</div>
+                        </div>
+                        <div className="d-flex gap-2">
+                          {callMode === "incoming" && (
+                            <>
+                              <button type="button" className="btn btn-success btn-sm" onClick={acceptCall}>
+                                Accept
+                              </button>
+                              <button type="button" className="btn btn-danger btn-sm" onClick={rejectCall}>
+                                Reject
+                              </button>
+                            </>
+                          )}
+                          {callMode === "calling" && (
+                            <button type="button" className="btn btn-danger btn-sm" onClick={hangUp}>
+                              Cancel
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                      <div className="d-flex flex-column flex-md-row gap-3">
+                        <div className="video-box flex-fill">
+                          <video ref={localVideoRef} autoPlay muted playsInline className="rounded-3 video-preview" />
+                          <div className="text-white-50 small mt-2">Your camera</div>
+                        </div>
+                        <div className="video-box flex-fill">
+                          <video ref={remoteVideoRef} autoPlay playsInline className="rounded-3 video-preview" />
+                          <div className="text-white-50 small mt-2">
+                            {callMode === "in-call" ? "Remote video" : "Waiting for connection..."}
+                          </div>
+                        </div>
+                      </div>
+                      {callError && <div className="text-danger small">{callError}</div>}
+                    </div>
+                  </div>
+                )}
+
                 {/* Messages Area */}
-                <div
-                  className="flex-grow-1 p-4 overflow-auto"
-                  style={{ backgroundImage: "radial-gradient(#eee 1px, transparent 1px)", backgroundSize: "20px 20px", backgroundColor: "#fafafa" }}
-                >
+                <div className="flex-grow-1 p-4 overflow-auto chat-messages-area">
                   {messages.length === 0 ? (
-                    <div className="text-center text-muted py-5">
-                      <div style={{ fontSize: "2.5rem" }}>💬</div>
-                      <p className="mt-2 small">No messages yet. Say hello to {activeContact.name}!</p>
+                    <div className="text-center py-5">
+                      <div style={{ fontSize: "2.5rem", color: "#93c5fd" }}>💬</div>
+                      <p className="mt-2 small text-white-50">No messages yet. Say hello to {activeContact.name}!</p>
                     </div>
                   ) : (
                     messages.map((m) => {
@@ -261,20 +553,18 @@ function Chat() {
                         <div key={m._id} className={`d-flex mb-3 ${isMe ? "justify-content-end" : "justify-content-start"}`}>
                           {!isMe && (
                             <div
-                              className="bg-secondary bg-opacity-10 text-secondary rounded-circle d-flex align-items-center justify-content-center fw-bold me-2 mt-auto"
-                              style={{ width: "28px", height: "28px", fontSize: "0.7rem", flexShrink: 0 }}
+                              className="chat-avatar-sm rounded-circle d-flex align-items-center justify-content-center fw-bold me-2 mt-auto"
+                              style={{ width: "28px", height: "28px", fontSize: "0.75rem", flexShrink: 0 }}
                             >
                               {activeContact.avatar}
                             </div>
                           )}
                           <div
-                            className={`p-3 rounded-4 shadow-sm ${isMe ? "bg-primary text-white" : "bg-white text-dark border"}`}
+                            className={`p-3 rounded-4 chat-bubble ${isMe ? "chat-bubble-me" : "chat-bubble-other"}`}
                             style={{ maxWidth: "70%" }}
                           >
                             <div className="small lh-sm">{m.text}</div>
-                            <div className="text-end mt-1 opacity-75" style={{ fontSize: "0.65rem" }}>
-                              {formatTime(m.createdAt)}
-                            </div>
+                            <div className="text-end mt-1 opacity-75 chat-time">{formatTime(m.createdAt)}</div>
                           </div>
                         </div>
                       );
@@ -284,10 +574,10 @@ function Chat() {
                 </div>
 
                 {/* Input Area */}
-                <form className="p-3 border-top bg-white d-flex gap-2" onSubmit={handleSendMessage}>
+                <form className="p-3 chat-input-area d-flex gap-2" onSubmit={handleSendMessage}>
                   <input
                     type="text"
-                    className="form-control rounded-pill border-light bg-light px-4"
+                    className="form-control rounded-pill chat-input px-4"
                     placeholder={`Message ${activeContact.name}...`}
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
@@ -295,8 +585,9 @@ function Chat() {
                   />
                   <button
                     type="submit"
-                    className="btn btn-primary rounded-pill px-4 fw-bold"
+                    className="btn btn-glass rounded-pill px-4 fw-bold"
                     disabled={sending || !newMessage.trim()}
+                    style={{ minWidth: '110px' }}
                   >
                     {sending ? <span className="spinner-border spinner-border-sm"></span> : "Send"}
                   </button>

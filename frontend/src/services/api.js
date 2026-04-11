@@ -143,7 +143,19 @@ export const sendMessage = async (receiverId, text) => {
 
 export const updateUserProfile = async (data, id = null) => {
   const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
-  
+
+  if (data instanceof FormData) {
+    if (id) data.append("targetId", id);
+    const res = await fetch(`${BASE_URL}/users/update`, {
+      method: "PUT",
+      headers: {
+        Authorization: token
+      },
+      body: data
+    });
+    return res.json();
+  }
+
   const payload = { ...data };
   if (id) payload.targetId = id;
 

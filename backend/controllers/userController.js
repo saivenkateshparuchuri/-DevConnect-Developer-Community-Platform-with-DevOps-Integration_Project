@@ -43,9 +43,7 @@ const getUserProfile = async (req, res) => {
 //  Update profile
 const updateProfile = async (req, res) => {
   try {
-    const { name, bio, gender, targetId } = req.body;
-    let user;
-
+    const { name, bio, gender, photoUrl, targetId } = req.body;
     const isAdminAcc = req.user.role === 'admin' || req.user.isAdmin === true;
     
     // If targetId is provided, requester MUST be an admin to edit someone else
@@ -53,7 +51,7 @@ const updateProfile = async (req, res) => {
 
     // Determine which collection to look in (Admin or User)
     // First check Admin collection if the ID belongs to an admin
-    user = await Admin.findById(idToUpdate);
+    let user = await Admin.findById(idToUpdate);
     if (!user) {
       user = await User.findById(idToUpdate);
     }
@@ -65,6 +63,12 @@ const updateProfile = async (req, res) => {
     user.name = name || user.name;
     user.bio = bio || user.bio;
     user.gender = gender || user.gender;
+
+    if (req.file) {
+      user.photoUrl = `/uploads/${req.file.filename}`;
+    } else if (photoUrl !== undefined) {
+      user.photoUrl = photoUrl;
+    }
 
     await user.save();
 

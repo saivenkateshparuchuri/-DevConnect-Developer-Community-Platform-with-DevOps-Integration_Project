@@ -55,7 +55,7 @@ function Users() {
       <div className="d-flex justify-content-between align-items-end mb-4 border-bottom pb-3">
         <div>
           <h3 className="fw-bold m-0 text-dark">👤 Developers</h3>
-          <p className="text-muted small mt-1 mb-0">Browse the community network.</p>
+          <p className="text-white-50 small mt-1 mb-0">Browse the community network.</p>
         </div>
         {isAdmin && <span className="badge bg-danger">Admin Mode Active</span>}
       </div>

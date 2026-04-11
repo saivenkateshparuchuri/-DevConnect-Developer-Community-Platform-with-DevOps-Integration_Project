@@ -13,23 +13,23 @@ function PostCard({ post, onAnswerAdded }) {
   const answerCount = post.answers?.length || 0;
 
   return (
-    <div className="card shadow-sm mb-4 border-0 border-bottom border-secondary border-opacity-25 pb-3">
+    <div className="card glass-glow mb-4 border-0 border-bottom border-secondary border-opacity-25 pb-3 hover-move glow-border fade-in-scale">
       <div className="card-body d-flex gap-3">
         {/* Left Stats Column */}
         <div className="d-flex flex-column align-items-end" style={{ minWidth: "80px" }}>
-          <div className="text-muted small mb-1">{votes} votes</div>
+          <div className="text-light small mb-1">{votes} votes</div>
           <div className={`small mb-1 px-2 py-1 rounded ${answerCount > 0 ? "border border-success text-success" : "text-muted"}`}>
             {answerCount} answers
           </div>
-          <div className="text-muted small">{views} views</div>
+          <div className="text-light small">{views} views</div>
         </div>
 
         {/* Right Content Column */}
         <div className="flex-grow-1">
           <Link to={`/questions/${post._id}`} onClick={(e) => e.preventDefault()} className="text-decoration-none focus-ring">
-            <h5 className="text-primary mb-2" style={{ cursor: "pointer" }}>{post.title}</h5>
+            <h5 className="text-info mb-2" style={{ cursor: "pointer" }}>{post.title}</h5>
           </Link>
-          <p className="text-dark mb-3" style={{ whiteSpace: "pre-wrap", display: "-webkit-box", WebkitLineClamp: "3", WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+          <p className="text-light mb-3" style={{ whiteSpace: "pre-wrap", display: "-webkit-box", WebkitLineClamp: "3", WebkitBoxOrient: "vertical", overflow: "hidden" }}>
             {post.content}
           </p>
           

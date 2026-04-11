@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const http = require('http');
+const { Server } = require('socket.io');
 require('dotenv').config();
 const userRoutes = require("./routes/userRoutes");
 
@@ -9,6 +11,7 @@ const userRoutes = require("./routes/userRoutes");
 const connectDB = require('./config/db');
 
 const app = express();
+const server = http.createServer(app);
 
 // ✅ middleware FIRST
 const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim()) : [
@@ -94,8 +97,71 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Server error' });
 });
 
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigins,
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
+const onlineUsers = new Map();
+
+io.on('connection', (socket) => {
+  console.log('Socket connected:', socket.id);
+
+  socket.on('register_user', (userId) => {
+    if (!userId) return;
+    onlineUsers.set(userId, socket.id);
+    console.log('Registered user', userId, '->', socket.id);
+  });
+
+  socket.on('disconnect', () => {
+    for (const [userId, socketId] of onlineUsers.entries()) {
+      if (socketId === socket.id) {
+        onlineUsers.delete(userId);
+        break;
+      }
+    }
+  });
+
+  socket.on('call_user', ({ targetUserId, callerId, callerName, offer }) => {
+    const targetSocketId = onlineUsers.get(targetUserId);
+    if (targetSocketId) {
+      io.to(targetSocketId).emit('incoming_call', {
+        from: callerId,
+        callerName,
+        offer,
+      });
+    } else {
+      socket.emit('user_unavailable', { targetUserId });
+    }
+  });
+
+  socket.on('answer_call', ({ targetUserId, answer }) => {
+    const targetSocketId = onlineUsers.get(targetUserId);
+    if (targetSocketId) {
+      io.to(targetSocketId).emit('call_answered', { answer });
+    }
+  });
+
+  socket.on('ice_candidate', ({ targetUserId, candidate }) => {
+    const targetSocketId = onlineUsers.get(targetUserId);
+    if (targetSocketId) {
+      io.to(targetSocketId).emit('ice_candidate', { candidate });
+    }
+  });
+
+  socket.on('end_call', ({ targetUserId }) => {
+    const targetSocketId = onlineUsers.get(targetUserId);
+    if (targetSocketId) {
+      io.to(targetSocketId).emit('call_ended');
+    }
+  });
+});
+
 const PORT = parseInt(process.env.PORT, 10) || 5000;
 
-app.listen(PORT, '0.0.0.0', () => {
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });

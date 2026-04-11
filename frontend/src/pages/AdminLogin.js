@@ -13,14 +13,13 @@ function AdminLogin() {
     e.preventDefault();
     setLoading(true);
     setError("");
-    
+
     try {
       const data = await adminLogin(email, password);
 
       if (data.adminToken) {
-        localStorage.removeItem("token"); // Clear existing user session
+        localStorage.removeItem("token");
         localStorage.setItem("adminToken", data.adminToken);
-        // Navigate to home after admin login as requested
         navigate("/home");
       } else {
         setError(data.message || "Invalid Admin Credentials");
@@ -33,55 +32,75 @@ function AdminLogin() {
   };
 
   return (
-    <div className="vh-100 d-flex align-items-center justify-content-center bg-light text-dark">
-      <div className="card border-0 shadow-lg" style={{ width: "400px", borderRadius: "10px", backgroundColor: "#ffffff" }}>
-        <div className="card-body p-5">
-          <div className="text-center mb-4">
-            <h3 className="fw-bold mb-1">Admin Portal</h3>
-            <p className="text-muted small">Access strictly restricted</p>
-          </div>
-          
-          {error && <div className="alert alert-danger p-2 small">{error}</div>}
+    <div className="admin-login-page vh-100 d-flex align-items-center justify-content-center position-relative overflow-hidden">
+      <div className="position-fixed top-0 start-0 w-100 h-100 pointer-events-none" style={{ zIndex: 1 }}>
+        <div className="floating position-absolute" style={{ top: '12%', left: '12%', fontSize: '2rem', opacity: 0.08 }}>✨</div>
+        <div className="floating delay-1 position-absolute" style={{ top: '18%', right: '14%', fontSize: '1.4rem', opacity: 0.08 }}>🌟</div>
+        <div className="floating delay-2 position-absolute" style={{ bottom: '28%', left: '18%', fontSize: '1.9rem', opacity: 0.08 }}>💫</div>
+        <div className="floating position-absolute" style={{ bottom: '18%', right: '12%', fontSize: '1.1rem', opacity: 0.08 }}>⭐</div>
+      </div>
 
-          <form onSubmit={handleLogin}>
-            <div className="mb-3">
-              <label className="form-label small text-muted">Administrator Email</label>
-              <input
-                type="email"
-                className="form-control bg-white text-dark border-light shadow-sm"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="admin@example.com"
-              />
-            </div>
-            
-            <div className="mb-4">
-              <label className="form-label small text-muted">Password</label>
-              <input
-                type="password"
-                className="form-control bg-white text-dark border-light shadow-sm"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            
-            <button 
-              type="submit" 
-              className="btn btn-primary w-100 fw-bold py-2 mb-3"
-              style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)", border: "none" }}
-              disabled={loading}
-            >
-              {loading ? "Authenticating..." : "Admin Login"}
-            </button>
-          </form>
-
-          <div className="text-center">
-             <Link to="/" className="text-muted small text-decoration-none hover-move" style={{ color: "#a5b4fc !important" }}>
-               &larr; Return to Public Site
-             </Link>
+      <div className="auth-card glass-panel p-5 admin-login-card" style={{ width: "420px", maxWidth: "92vw", zIndex: 10 }}>
+        <div className="d-flex align-items-center justify-content-between mb-4">
+          <div>
+            <h2 className="fw-bold mb-1 text-white" style={{ letterSpacing: "-0.4px", fontSize: "1.85rem" }}>Admin Portal</h2>
+            <p className="text-muted small mb-0" style={{ color: "#a5b4fc" }}>Secure access for administrators only.</p>
           </div>
+          <span className="badge admin-badge">ADMIN</span>
+        </div>
+
+        {error && (
+          <div className="alert alert-danger p-3 mb-4 text-center" style={{ background: "rgba(248, 113, 113, 0.12)", border: "1px solid rgba(248, 113, 113, 0.3)", color: "#fecaca" }}>
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleLogin}>
+          <div className="mb-3">
+            <label className="form-label small fw-semibold" style={{ color: "#cbd5e1" }}>Administrator Email</label>
+            <input
+              type="email"
+              className="form-control auth-input"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder="admin@devconnect.com"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="form-label small fw-semibold" style={{ color: "#cbd5e1" }}>Access Password</label>
+            <input
+              type="password"
+              className="form-control auth-input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="Enter secure password"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="btn btn-glass w-100 fw-semibold py-3 mb-3"
+            style={{ background: "linear-gradient(135deg, #f97316, #dc2626)", border: "none", fontSize: "1rem" }}
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                Authenticating...
+              </>
+            ) : (
+              "Admin Access"
+            )}
+          </button>
+        </form>
+
+        <div className="text-center pt-2">
+          <Link to="/" className="text-decoration-none hover-move" style={{ color: "#93c5fd", fontSize: "0.92rem", fontWeight: 500 }}>
+            ← Return to Public Platform
+          </Link>
         </div>
       </div>
     </div>

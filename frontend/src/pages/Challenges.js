@@ -34,7 +34,7 @@ function Challenges() {
       <div className="d-flex align-items-center justify-content-between mb-4 border-bottom pb-3">
         <div>
            <h3 className="fw-bold m-0 text-dark">🏆 Weekly Challenges</h3>
-           <p className="text-muted small mb-0 mt-1">
+           <p className="text-white-50 small mb-0 mt-1">
              {activeCat ? `Showing ${activeCat} challenges.` : "Compete with the best and earn exclusive badges."}
            </p>
         </div>

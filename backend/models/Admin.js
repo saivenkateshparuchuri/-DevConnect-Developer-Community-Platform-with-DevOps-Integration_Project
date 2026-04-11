@@ -27,6 +27,10 @@ const adminSchema = new mongoose.Schema({
     type: String,
     default: "System Administrator 🛡️"
   },
+  photoUrl: {
+    type: String,
+    default: ""
+  },
   createdAt: {
     type: Date,
     default: Date.now

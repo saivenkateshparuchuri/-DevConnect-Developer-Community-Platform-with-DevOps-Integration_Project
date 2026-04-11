@@ -30,6 +30,9 @@ const SvgArticle = () => (
 const SvgZap = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
 );
+const SvgShield = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12h6"></path><path d="M12 9v6"></path></svg>
+);
 
 function Layout({ children }) {
   const navigate = useNavigate();
@@ -50,6 +53,13 @@ function Layout({ children }) {
       }
     };
     fetchData();
+
+    const handleProfileUpdated = (event) => {
+      if (event.detail) setCurrentUser(event.detail);
+    };
+
+    window.addEventListener("profileUpdated", handleProfileUpdated);
+    return () => window.removeEventListener("profileUpdated", handleProfileUpdated);
   }, []);
 
   const handleLogout = () => {
@@ -58,89 +68,107 @@ function Layout({ children }) {
     navigate("/");
   };
 
-  // StackOverflow style link renderer
+  // Modern sidebar link renderer with a pill-style active state
   const renderLink = (name, path, Icon) => {
     const isActive = location.pathname === path;
-    const baseClasses = "d-flex align-items-center py-2 px-3 text-decoration-none rounded-end-pill mb-1";
-    
-    const activeClasses = isActive 
-      ? "bg-light border-start border-3 border-primary text-dark fw-bold" 
-      : "text-secondary hover-bg-subtle border-start border-3 border-transparent";
-      
+
     return (
       <Link
         key={path}
         to={path}
-        className={`${baseClasses} ${activeClasses}`}
-        style={{
-          borderLeftColor: isActive ? '#6366f1' : 'transparent',
-          backgroundColor: isActive ? '#f5f3ff' : 'transparent',
-          transition: "all 0.2s"
-        }}
-        onMouseEnter={(e) => {
-          if (!isActive) e.currentTarget.style.backgroundColor = "#f5f3ff";
-        }}
-        onMouseLeave={(e) => {
-          if (!isActive) e.currentTarget.style.backgroundColor = "transparent";
-        }}
+        className={`sidebar-link ${isActive ? "sidebar-link-active" : ""}`}
       >
-        <span className={isActive ? "text-dark" : "text-secondary"}>{Icon}</span>
-        <span style={{ fontSize: "0.95rem" }}>{name}</span>
+        <span className="sidebar-link-icon">{Icon}</span>
+        <span style={{ fontSize: "0.95rem", fontWeight: isActive ? 700 : 500 }}>{name}</span>
       </Link>
     );
   };
 
   return (
     <div className="container-fluid" style={{ fontFamily: "Inter, sans-serif" }}>
-      <div className="row">
+      {/* Floating Particles */}
+      <div className="position-fixed top-0 start-0 w-100 h-100 pointer-events-none" style={{ zIndex: 1 }}>
+        <div className="floating position-absolute" style={{ top: '10%', left: '10%', fontSize: '2rem', opacity: 0.1 }}>✨</div>
+        <div className="floating delay-1 position-absolute" style={{ top: '20%', right: '15%', fontSize: '1.5rem', opacity: 0.1 }}>🌟</div>
+        <div className="floating delay-2 position-absolute" style={{ bottom: '30%', left: '20%', fontSize: '1.8rem', opacity: 0.1 }}>💫</div>
+        <div className="floating position-absolute" style={{ bottom: '20%', right: '10%', fontSize: '1.2rem', opacity: 0.1 }}>⭐</div>
+      </div>
+      <div className="row vh-100">
         
-        {/* Left Sidebar */}
-        <div className="col-md-2 vh-100 py-3 position-fixed bg-white border-end" style={{ zIndex: 1000, overflowY: "auto", paddingRight: 0 }}>
-          
-          <div className="d-flex align-items-center mb-4 px-3" style={{ cursor: "pointer" }} onClick={() => navigate('/home')}>
-             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="me-2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-             <h5 className="fw-bold m-0 text-dark" style={{ letterSpacing: "-0.5px" }}>DevCommunity</h5>
+        {/* Left Panel - Navigation Sidebar */}
+        <div className="layout-left-panel vh-100 p-4 position-fixed glass-panel order-1" style={{ zIndex: 1000, overflowY: "auto", left: "0", width: "280px", top: "0" }}>
+          {/* Logo */}
+          <div className="d-flex align-items-center mb-4 px-3 py-2" style={{ cursor: "pointer", borderRadius: "12px", transition: "all 0.3s ease" }} onClick={() => navigate('/home')}
+               onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(96, 165, 250, 0.1)'}
+               onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
+             <div className="me-3">
+               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="url(#logoGradient)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                 <defs>
+                   <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                     <stop offset="0%" stopColor="#60a5fa" />
+                     <stop offset="100%" stopColor="#a78bfa" />
+                   </linearGradient>
+                 </defs>
+                 <polyline points="16 18 22 12 16 6"></polyline>
+                 <polyline points="8 6 2 12 8 18"></polyline>
+               </svg>
+             </div>
+             <div>
+               <h5 className="fw-bold m-0 animated-text text-glow" style={{ letterSpacing: "-0.5px", fontSize: "1.4rem" }}>DevCommunity</h5>
+               <small className="text-white-50" style={{ fontSize: "0.7rem", opacity: 0.9 }}>Code • Connect • Create</small>
+             </div>
           </div>
 
+          {/* Navigation Links */}
           <div className="d-flex flex-column pe-2">
-            
             {renderLink("Home", "/home", <SvgHome />)}
-            
-            <div className="mt-4 mb-2 px-3 text-uppercase text-muted fw-bold" style={{ fontSize: "0.7rem", letterSpacing: "1px" }}>Public</div>
+            <div className="mt-4 mb-3 px-3">
+              <div className="sidebar-section-divider">
+                <span className="sidebar-section-title">PUBLIC</span>
+              </div>
+            </div>
             {renderLink("Questions", "/questions", <SvgGlobe />)}
             {renderLink("Tags", "/tags", <SvgTag />)}
             {renderLink("Users", "/users", <SvgUsers />)}
             {renderLink("Companies", "/companies", <SvgCompany />)}
-
-            <div className="mt-4 mb-2 px-3 text-uppercase text-muted fw-bold" style={{ fontSize: "0.7rem", letterSpacing: "1px" }}>Engagement</div>
+            <div className="mt-4 mb-3 px-3">
+              <div className="sidebar-section-divider">
+                <span className="sidebar-section-title">ENGAGEMENT</span>
+              </div>
+            </div>
             {renderLink("Challenges", "/challenges", <SvgChallenge />)}
-            
-            <div className="mt-4 mb-2 px-3 text-uppercase text-muted fw-bold" style={{ fontSize: "0.7rem", letterSpacing: "1px" }}>Resources</div>
+            <div className="mt-4 mb-3 px-3">
+              <div className="sidebar-section-divider">
+                <span className="sidebar-section-title">RESOURCES</span>
+              </div>
+            </div>
             {renderLink("Chat", "/chat", <SvgChat />)}
             {renderLink("Articles", "/articles", <SvgArticle />)}
-
             {localStorage.getItem("adminToken") && (
               <>
-                <div className="mt-4 mb-2 px-3 text-uppercase text-muted fw-bold" style={{ fontSize: "0.7rem", letterSpacing: "1px", color: "#6366f1" }}>Admin</div>
-                {renderLink("Admin Dashboard", "/admin/dashboard", <SvgGlobe />)}
+                <div className="mt-4 mb-2 px-3 text-uppercase fw-bold" style={{ fontSize: "0.7rem", letterSpacing: "1px", color: "#a78bfa" }}>Admin Console</div>
+                {renderLink("Admin Dashboard", "/admin/dashboard", <SvgShield />)}
               </>
             )}
           </div>
         </div>
 
         {/* Center Main Content */}
-        <div className="col-md-7 p-0 offset-md-2 min-vh-100" style={{ backgroundColor: "#fdfdfd" }}>
+        <div className="layout-main p-0 min-vh-100 glass-panel order-2" style={{ backgroundColor: "transparent", marginLeft: "280px", width: "calc(100% - 560px)" }}>
           {/* Top Search Bar / Header */}
-          <div className="sticky-top bg-white border-bottom px-4 py-2 d-flex align-items-center" style={{ zIndex: 900 }}>
-             <div className="input-group search-bar" style={{ maxWidth: "600px" }}>
-                <span className="input-group-text bg-light border-end-0">
-                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <div className="sticky-top glass-glow border-bottom px-4 py-3 d-flex align-items-center" style={{ zIndex: 900, backdropFilter: "blur(20px)" }}>
+             <div className="input-group search-bar flex-grow-1" style={{ maxWidth: "600px" }}>
+                <span className="input-group-text glass-panel border-end-0 d-flex align-items-center justify-content-center" style={{ background: "rgba(96, 165, 250, 0.1)", border: "none", borderRadius: "12px 0 0 12px" }}>
+                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                     <circle cx="11" cy="11" r="8"></circle>
+                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                   </svg>
                 </span>
                 <input 
                   type="text" 
-                  className="form-control bg-light border-start-0 ps-0" 
+                  className="form-control glass-panel border-start-0 ps-0 text-light" 
                   placeholder="Search questions, tags, or users..." 
-                  style={{ fontSize: "0.9rem" }}
+                  style={{ fontSize: "0.95rem", background: "rgba(30, 41, 59, 0.6)", border: "none", borderRadius: "0 12px 12px 0", fontWeight: "500" }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                        navigate(`/questions?q=${e.target.value}`);
@@ -154,234 +182,76 @@ function Layout({ children }) {
           </div>
         </div>
 
-        {/* Right Panel */}
-        <div className="col-md-3 vh-100 p-4 position-fixed end-0 bg-white border-start" style={{ zIndex: 1000, overflowY: "auto" }}>
-          
-          {/* Header Action Row (Profile Edit + Logout) */}
-          <div className="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
-            {currentUser ? (
-              <div 
-                className="d-flex align-items-center gap-2" 
-                style={{ cursor: "pointer", padding: "4px", borderRadius: "8px" }} 
-                onClick={() => navigate(`/profile/${currentUser._id}`)}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#f8f9fa"}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
-              >
-                <div 
-                  className="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" 
-                  style={{ width: "36px", height: "36px" }}
-                  title="View Profile"
-                >
-                  {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : "U"}
-                </div>
-                <div className="d-flex flex-column lh-1">
-                  <span className="fw-bold small text-dark">{currentUser.name || "My Profile"}</span>
-                  <span className="text-muted" style={{ fontSize: "0.65rem" }}>View &amp; Edit</span>
-                </div>
-              </div>
-            ) : (
-              <div></div>
-            )}
-            
-            <button onClick={handleLogout} className="btn btn-light border btn-sm rounded-pill px-3 fw-semibold text-secondary hover-move" style={{ transition: "all 0.2s" }}>
-              Logout
-            </button>
-          </div>
-
-          {/* Context-aware Right Widgets */}
-          {location.pathname === "/companies" ? (
-            <>
-              {/* Industry Filter Widget */}
-              <div className="card border p-3 mb-4 rounded-3 shadow-none bg-light pt-2 pb-2">
-                <h6 className="fw-bold text-dark mb-3 mt-2 d-flex align-items-center">
-                  <span className="me-2">🏭</span> Filter by Industry
-                </h6>
-                <div className="d-flex flex-column gap-1">
-                  {[
-                    { name: "All Industries", icon: "🌐", filter: "" },
-                    { name: "Technology", icon: "💻", filter: "Technology" },
-                    { name: "Social Media", icon: "📱", filter: "Social Media" },
-                    { name: "E-Commerce / Cloud", icon: "☁️", filter: "E-Commerce / Cloud" },
-                    { name: "Streaming", icon: "🎬", filter: "Streaming / Entertainment" },
-                    { name: "Consumer Tech", icon: "📦", filter: "Consumer Technology" }
-                  ].map((ind) => {
-                    const activeInd = new URLSearchParams(location.search).get('industry') || "";
-                    const isActiveInd = activeInd === ind.filter;
-                    return (
-                      <Link
-                        key={ind.name}
-                        to={`/companies${ind.filter ? `?industry=${encodeURIComponent(ind.filter)}` : ""}`}
-                        className={`text-decoration-none small p-2 rounded d-flex align-items-center ${ isActiveInd ? "bg-primary text-white fw-bold" : "text-secondary" }`}
-                        style={{ cursor: "pointer" }}
-                      >
-                        <span className="me-2">{ind.icon}</span>{ind.name}
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Job Type Widget */}
-              <div className="card border p-3 mb-4 rounded-3 shadow-none">
-                <h6 className="fw-bold text-dark mb-3 d-flex align-items-center">
-                  <span className="me-2">🎯</span> Job Types
-                </h6>
-                <div className="d-flex flex-column gap-2">
-                  {[
-                    { label: "Full-time", color: "success", count: 14 },
-                    { label: "Remote", color: "primary", count: 8 },
-                    { label: "Internship", color: "warning", count: 5 }
-                  ].map(jt => (
-                    <div key={jt.label} className="d-flex justify-content-between align-items-center small">
-                      <span className={`badge bg-${jt.color} bg-opacity-10 text-${jt.color} border border-${jt.color} border-opacity-25`}>
-                        {jt.label}
-                      </span>
-                      <span className="text-muted fw-semibold">{jt.count} roles</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Top Hiring Now */}
-              <div className="card border p-3 rounded-3 shadow-none bg-dark text-white">
-                <h6 className="fw-bold mb-3 d-flex align-items-center" style={{ color: "#a5b4fc" }}>
-                  <span className="me-2">🔥</span> Actively Hiring
-                </h6>
-                <div className="d-flex flex-column gap-2">
-                  {[
-                    { name: "Google", color: "#4285F4", jobs: 3 },
-                    { name: "Microsoft", color: "#00A4EF", jobs: 3 },
-                    { name: "Meta", color: "#1877F2", jobs: 3 },
-                    { name: "Amazon", color: "#FF9900", jobs: 3 }
-                  ].map(c => (
-                    <div key={c.name} className="d-flex justify-content-between align-items-center small opacity-90">
-                      <span className="d-flex align-items-center gap-2">
-                        <span className="rounded-circle d-inline-block" style={{ width: "8px", height: "8px", background: c.color }}></span>
-                        {c.name}
-                      </span>
-                      <span className="badge bg-light text-dark">{c.jobs} jobs</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </>
-          ) : location.pathname === "/challenges" ? (
-             <>
-               <div className="card border p-3 mb-4 rounded-3 shadow-none bg-light pt-2 pb-2">
-                 <h6 className="fw-bold text-dark mb-3 mt-2 d-flex align-items-center">
-                   <span className="me-2">🎯</span> Categories
-                 </h6>
-                 <div className="d-flex flex-column gap-1">
-                   {[
-                     { name: "All Challenges", filter: "" },
-                     { name: "Frontend UI", filter: "Frontend" },
-                     { name: "Backend Logic", filter: "Backend" },
-                     { name: "AI & Data", filter: "AI" },
-                     { name: "Practice Labs", filter: "Practice" }
-                   ].map((cat) => {
-                      const isActive = (new URLSearchParams(location.search).get('cat') || "") === cat.filter;
-                      return (
-                        <Link 
-                          key={cat.name} 
-                          to={`/challenges${cat.filter ? `?cat=${cat.filter}` : ""}`}
-                          className={`small p-2 rounded text-decoration-none transition-all ${isActive ? "bg-primary text-white fw-bold shadow-sm" : "text-secondary hover-bg-light"}`}
-                          style={{ cursor: "pointer" }}
-                        >
-                           {cat.name}
-                        </Link>
-                      );
-                   })}
-                 </div>
-               </div>
-
-               <div className="card border p-3 mb-4 rounded-3 shadow-none">
-                 <h6 className="fw-bold text-dark mb-3 d-flex align-items-center">
-                   <span className="me-2"><SvgZap /></span> My Stats
-                 </h6>
-                 <div className="d-flex justify-content-around text-center py-2">
-                    <div>
-                       <div className="fw-bold text-primary">12</div>
-                       <div className="text-muted" style={{ fontSize: "0.65rem" }}>Solved</div>
-                    </div>
-                    <div className="border-start"></div>
-                    <div>
-                       <div className="fw-bold text-success">350</div>
-                       <div className="text-muted" style={{ fontSize: "0.65rem" }}>Points</div>
-                    </div>
-                    <div className="border-start"></div>
-                    <div>
-                       <div className="fw-bold text-warning">4</div>
-                       <div className="text-muted" style={{ fontSize: "0.65rem" }}>Streak</div>
-                    </div>
-                 </div>
-               </div>
-
-               {/* 🏆 Top Challengers — REAL DB USERS */}
-               <div className="card border p-3 rounded-3 shadow-none bg-dark text-white">
-                 <h6 className="fw-bold mb-3 d-flex align-items-center" style={{ color: "#a5b4fc" }}>
-                   <span className="me-2">🏆</span> Top Challengers
-                 </h6>
-                 <div className="d-flex flex-column gap-2">
-                    {topUsers.length > 0 ? topUsers.slice(0, 5).map((u, idx) => (
-                      <div key={u._id} className="d-flex justify-content-between align-items-center small opacity-90">
-                         <span className="d-flex align-items-center gap-2">
-                           <span className="text-muted fw-bold" style={{ minWidth: "14px" }}>{idx + 1}.</span>
-                           <span
-                             className="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center text-white fw-bold"
-                             style={{ width: "22px", height: "22px", fontSize: "0.65rem", flexShrink: 0 }}
-                           >
-                             {u.name.charAt(0).toUpperCase()}
-                           </span>
-                           {u.name}
-                         </span>
-                         <span className="badge bg-light text-dark">#{idx + 1}</span>
-                      </div>
-                    )) : (
-                      <div className="small opacity-75">Loading users...</div>
+        {/* Right Panel - User Actions */}
+        <div className="layout-right-panel vh-100 p-4 position-fixed glass-panel order-3" style={{ zIndex: 1000, overflowY: "auto", right: "0", width: "280px", top: "0" }}>
+          {/* User Profile Section */}
+          {currentUser && (
+            <div className="mb-4">
+              <div className="glass-glow p-3 rounded-3 profile-card">
+                <div className="d-flex align-items-start mb-3">
+                  <div className="profile-avatar me-3">
+                    {currentUser.photoUrl ? (
+                      <img src={currentUser.photoUrl} alt="Profile" className="img-fluid rounded-circle" />
+                    ) : (
+                      currentUser.name ? currentUser.name.charAt(0).toUpperCase() : "D"
                     )}
-                 </div>
-               </div>
-             </>
-          ) : (
-            <>
-              <div className="card border p-3 mb-4 rounded-3 shadow-none bg-light pt-2 pb-2">
-                <h6 className="fw-bold text-dark mb-3 mt-2 d-flex align-items-center">
-                  <span className="me-2">📢</span> Announcements
-                </h6>
-                <div className="small text-secondary">
-                  <p className="mb-2 fw-semibold text-dark border-start border-2 border-primary ps-2">Welcome to Dev Community</p>
-                  <p className="mb-0">Start asking questions, connect with top developers, and build your reputation today!</p>
+                  </div>
+                  <div className="flex-grow-1">
+                    <p className="text-white-50 mb-1" style={{ fontSize: '0.82rem', letterSpacing: '0.3px' }}>Welcome back</p>
+                    <div className="d-flex align-items-center flex-wrap gap-2 mb-1">
+                      <h5 className="text-white fw-bold mb-0 profile-name">{currentUser.name || "Developer"}</h5>
+                      {localStorage.getItem("adminToken") && (
+                        <span className="admin-badge">ADMIN</span>
+                      )}
+                    </div>
+                    <p className="profile-email mb-0">{currentUser.email}</p>
+                  </div>
+                </div>
+                <div className="d-flex flex-column flex-sm-row gap-2">
+                  <button className="btn btn-glass btn-sm flex-fill" style={{ minHeight: '42px' }} onClick={() => navigate(`/profile/${currentUser._id}`)}>
+                    Profile
+                  </button>
+                  <button className="btn btn-glass btn-sm flex-fill" style={{ minHeight: '42px', background: 'linear-gradient(135deg, #f97316, #fb7185)' }} onClick={handleLogout}>
+                    Logout
+                  </button>
                 </div>
               </div>
-
-              <div className="card border p-3 rounded-3 shadow-none">
-                <h6 className="fw-bold text-dark mb-3 d-flex align-items-center">
-                  <span className="me-2">👥</span> Top Users
-                </h6>
-                <div className="d-flex flex-column gap-2">
-                  {topUsers.length > 0 ? topUsers.map((u) => (
-                    <Link 
-                        key={u._id} 
-                        to={`/profile/${u._id}`} 
-                        className="d-flex align-items-center gap-2 text-decoration-none p-1 rounded"
-                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#f8f9fa"}
-                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
-                      >
-                      <div 
-                        className="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold" 
-                        style={{ width: "28px", height: "28px", fontSize: "0.8rem" }}
-                      >
-                        {u.name.charAt(0).toUpperCase()}
-                      </div>
-                      <span className="small fw-semibold text-dark">{u.name}</span>
-                    </Link>
-                  )) : (
-                    <div className="text-muted small">Loading top users...</div>
-                  )}
-                </div>
-              </div>
-            </>
+            </div>
           )}
+
+          {/* Top Users Section */}
+          {topUsers.length > 0 && (
+            <div className="mb-4">
+              <h6 className="text-light fw-bold mb-3">🏆 Top Contributors</h6>
+              <div className="glass-glow p-3 rounded-3">
+                {topUsers.slice(0, 5).map((user, index) => (
+                  <div key={user._id} className="d-flex align-items-center mb-2">
+                    <span className="badge bg-primary me-2" style={{ minWidth: '24px' }}>#{index + 1}</span>
+                    <div className="avatar-circle me-2" style={{ width: '24px', height: '24px', background: 'linear-gradient(135deg, #60a5fa, #a78bfa)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', fontWeight: 'bold', color: 'white' }}>
+                      {user.name.charAt(0).toUpperCase()}
+                    </div>
+                    <small className="text-light fw-medium">{user.name}</small>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Quick Actions */}
+          <div className="mb-4">
+            <h6 className="text-light fw-bold mb-3">⚡ Quick Actions</h6>
+            <div className="d-grid gap-2">
+              <button className="btn btn-glass btn-sm text-start" onClick={() => navigate('/questions')}>
+                <SvgZap /> Ask Question
+              </button>
+              <button className="btn btn-glass btn-sm text-start" onClick={() => navigate('/challenges')}>
+                <SvgChallenge /> View Challenges
+              </button>
+              <button className="btn btn-glass btn-sm text-start" onClick={() => navigate('/chat')}>
+                <SvgChat /> Start Chat
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

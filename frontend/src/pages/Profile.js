@@ -18,6 +18,8 @@ function Profile() {
   const [editName, setEditName] = useState("");
   const [editBio, setEditBio] = useState("");
   const [editGender, setEditGender] = useState("male");
+  const [editPhotoFile, setEditPhotoFile] = useState(null);
+  const [editPhotoPreview, setEditPhotoPreview] = useState("");
   const [saving, setSaving] = useState(false);
 
   const fetchProfile = useCallback(async () => {
@@ -35,6 +37,8 @@ function Profile() {
         setEditName(profileData.user.name);
         setEditBio(profileData.user.bio || "");
         setEditGender(profileData.user.gender || "male");
+        setEditPhotoPreview(profileData.user.photoUrl || "");
+        setEditPhotoFile(null);
 
         if (meData && meData.user) {
           setMe(meData.user);
@@ -57,20 +61,37 @@ function Profile() {
     fetchProfile();
   }, [fetchProfile]);
 
+  useEffect(() => {
+    if (editPhotoFile) {
+      const previewUrl = URL.createObjectURL(editPhotoFile);
+      setEditPhotoPreview(previewUrl);
+      return () => URL.revokeObjectURL(previewUrl);
+    }
+    if (user?.photoUrl) {
+      setEditPhotoPreview(user.photoUrl);
+    }
+  }, [editPhotoFile, user?.photoUrl]);
+
   const handleUpdate = async (e) => {
     e.preventDefault();
     setSaving(true);
     try {
-      // Pass the current user's ID to allow admins to edit others
-      const res = await updateUserProfile({
-        name: editName,
-        bio: editBio,
-        gender: editGender
-      }, user._id); 
+      const formData = new FormData();
+      formData.append("name", editName);
+      formData.append("bio", editBio);
+      formData.append("gender", editGender);
+      if (editPhotoFile) {
+        formData.append("photo", editPhotoFile);
+      }
+
+      const res = await updateUserProfile(formData, user._id);
 
       if (res.user) {
         setUser(res.user);
+        setEditPhotoPreview(res.user.photoUrl || "");
+        setEditPhotoFile(null);
         setIsEditing(false);
+        window.dispatchEvent(new CustomEvent("profileUpdated", { detail: res.user }));
       }
     } catch (err) {
       alert("Failed to update profile.");
@@ -131,9 +152,13 @@ function Profile() {
             <div className={`py-4 px-4 text-center text-white ${user.gender === "female" ? "bg-danger" : "bg-success"}`}>
               <div 
                 className={`bg-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 shadow ${user.gender === "female" ? "text-danger" : "text-success"}`} 
-                style={{ width: "80px", height: "80px", fontSize: "3rem" }}
+                style={{ width: "80px", height: "80px", overflow: 'hidden' }}
               >
-                {user.gender === "female" ? "👩" : "👨"}
+                {user.photoUrl ? (
+                  <img src={user.photoUrl} alt="Profile" className="w-100 h-100 object-fit-cover" />
+                ) : (
+                  <span style={{ fontSize: "3rem" }}>{user.gender === "female" ? "👩" : "👨"}</span>
+                )}
               </div>
               
               {!isEditing ? (
@@ -167,6 +192,25 @@ function Profile() {
                  <p className="lead">{user.bio || `Hey! I am ${user.name} and I use Dev Community 🚀`}</p>
               ) : (
                 <form onSubmit={handleUpdate}>
+                   <label className="form-label text-start w-100 mb-2">Upload Profile Photo</label>
+                   <div className="d-flex flex-column align-items-center mb-3">
+                     <div className="rounded-circle overflow-hidden mb-2" style={{ width: '90px', height: '90px', background: '#0f172a' }}>
+                       <img
+                         src={editPhotoPreview || user.photoUrl || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%2360a5fa'/%3E%3C/svg%3E"}
+                         alt="Preview"
+                         className="w-100 h-100 object-fit-cover"
+                       />
+                     </div>
+                     <input
+                       type="file"
+                       accept="image/*"
+                       className="form-control form-control-sm"
+                       onChange={(e) => {
+                         const file = e.target.files?.[0];
+                         setEditPhotoFile(file || null);
+                       }}
+                     />
+                   </div>
                    <textarea 
                      className="form-control mb-3" 
                      rows="3" 
@@ -178,7 +222,7 @@ function Profile() {
                      <button type="submit" disabled={saving} className="btn btn-primary rounded-pill px-4 shadow-sm">
                        {saving ? "Saving..." : "Save Changes"}
                      </button>
-                     <button type="button" onClick={() => setIsEditing(false)} className="btn btn-outline-secondary rounded-pill px-4">
+                     <button type="button" onClick={() => { setIsEditing(false); setEditPhotoFile(null); setEditPhotoPreview(user.photoUrl || ""); }} className="btn btn-outline-secondary rounded-pill px-4">
                        Cancel
                      </button>
                    </div>

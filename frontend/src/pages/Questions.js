@@ -95,7 +95,7 @@ function Questions() {
           </div>
         </div>
       ) : posts.length === 0 ? (
-        <div className="text-center py-5 text-muted">No questions available. Be the first to ask!</div>
+        <div className="text-center py-5 text-white-50">No questions available. Be the first to ask!</div>
       ) : (
         <div className="d-flex flex-column gap-1">
           {posts

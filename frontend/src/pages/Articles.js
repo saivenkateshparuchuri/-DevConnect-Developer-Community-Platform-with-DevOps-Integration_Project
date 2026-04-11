@@ -31,7 +31,7 @@ function Articles() {
       <div className="d-flex align-items-center justify-content-between mb-4 border-bottom pb-4">
         <div>
            <h3 className="fw-bold m-0 text-dark">📰 Developer Hub</h3>
-           <p className="text-muted small mb-0 mt-1">Daily insights, tutorials, and ecosystem news from the database.</p>
+           <p className="text-white-50 small mb-0 mt-1">Daily insights, tutorials, and ecosystem news from the database.</p>
         </div>
         <button className="btn btn-primary rounded-pill px-4 fw-bold">Write Article</button>
       </div>

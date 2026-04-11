@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema({
   type: String,
   default: "Hey! I am using Dev Community 🚀"
 },
+  photoUrl: {
+    type: String,
+    default: ""
+  },
   isAdmin: {
     type: Boolean,
     default: false

@@ -28,7 +28,7 @@ function Tags() {
       <div className="d-flex align-items-center justify-content-between mb-4 border-bottom pb-3">
         <div>
            <h3 className="fw-bold m-0 text-dark">🏷 Popular Tags</h3>
-           <p className="text-muted small mb-0 mt-1">Foundational keywords to categorize the community network.</p>
+           <p className="text-white-50 small mb-0 mt-1">Foundational keywords to categorize the community network.</p>
         </div>
         <div className="col-md-4">
            <input 
