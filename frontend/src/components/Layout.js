@@ -227,21 +227,37 @@ function Layout({ children }) {
           {/* Top Search Bar / Header */}
           <div className="sticky-top border-bottom px-4 py-3 d-flex align-items-center justify-content-between" style={{ zIndex: 900, backdropFilter: "blur(20px)", background: 'rgba(15, 23, 42, 0.2)', borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
              <div className="input-group search-bar flex-grow-1" style={{ maxWidth: "600px" }}>
-                <span className="input-group-text glass-panel border-end-0 d-flex align-items-center justify-content-center" style={{ background: "rgba(96, 165, 250, 0.1)", border: "none", borderRadius: "12px 0 0 12px" }}>
-                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <span className="input-group-text glass-panel border-end-0 d-flex align-items-center justify-content-center" style={{ background: "linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%)", border: "1px solid rgba(99, 102, 241, 0.3)", borderRadius: "12px 0 0 12px", borderRight: "none" }}>
+                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="url(#searchGradient)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                     <defs>
+                       <linearGradient id="searchGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                         <stop offset="0%" stopColor="#6366f1" />
+                         <stop offset="100%" stopColor="#a78bfa" />
+                       </linearGradient>
+                     </defs>
                      <circle cx="11" cy="11" r="8"></circle>
                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                    </svg>
                 </span>
                 <input 
                   type="text" 
-                  className="form-control glass-panel border-start-0 ps-0 text-light" 
-                  placeholder="Search questions, tags, or users..." 
-                  style={{ fontSize: "0.95rem", background: "rgba(30, 41, 59, 0.6)", border: "none", borderRadius: "0 12px 12px 0", fontWeight: "500" }}
+                  className="form-control glass-panel border-start-0 ps-3 text-light" 
+                  placeholder="Search CodeVerse..." 
+                  style={{ fontSize: "0.95rem", background: "rgba(30, 41, 59, 0.6)", border: "1px solid rgba(99, 102, 241, 0.3)", borderLeft: "none", borderRadius: "0 12px 12px 0", fontWeight: "500" }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                        navigate(`/questions?q=${e.target.value}`);
                     }
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.background = 'rgba(30, 41, 59, 0.8)';
+                    e.target.style.borderColor = 'rgba(99, 102, 241, 0.5)';
+                    e.target.style.boxShadow = '0 0 15px rgba(99, 102, 241, 0.2)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.background = 'rgba(30, 41, 59, 0.6)';
+                    e.target.style.borderColor = 'rgba(99, 102, 241, 0.3)';
+                    e.target.style.boxShadow = 'none';
                   }}
                 />
              </div>
