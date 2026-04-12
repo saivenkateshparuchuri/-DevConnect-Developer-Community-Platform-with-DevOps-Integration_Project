@@ -20,36 +20,58 @@ function AdminDashboard() {
   const [currentAdmin, setCurrentAdmin] = useState(null);
   const navigate = useNavigate();
 
+  const fetchAdminData = async () => {
+    const adminToken = localStorage.getItem("adminToken");
+    if (!adminToken) {
+      navigate("/admin");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const [usersList, postsList, submissionsList, adminMe] = await Promise.all([
+        getAllUsers(),
+        getPosts(),
+        getAllChallengeSubmissions(),
+        adminGetMe(adminToken)
+      ]);
+
+      setUsers(usersList);
+      setPosts(postsList);
+      setChallengeSubmissions(Array.isArray(submissionsList) ? submissionsList : []);
+      if (adminMe.user) setCurrentAdmin(adminMe.user);
+    } catch (err) {
+      console.error("Error fetching admin data:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    // Basic verification and data fetch
-    const fetchAdminData = async () => {
-      const adminToken = localStorage.getItem("adminToken");
-      if (!adminToken) {
-         navigate("/admin");
-         return;
-      }
+    fetchAdminData();
 
-      try {
-        setLoading(true);
-        const [usersList, postsList, submissionsList, adminMe] = await Promise.all([
-          getAllUsers(),
-          getPosts(),
-          getAllChallengeSubmissions(),
-          adminGetMe(adminToken)
-        ]);
+    const intervalId = setInterval(() => {
+      getAllChallengeSubmissions()
+        .then((submissionsList) => setChallengeSubmissions(Array.isArray(submissionsList) ? submissionsList : []))
+        .catch((err) => console.error("Error refreshing challenge submissions:", err));
+    }, 15000);
 
-        setUsers(usersList);
-        setPosts(postsList);
-        setChallengeSubmissions(Array.isArray(submissionsList) ? submissionsList : []);
-        if (adminMe.user) setCurrentAdmin(adminMe.user);
-      } catch (err) {
-        console.error("Error fetching admin data:", err);
-      } finally {
-        setLoading(false);
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        getAllChallengeSubmissions()
+          .then((submissionsList) => setChallengeSubmissions(Array.isArray(submissionsList) ? submissionsList : []))
+          .catch((err) => console.error("Error refreshing challenge submissions:", err));
       }
     };
 
-    fetchAdminData();
+    window.addEventListener("focus", handleVisibilityChange);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      clearInterval(intervalId);
+      window.removeEventListener("focus", handleVisibilityChange);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, [navigate]);
 
   const handleDeleteUser = async (userId) => {
@@ -96,6 +118,13 @@ function AdminDashboard() {
   const handleFeedbackChange = (submissionId, value) => {
     setFeedbackBySubmission((prev) => ({ ...prev, [submissionId]: value }));
   };
+
+  const sortedChallengeSubmissions = [...challengeSubmissions].sort((a, b) => {
+    const statusRank = (submission) => (submission.status === "Pending" ? 0 : submission.status === "Rejected" ? 1 : 2);
+    const rankDiff = statusRank(a) - statusRank(b);
+    if (rankDiff !== 0) return rankDiff;
+    return new Date(b.submittedAt) - new Date(a.submittedAt);
+  });
 
   const handleReviewSubmission = async (submission, status) => {
     try {
@@ -324,7 +353,7 @@ function AdminDashboard() {
                        </tr>
                      </thead>
                      <tbody>
-                       {challengeSubmissions.slice(0, 20).map((submission) => (
+                       {sortedChallengeSubmissions.map((submission) => (
                          <tr key={submission.submissionId}>
                            <td>
                              <div className="fw-semibold small">{submission.challengeTitle}</div>
