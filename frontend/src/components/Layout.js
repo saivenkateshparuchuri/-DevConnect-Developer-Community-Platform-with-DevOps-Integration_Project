@@ -114,22 +114,43 @@ function Layout({ children }) {
         <div className="layout-left-panel p-4 position-fixed" style={{ zIndex: 1000, overflowY: "auto", left: "0", width: "280px", top: "0", height: '100vh', background: 'rgba(15, 23, 42, 0.3)', backdropFilter: 'blur(10px)', borderRight: '1px solid rgba(255, 255, 255, 0.05)' }}>
           {/* Logo */}
           <div className="d-flex align-items-center mb-4 px-3 py-2" style={{ cursor: "pointer", borderRadius: "12px", transition: "all 0.3s ease" }} onClick={() => navigate('/home')}
-               onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(96, 165, 250, 0.1)'}
+               onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(99, 102, 241, 0.1)'}
                onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
              <div className="me-3">
-               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="url(#logoGradient)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+               <svg width="36" height="36" viewBox="0 0 65 65" style={{ filter: 'drop-shadow(0 2px 8px rgba(99, 102, 241, 0.2))' }}>
+                 {/* Background circle */}
+                 <circle cx="32.5" cy="32.5" r="30" fill="rgba(99, 102, 241, 0.1)" stroke="url(#logoGradientLayout)" strokeWidth="1.5"/>
+                 
+                 {/* Top node */}
+                 <circle cx="32.5" cy="15" r="3.5" fill="url(#logoGradientLayout)"/>
+                 
+                 {/* Left node */}
+                 <circle cx="15" cy="40" r="3.5" fill="url(#logoGradientLayout)"/>
+                 
+                 {/* Right node */}
+                 <circle cx="50" cy="40" r="3.5" fill="url(#logoGradientLayout)"/>
+                 
+                 {/* Center node */}
+                 <circle cx="32.5" cy="32.5" r="4" fill="url(#logoGradientLayout)"/>
+                 
+                 {/* Connection lines */}
+                 <line x1="32.5" y1="18.5" x2="32.5" y2="28.5" stroke="url(#logoGradientLayout)" strokeWidth="1.5" opacity="0.7"/>
+                 <line x1="32.5" y1="18.5" x2="18" y2="37.5" stroke="url(#logoGradientLayout)" strokeWidth="1.5" opacity="0.7"/>
+                 <line x1="32.5" y1="18.5" x2="47" y2="37.5" stroke="url(#logoGradientLayout)" strokeWidth="1.5" opacity="0.7"/>
+                 <line x1="18" y1="40" x2="29" y2="32.5" stroke="url(#logoGradientLayout)" strokeWidth="1.5" opacity="0.6"/>
+                 <line x1="47" y1="40" x2="36" y2="32.5" stroke="url(#logoGradientLayout)" strokeWidth="1.5" opacity="0.6"/>
+                 
+                 {/* Gradient definitions */}
                  <defs>
-                   <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                     <stop offset="0%" stopColor="#60a5fa" />
-                     <stop offset="100%" stopColor="#a78bfa" />
+                   <linearGradient id="logoGradientLayout" x1="0%" y1="0%" x2="100%" y2="100%">
+                     <stop offset="0%" style={{ stopColor: '#6366f1', stopOpacity: 1 }} />
+                     <stop offset="100%" style={{ stopColor: '#a78bfa', stopOpacity: 1 }} />
                    </linearGradient>
                  </defs>
-                 <polyline points="16 18 22 12 16 6"></polyline>
-                 <polyline points="8 6 2 12 8 18"></polyline>
                </svg>
              </div>
              <div>
-               <h5 className="fw-bold m-0 animated-text text-glow" style={{ letterSpacing: "-0.5px", fontSize: "1.4rem" }}>DevCommunity</h5>
+               <h5 className="fw-bold m-0 animated-text text-glow" style={{ letterSpacing: "0.5px", fontSize: "1.3rem", background: 'linear-gradient(135deg, #6366f1 0%, #a78bfa 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>CodeVerse</h5>
                <small className="text-white-50" style={{ fontSize: "0.7rem", opacity: 0.9 }}>Code • Connect • Create</small>
              </div>
           </div>
