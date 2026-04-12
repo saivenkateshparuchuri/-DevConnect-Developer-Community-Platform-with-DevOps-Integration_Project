@@ -1,59 +1,50 @@
-# 🚀 DevConnect: Developer Community Platform with DevOps Integration
+# 🚀 DevConnect: Developer Community Platform
 
-A full-stack **MERN** application that enables developers to collaborate, share knowledge, and engage in discussions through posts and comments.
+A full-stack MERN (MongoDB, Express.js, React.js, Node.js) application that enables developers to collaborate, share knowledge, and engage in discussions through posts and comments.
 
-This repository has been reset and configured as a personal project by Paruchuri Sai Venkatesh.
+This repository is maintained as a personal project by **Paruchuri Sai Venkatesh**.
 
 ---
 
 ## 🌐 Live Demo
-
-* https://devconnect-developer-community-platform-haoy.onrender.com
+🔗 Frontend - https://dev-connect-developer-community-pla-seven.vercel.app/
+🔗 Backend - https://devconnect-developer-community-platform.onrender.com
 
 ---
 
 ## ✨ Features
-
-* 🔐 Secure Authentication (JWT-based login & signup)
-* 📝 Create, view, and delete posts
-* 💬 Comment system for discussions
-* 👤 User profiles and protected routes
-* ⚡ Responsive UI with smooth UX
-* 🌍 Fully deployed (Vercel + Render)
+- 🔐 **Secure Authentication** – JWT-based login and signup
+- 📝 **Post Management** – Create, view, and delete posts
+- 💬 **Comment System** – Engage in discussions
+- 👤 **User Profiles** – Protected routes and personalized experience
+- ⚡ **Responsive UI** – Optimized for desktop and mobile devices
+- 🌍 **Cloud Deployment** – Frontend on Vercel, backend on Render, database on MongoDB Atlas
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-
-* React.js
-* CSS
+- React.js
+- CSS
+- Axios
 
 ### Backend
-
-* Node.js
-* Express.js
+- Node.js
+- Express.js
 
 ### Database
-
-* MongoDB
+- MongoDB (Atlas)
 
 ### Authentication
-
-* JSON Web Tokens (JWT)
+- JSON Web Tokens (JWT)
 
 ---
 
 ## 🏗️ Architecture
 
-```text
-Frontend (React - Vercel)
-        ↓
-Backend (Node.js + Express - Render)
-        ↓
-MongoDB Database
-```
+Frontend (React - Vercel) --> Backend (Node.js + Express - Render) --> MongoDB Atlas
+
 
 ---
 
@@ -61,7 +52,6 @@ MongoDB Database
 
 ### Backend
 
-```
 backend/
 │── server.js
 │── config/
@@ -69,116 +59,91 @@ backend/
 │── routes/
 │── controllers/
 │── middleware/
-```
+
 
 ### Frontend
 
-```
 frontend/
 │── src/
 │── components/
 │── pages/
 │── services/
-```
 
 ---
 
 ## ⚙️ Installation & Setup
 
-### 1️⃣ Clone the repository
 
-```
+### 1️⃣ Clone the Repository
+```bash
 git clone https://github.com/saivenkateshparuchuri/-DevConnect-Developer-Community-Platform-with-DevOps-Integration_Project.git
 cd Developer_community_project_2-main
-```
 
----
 
-### 2️⃣ Setup Backend
+2️⃣ Setup Backend
 
-```
 cd backend
 npm install
 npm start
-```
 
----
 
-### 3️⃣ Setup Frontend
+3️⃣ Setup Frontend
 
-```
 cd frontend
 npm install
 npm start
-```
 
----
 
-## 🔐 Environment Variables
+🔐 Environment Variables
 
-Create a `.env` file in the **backend** folder:
-
-```
+Create a .env file in the backend folder:
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_secret_key
-```
 
----
 
-## 📡 API Endpoints
+📡 API Endpoints
 
-### Auth
+Authentication
 
-* POST `/api/auth/signup`
-* POST `/api/auth/login`
+Method	Endpoint	        Description
+POST	/api/auth/signup	Register a new user
+POST	/api/auth/login	        Authenticate user
 
-### Posts
+Posts
 
-* GET `/api/posts`
-* POST `/api/posts`
-* GET `/api/posts/:id`
-* DELETE `/api/posts/:id`
+Method	        Endpoint	        Description
+GET	        /api/posts	        Get all posts
+POST	        /api/posts	        Create a post
+GET	        /api/posts/:id	        Get a specific post
+DELETE	        /api/posts/:id	        Delete a post
 
-### Comments
+Comments
 
-* POST `/api/comments`
-* GET `/api/comments/:postId`
+Method	        Endpoint	        Description
+POST	        /api/comments	        Add a comment
+GET	        /api/comments/:postId	Get comments for a post
 
----
 
-## 🚀 Deployment
+🚀 Deployment
 
-* Frontend deployed on **Vercel**
-* Backend deployed on **Render**
-* Database hosted on **MongoDB Atlas**
+Frontend: Vercel
+Backend: Render
+Database: MongoDB Atlas
 
----
+🚀 Future Enhancements
 
-## 🚀 Future Enhancements
+🔔 Real-time notifications
+👍 Like/Upvote system
+🔍 Advanced search & filters
+🤖 AI-based recommendations
+🏆 Gamification (badges & leaderboard)
 
-* 🔔 Real-time notifications
-* 👍 Like/Upvote system
-* 🔍 Advanced search & filters
-* 🤖 AI-based recommendations
-* 🏆 Gamification (badges & leaderboard)
+🤝 Contributing
 
----
+Contributions are welcome! Feel free to fork the repository and submit a pull request.
 
-## 🤝 Contributing
+📧 Contact
 
-Contributions are welcome!
-Feel free to fork this repo and submit a pull request.
-
----
-
-## 📧 Contact
-
-For collaboration or queries:
-📩 [saivenkateshparuchuri2004@gmail.com](mailto:saivenkateshparuchuri2004@gmail.com)
-
----
-
-## ⭐ Support
-
-If you like this project, consider giving it a ⭐ on GitHub!
+Name : Paruchuri Sai Venkatesh
+📩 Email: saivenkateshparuchuri2004@gmail.com
