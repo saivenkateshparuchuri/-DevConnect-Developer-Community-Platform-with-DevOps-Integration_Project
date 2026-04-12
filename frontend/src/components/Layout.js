@@ -113,9 +113,15 @@ function Layout({ children }) {
         {/* Left Panel - Navigation Sidebar */}
         <div className="layout-left-panel p-4 position-fixed" style={{ zIndex: 1000, overflowY: "auto", left: "0", width: "280px", top: "0", height: '100vh', background: 'rgba(15, 23, 42, 0.3)', backdropFilter: 'blur(10px)', borderRight: '1px solid rgba(255, 255, 255, 0.05)' }}>
           {/* Logo */}
-          <div className="d-flex align-items-center mb-4 px-3 py-2" style={{ cursor: "pointer", borderRadius: "12px", transition: "all 0.3s ease" }} onClick={() => navigate('/home')}
-               onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(99, 102, 241, 0.1)'}
-               onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
+          <div className="d-flex align-items-center mb-4 px-3 py-2" style={{ cursor: "pointer", borderRadius: "12px", transition: "all 0.3s ease", background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%)', border: '1px solid rgba(99, 102, 241, 0.3)' }} onClick={() => navigate('/home')}
+               onMouseEnter={(e) => {
+                 e.currentTarget.style.background = 'linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(168, 85, 247, 0.25) 100%)';
+                 e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.5)';
+               }}
+               onMouseLeave={(e) => {
+                 e.currentTarget.style.background = 'linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%)';
+                 e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.3)';
+               }}>
              <div className="me-3">
                <svg width="36" height="36" viewBox="0 0 65 65" style={{ filter: 'drop-shadow(0 2px 8px rgba(99, 102, 241, 0.2))' }}>
                  {/* Background circle */}
