@@ -189,39 +189,56 @@ function Home() {
           </div>
         </div>
 
-        {/* Badge Progress */}
+        {/* AI Assistant */}
         <div className="col-xl-4 col-lg-5 col-md-6 fade-in-scale delay-2">
           <div className="card glass-glow border-0 h-100 p-4 rounded-3 hover-move glow-border" style={{ minHeight: '260px' }}>
-            <h5 className="fw-bold mb-4 text-light" style={{ fontSize: '1.3rem' }}>Badge progress</h5>
+            <div className="d-flex align-items-center justify-content-between mb-3">
+              <h5 className="fw-bold mb-0 text-light" style={{ fontSize: '1.3rem' }}>AI assistant</h5>
+              <span className="badge rounded-pill" style={{ background: 'rgba(59, 130, 246, 0.18)', color: '#bfdbfe', padding: '0.5rem 0.8rem' }}>
+                Fast answers
+              </span>
+            </div>
             <p className="text-white-50 mb-4 mt-2" style={{ fontSize: '0.95rem' }}>
-              Take the tour to earn your first badge!
+              Draft questions, refine answers, or get a quick explanation before you post.
             </p>
-            <button className="btn btn-glass rounded-pill mt-auto w-75 py-2" onClick={() => navigate('/questions')} style={{ fontSize: '0.95rem' }}>
-              Get started here
+            <div className="d-flex flex-column gap-2 mb-4">
+              <div className="d-flex align-items-center gap-2 text-light small">
+                <span>•</span>
+                <span>Summarize complex topics in seconds</span>
+              </div>
+              <div className="d-flex align-items-center gap-2 text-light small">
+                <span>•</span>
+                <span>Turn rough notes into clear questions</span>
+              </div>
+              <div className="d-flex align-items-center gap-2 text-light small">
+                <span>•</span>
+                <span>Jump directly into the AI workspace</span>
+              </div>
+            </div>
+            <button className="btn btn-glass rounded-pill mt-auto w-75 py-2" onClick={() => navigate('/ai')} style={{ fontSize: '0.95rem' }}>
+              Open AI helper
             </button>
           </div>
         </div>
 
-        {/* Watched Tags */}
+        {/* Challenge Spotlight */}
         <div className="col-xl-4 col-lg-5 col-md-6 slide-in-right delay-3">
           <div className="card glass-glow border-0 h-100 p-4 rounded-3 position-relative hover-move glow-border" style={{ minHeight: '260px' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
-              <h5 className="fw-bold mb-0 text-light" style={{ fontSize: '1.3rem' }}>Watched tags</h5>
-              <span
-                className="text-muted settings-icon"
-                title="Manage watched tags"
-                style={{ cursor: "pointer" }}
-                onClick={() => navigate('/tags')}
-              >
-                ⚙️
-              </span>
+              <h5 className="fw-bold mb-0 text-light" style={{ fontSize: '1.3rem' }}>Challenge spotlight</h5>
+              <span className="text-warning fw-semibold" style={{ letterSpacing: '0.04em' }}>Live</span>
             </div>
-            <div className="d-flex flex-wrap gap-2">
-              <span className="tag-badge slide-in-up delay-4">css</span>
-              <span className="tag-badge slide-in-up delay-1">html</span>
-              <span className="tag-badge slide-in-up delay-2">javascript</span>
-              <span className="tag-badge slide-in-up delay-3">python</span>
+            <p className="text-white-50 mb-4" style={{ fontSize: '0.95rem' }}>
+              Build momentum with a focused challenge, sharpen your skills, and earn visible progress.
+            </p>
+            <div className="d-flex flex-wrap gap-2 mb-4">
+              <span className="tag-badge slide-in-up delay-1">daily practice</span>
+              <span className="tag-badge slide-in-up delay-2">skill growth</span>
+              <span className="tag-badge slide-in-up delay-3">reputation boost</span>
             </div>
+            <button className="btn btn-glass rounded-pill mt-auto w-75 py-2" onClick={() => navigate('/challenges')} style={{ fontSize: '0.95rem' }}>
+              View challenges
+            </button>
           </div>
         </div>
 
@@ -279,7 +296,7 @@ function Home() {
       {/* Feed Section */}
       <div className="mb-3 slide-in-up delay-1">
         <h5 className="fw-bold text-light mb-1 text-glow">Interesting posts for you</h5>
-        <p className="text-secondary small mb-3">Based on your viewing history and watched tags. <a href="#feed" className="text-decoration-none text-info">Customize your feed</a></p>
+        <p className="text-secondary small mb-3">Based on your activity and trending discussions. <a href="#feed" className="text-decoration-none text-info">Customize your feed</a></p>
       </div>
 
       {loading ? (
