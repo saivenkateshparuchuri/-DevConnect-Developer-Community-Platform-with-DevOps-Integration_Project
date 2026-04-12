@@ -206,8 +206,10 @@ function Layout({ children }) {
                style={{
                  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                  border: 'none',
-                 borderRadius: '0.75rem',
-                 padding: '0.6rem 0.8rem',
+                 borderRadius: '999px',
+                 width: '52px',
+                 height: '52px',
+                 padding: 0,
                  cursor: 'pointer',
                  transition: 'all 0.3s ease',
                  display: 'flex',
@@ -216,11 +218,37 @@ function Layout({ children }) {
                }}
                title="Toggle sidebar"
              >
-               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                 <line x1="8" y1="6" x2="21" y2="6"></line>
-                 <line x1="8" y1="12" x2="21" y2="12"></line>
-                 <line x1="8" y1="18" x2="21" y2="18"></line>
-               </svg>
+               {currentUser?.photoUrl ? (
+                 <img
+                   src={currentUser.photoUrl}
+                   alt="Profile"
+                   style={{
+                     width: '44px',
+                     height: '44px',
+                     borderRadius: '50%',
+                     objectFit: 'cover',
+                     border: '2px solid rgba(255, 255, 255, 0.35)'
+                   }}
+                 />
+               ) : (
+                 <span
+                   style={{
+                     width: '44px',
+                     height: '44px',
+                     borderRadius: '50%',
+                     background: 'linear-gradient(135deg, #60a5fa, #a78bfa)',
+                     border: '2px solid rgba(255, 255, 255, 0.35)',
+                     color: 'white',
+                     display: 'flex',
+                     alignItems: 'center',
+                     justifyContent: 'center',
+                     fontWeight: 700,
+                     fontSize: '1rem'
+                   }}
+                 >
+                   {(currentUser?.name || 'D').charAt(0).toUpperCase()}
+                 </span>
+               )}
              </button>
           </div>
           <div className="p-4" style={{ maxWidth: "100%", width: "100%" }}>
