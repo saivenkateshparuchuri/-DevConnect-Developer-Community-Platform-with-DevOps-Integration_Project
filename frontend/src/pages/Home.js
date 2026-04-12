@@ -103,7 +103,7 @@ function Home() {
             className={`card glass-glow border-0 h-100 p-4 rounded-3 hover-move glow-border streak-card-snap ${streakAtRisk ? 'streak-card-risk' : ''} ${streakBroken ? 'streak-card-broken' : ''}`}
             style={{ minHeight: '260px' }}
           >
-            <h5 className="fw-bold mb-3 text-light" style={{ fontSize: '1.3rem' }}>Reputation Streak</h5>
+            <h5 className="fw-bold mb-3 text-light" style={{ fontSize: '1.3rem' }}>Streak</h5>
             <div className="d-flex align-items-center justify-content-between mb-3">
               <div className="d-flex align-items-end">
                 <span className={`me-3 streak-flame ${streakBroken ? 'streak-flame-broken' : ''}`} style={{ fontSize: '2.3rem', lineHeight: 1, '--streak-flame-speed': flameSpeed }} role="img" aria-label="Streak">🔥</span>
