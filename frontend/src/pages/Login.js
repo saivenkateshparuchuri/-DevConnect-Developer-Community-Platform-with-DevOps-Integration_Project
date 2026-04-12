@@ -77,41 +77,47 @@ function Login() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '0.5rem'
+              gap: '0.8rem'
             }}>
-              <svg width="60" height="60" viewBox="0 0 60 60" style={{ filter: 'drop-shadow(0 0 10px rgba(99, 102, 241, 0.4))' }}>
-                {/* Outer circle */}
-                <circle cx="30" cy="30" r="28" fill="none" stroke="url(#gradient1)" strokeWidth="2"/>
+              <svg width="65" height="65" viewBox="0 0 65 65" style={{ filter: 'drop-shadow(0 2px 8px rgba(99, 102, 241, 0.3))' }}>
+                {/* Background circle */}
+                <circle cx="32.5" cy="32.5" r="30" fill="rgba(99, 102, 241, 0.1)" stroke="url(#logoGradient)" strokeWidth="1.5"/>
                 
-                {/* Code brackets */}
-                <text x="15" y="38" fontSize="24" fontWeight="bold" fill="url(#gradient1)" fontFamily="monospace">&lt;</text>
-                <text x="40" y="38" fontSize="24" fontWeight="bold" fill="url(#gradient2)" fontFamily="monospace">/&gt;</text>
+                {/* Top node */}
+                <circle cx="32.5" cy="15" r="3.5" fill="url(#logoGradient)"/>
                 
-                {/* Stars for universe concept */}
-                <circle cx="12" cy="12" r="1.5" fill="#a78bfa" opacity="0.8"/>
-                <circle cx="48" cy="10" r="1" fill="#c4b5fd" opacity="0.6"/>
-                <circle cx="50" cy="40" r="1.2" fill="#a78bfa" opacity="0.7"/>
-                <circle cx="14" cy="48" r="1" fill="#c4b5fd" opacity="0.6"/>
+                {/* Left node */}
+                <circle cx="15" cy="40" r="3.5" fill="url(#logoGradient)"/>
+                
+                {/* Right node */}
+                <circle cx="50" cy="40" r="3.5" fill="url(#logoGradient)"/>
+                
+                {/* Center node */}
+                <circle cx="32.5" cy="32.5" r="4" fill="url(#logoGradient)"/>
+                
+                {/* Connection lines */}
+                <line x1="32.5" y1="18.5" x2="32.5" y2="28.5" stroke="url(#logoGradient)" strokeWidth="1.5" opacity="0.7"/>
+                <line x1="32.5" y1="18.5" x2="18" y2="37.5" stroke="url(#logoGradient)" strokeWidth="1.5" opacity="0.7"/>
+                <line x1="32.5" y1="18.5" x2="47" y2="37.5" stroke="url(#logoGradient)" strokeWidth="1.5" opacity="0.7"/>
+                <line x1="18" y1="40" x2="29" y2="32.5" stroke="url(#logoGradient)" strokeWidth="1.5" opacity="0.6"/>
+                <line x1="47" y1="40" x2="36" y2="32.5" stroke="url(#logoGradient)" strokeWidth="1.5" opacity="0.6"/>
                 
                 {/* Gradient definitions */}
                 <defs>
-                  <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" style={{ stopColor: '#6366f1', stopOpacity: 1 }} />
-                    <stop offset="100%" style={{ stopColor: '#8b5cf6', stopOpacity: 1 }} />
-                  </linearGradient>
-                  <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style={{ stopColor: '#8b5cf6', stopOpacity: 1 }} />
                     <stop offset="100%" style={{ stopColor: '#a78bfa', stopOpacity: 1 }} />
                   </linearGradient>
                 </defs>
               </svg>
               <span style={{ 
-                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                background: 'linear-gradient(135deg, #6366f1 0%, #a78bfa 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
-                fontWeight: 'bold',
-                fontSize: '2rem'
+                fontWeight: '700',
+                fontSize: '2rem',
+                letterSpacing: '0.5px'
               }}>
                 CodeVerse
               </span>
