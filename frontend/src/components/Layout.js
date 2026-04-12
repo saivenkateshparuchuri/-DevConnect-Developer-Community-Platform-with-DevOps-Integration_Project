@@ -155,7 +155,12 @@ function Layout({ children }) {
         </div>
 
         {/* Center Main Content */}
-        <div className="layout-main p-0 min-vh-100 glass-panel order-2" style={{ backgroundColor: "transparent", marginLeft: "280px", width: "calc(100% - 560px)", transition: "all 0.3s ease" }}>
+        <div className="layout-main p-0 min-vh-100 glass-panel order-2" style={{ 
+          backgroundColor: "transparent", 
+          marginLeft: "280px", 
+          width: sidebarOpen ? "calc(100% - 560px)" : "calc(100% - 280px)",
+          transition: "all 0.3s ease"
+        }}>
           {/* Top Search Bar / Header */}
           <div className="sticky-top glass-glow border-bottom px-4 py-3 d-flex align-items-center justify-content-between" style={{ zIndex: 900, backdropFilter: "blur(20px)" }}>
              <div className="input-group search-bar flex-grow-1" style={{ maxWidth: "600px" }}>
