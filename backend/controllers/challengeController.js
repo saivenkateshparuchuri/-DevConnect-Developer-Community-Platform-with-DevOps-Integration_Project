@@ -130,6 +130,7 @@ const getMySubmissions = async (req, res) => {
             language: submission.language,
             status: submission.status,
             feedback: submission.feedback,
+            awardedMarks: submission.awardedMarks || 0,
             submittedAt: submission.submittedAt
           });
         }
