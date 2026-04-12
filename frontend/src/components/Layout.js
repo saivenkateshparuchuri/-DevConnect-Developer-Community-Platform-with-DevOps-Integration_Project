@@ -108,6 +108,25 @@ function Layout({ children }) {
         <div className="floating delay-2 position-absolute" style={{ bottom: '30%', left: '20%', fontSize: '1.8rem', opacity: 0.1 }}>💫</div>
         <div className="floating position-absolute" style={{ bottom: '20%', right: '10%', fontSize: '1.2rem', opacity: 0.1 }}>⭐</div>
       </div>
+
+      {/* Animated Background Text */}
+      <div className="position-fixed top-0 start-0 w-100 h-100 pointer-events-none" style={{ zIndex: 0, overflow: 'hidden' }}>
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          fontSize: '15rem',
+          fontWeight: 'bold',
+          color: 'rgba(99, 102, 241, 0.05)',
+          textShadow: '0 0 60px rgba(99, 102, 241, 0.1)',
+          whiteSpace: 'nowrap',
+          animation: 'floatBackground 20s ease-in-out infinite',
+          letterSpacing: '-5px'
+        }}>
+          CodeVerse
+        </div>
+      </div>
       <div className="row" style={{ margin: 0, minHeight: '100vh' }}>
         
         {/* Left Panel - Navigation Sidebar */}
@@ -394,6 +413,25 @@ function Layout({ children }) {
           }
           to {
             opacity: 1;
+          }
+        }
+
+        @keyframes floatBackground {
+          0%, 100% {
+            transform: translate(-50%, -50%) rotate(0deg) scale(1);
+            opacity: 0.05;
+          }
+          25% {
+            transform: translate(calc(-50% + 30px), calc(-50% - 20px)) rotate(5deg) scale(1.05);
+            opacity: 0.08;
+          }
+          50% {
+            transform: translate(calc(-50% - 20px), calc(-50% + 30px)) rotate(0deg) scale(1);
+            opacity: 0.05;
+          }
+          75% {
+            transform: translate(calc(-50% + 20px), calc(-50% - 40px)) rotate(-5deg) scale(0.95);
+            opacity: 0.07;
           }
         }
 
