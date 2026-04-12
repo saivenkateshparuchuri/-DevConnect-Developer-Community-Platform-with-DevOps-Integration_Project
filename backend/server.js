@@ -91,7 +91,7 @@ app.get('/api/protected', authMiddleware, async (req, res) => {
 });
 
 // Catch all handler: send back React's index.html file for client-side routing
-app.get(/^\/((?!api).)*$/, (req, res) => {
+app.get(/^\/((?!api|$).)*$/, (req, res) => {
   res.sendFile(path.join(__dirname, './public/index.html'));
 });
 
