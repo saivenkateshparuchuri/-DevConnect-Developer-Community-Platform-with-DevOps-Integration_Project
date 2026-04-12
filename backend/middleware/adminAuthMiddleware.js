@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const adminAuthMiddleware = (req, res, next) => {
-  const adminToken = req.header('x-admin-auth-token');
+  const adminToken = req.header('x-admin-auth-token') || req.header('Authorization');
 
   if (!adminToken) {
     return res.status(401).json({ message: 'No admin token, authorization denied' });

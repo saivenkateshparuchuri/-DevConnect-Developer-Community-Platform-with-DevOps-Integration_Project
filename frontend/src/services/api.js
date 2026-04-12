@@ -328,7 +328,7 @@ export const adminLogin = async (email, password) => {
 
 export const adminGetMe = async (adminToken) => {
   const res = await fetch(`${BASE_URL}/admin/auth/me`, {
-    headers: { 'x-admin-auth-token': adminToken }
+    headers: { Authorization: adminToken }
   });
   return res.json();
 };
@@ -336,7 +336,7 @@ export const adminGetMe = async (adminToken) => {
 export const adminDeleteUser = async (userId, adminToken) => {
   const res = await fetch(`${BASE_URL}/admin/auth/users/${userId}`, {
     method: "DELETE",
-    headers: { 'x-admin-auth-token': adminToken }
+    headers: { Authorization: adminToken }
   });
 
   const data = await res.json();
@@ -347,7 +347,7 @@ export const adminDeleteUser = async (userId, adminToken) => {
 export const adminDeletePost = async (postId, adminToken) => {
   const res = await fetch(`${BASE_URL}/admin/auth/posts/${postId}`, {
     method: "DELETE",
-    headers: { 'x-admin-auth-token': adminToken }
+    headers: { Authorization: adminToken }
   });
 
   const data = await res.json();
