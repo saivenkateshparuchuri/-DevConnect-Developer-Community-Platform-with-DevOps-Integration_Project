@@ -160,8 +160,9 @@ function Layout({ children }) {
           minHeight: "100vh",
           marginLeft: "280px", 
           marginRight: sidebarOpen ? "280px" : "0",
-          width: "auto",
-          transition: "all 0.3s ease"
+          width: sidebarOpen ? "calc(100% - 560px)" : "calc(100% - 280px)",
+          transition: "all 0.3s ease",
+          boxSizing: "border-box"
         }}>
           {/* Top Search Bar / Header */}
           <div className="sticky-top border-bottom px-4 py-3 d-flex align-items-center justify-content-between" style={{ zIndex: 900, backdropFilter: "blur(20px)", background: 'rgba(15, 23, 42, 0.2)', borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
