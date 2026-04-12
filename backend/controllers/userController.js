@@ -70,6 +70,10 @@ const updateProfile = async (req, res) => {
       user.photoUrl = photoUrl;
     }
 
+    if (user.constructor && user.constructor.modelName === "User") {
+      user.lastActivityAt = new Date();
+    }
+
     await user.save();
 
     // Prepare response object

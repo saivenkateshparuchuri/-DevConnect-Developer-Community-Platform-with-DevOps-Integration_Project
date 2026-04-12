@@ -1,4 +1,5 @@
 const Message = require('../models/Message');
+const User = require('../models/User');
 
 // GET /api/messages/conversations - Get latest message per conversation for sidebar sorting
 const getConversations = async (req, res) => {
@@ -63,6 +64,8 @@ const sendMessage = async (req, res) => {
       receiver: receiverId,
       text: text.trim()
     });
+
+    await User.findByIdAndUpdate(myId, { $set: { lastActivityAt: new Date() } });
 
     res.status(201).json(message);
   } catch (err) {

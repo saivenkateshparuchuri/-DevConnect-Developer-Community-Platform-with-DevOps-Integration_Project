@@ -1,4 +1,9 @@
 const Post = require('../models/Post');
+const User = require('../models/User');
+
+const touchUserActivity = async (userId) => {
+  await User.findByIdAndUpdate(userId, { $set: { lastActivityAt: new Date() } });
+};
 
 // ✅ createPost
 const createPost = async (req, res) => {
@@ -12,6 +17,7 @@ const createPost = async (req, res) => {
     });
 
     await post.save();
+    await touchUserActivity(req.user.id);
     res.status(201).json(post);
 
   } catch (error) {
@@ -73,6 +79,7 @@ const updatePost = async (req, res) => {
     post.content = content || post.content;
 
     await post.save();
+    await touchUserActivity(req.user.id);
     res.json(post);
 
   } catch (error) {
@@ -97,6 +104,7 @@ const addAnswer = async (req, res) => {
     });
 
     await post.save();
+    await touchUserActivity(req.user.id);
 
     res.json(post);
 

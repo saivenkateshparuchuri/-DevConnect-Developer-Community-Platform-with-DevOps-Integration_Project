@@ -57,6 +57,9 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
+    user.lastActivityAt = new Date();
+    await user.save();
+
     // create token
     const token = jwt.sign(
       { id: user._id, isAdmin: user.isAdmin || false, role: 'user' },

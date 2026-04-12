@@ -9,7 +9,29 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
   const [topUsers, setTopUsers] = useState([]);
+  const [nowTs, setNowTs] = useState(Date.now());
   const navigate = useNavigate();
+  const reputationScore = currentUser?.reputation || 0;
+  const streakDays = Math.max(1, reputationScore);
+  const streakStep = 7;
+  const streakSegment = streakDays % streakStep;
+  const activeSegments = streakSegment === 0 ? streakStep : streakSegment;
+  const streakProgress = (activeSegments / streakStep) * 100;
+  const nextStreakMilestone = streakDays + (streakStep - activeSegments);
+  const lastActivityDate = currentUser?.lastActivityAt ? new Date(currentUser.lastActivityAt) : null;
+  const isLastActivityValid = lastActivityDate && !Number.isNaN(lastActivityDate.getTime());
+  const msSinceLastActivity = isLastActivityValid ? (Date.now() - lastActivityDate.getTime()) : null;
+  const hoursSinceLastActivity = msSinceLastActivity !== null ? msSinceLastActivity / (1000 * 60 * 60) : null;
+  const streakBroken = hoursSinceLastActivity !== null ? hoursSinceLastActivity >= 48 : false;
+  const streakAtRisk = hoursSinceLastActivity !== null ? (hoursSinceLastActivity >= 24 && hoursSinceLastActivity < 48) : false;
+  const flameSpeed = streakBroken ? '3s' : (streakAtRisk ? '1s' : '2.2s');
+  const streakResetWindowMs = 48 * 60 * 60 * 1000;
+  const resetAtTs = isLastActivityValid ? lastActivityDate.getTime() + streakResetWindowMs : null;
+  const resetCountdownMs = resetAtTs ? Math.max(0, resetAtTs - nowTs) : null;
+  const countdownHours = resetCountdownMs !== null ? Math.floor(resetCountdownMs / (1000 * 60 * 60)) : 0;
+  const countdownMinutes = resetCountdownMs !== null ? Math.floor((resetCountdownMs % (1000 * 60 * 60)) / (1000 * 60)) : 0;
+  const countdownSeconds = resetCountdownMs !== null ? Math.floor((resetCountdownMs % (1000 * 60)) / 1000) : 0;
+  const resetCountdownLabel = `${String(countdownHours).padStart(2, "0")}:${String(countdownMinutes).padStart(2, "0")}:${String(countdownSeconds).padStart(2, "0")}`;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +60,16 @@ function Home() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (!streakAtRisk) return undefined;
+
+    const ticker = setInterval(() => {
+      setNowTs(Date.now());
+    }, 1000);
+
+    return () => clearInterval(ticker);
+  }, [streakAtRisk]);
+
   return (
     <Layout>
       {/* Title Section */}
@@ -65,24 +97,76 @@ function Home() {
       {/* Metrics Row */}
       <div className="row g-4 mb-5 justify-content-center">
         
-        {/* Reputation */}
+        {/* Reputation Streak */}
         <div className="col-xl-4 col-lg-5 col-md-6 slide-in-left delay-1">
-          <div className="card glass-glow border-0 h-100 p-4 rounded-3 hover-move glow-border" style={{ minHeight: '260px' }}>
-            <h5 className="fw-bold mb-4 text-light" style={{ fontSize: '1.3rem' }}>Reputation</h5>
-            <div className="d-flex align-items-end mb-3">
-              <span className="display-2 fw-light me-3 lh-1 text-light floating" style={{ fontSize: '3.5rem' }}>1</span>
-              <div 
-                className="w-100" 
-                style={{ height: "50px", background: "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(96, 165, 250, 0.1) 10px, rgba(96, 165, 250, 0.1) 20px)" }}
-              >
-                {/* Visual dotted Graph Mockup */}
-                <svg viewBox="0 0 100 20" className="w-100 h-100">
-                  <polyline fill="none" stroke="#60a5fa" strokeWidth="2" strokeDasharray="4" points="0,15 20,10 40,12 60,5 80,8 100,2" />
-                </svg>
+          <div
+            className={`card glass-glow border-0 h-100 p-4 rounded-3 hover-move glow-border streak-card-snap ${streakAtRisk ? 'streak-card-risk' : ''} ${streakBroken ? 'streak-card-broken' : ''}`}
+            style={{ minHeight: '260px' }}
+          >
+            <h5 className="fw-bold mb-3 text-light" style={{ fontSize: '1.3rem' }}>Reputation Streak</h5>
+            <div className="d-flex align-items-center justify-content-between mb-3">
+              <div className="d-flex align-items-end">
+                <span className={`me-3 streak-flame ${streakBroken ? 'streak-flame-broken' : ''}`} style={{ fontSize: '2.3rem', lineHeight: 1, '--streak-flame-speed': flameSpeed }} role="img" aria-label="Streak">🔥</span>
+                <div>
+                  <p className="mb-0 text-light fw-bold" style={{ fontSize: '2.4rem', lineHeight: 1 }}>{streakDays}</p>
+                  <small className="text-white-50 text-uppercase" style={{ letterSpacing: '0.08em' }}>days in a row</small>
+                </div>
               </div>
+              <span className="badge rounded-pill" style={{ background: streakBroken ? 'rgba(248, 113, 113, 0.2)' : 'rgba(255, 252, 0, 0.12)', color: streakBroken ? '#fecaca' : '#ffc34d', padding: '0.5rem 0.8rem' }}>
+                +{reputationScore} rep
+              </span>
             </div>
+
+            {streakBroken && (
+              <div className="streak-broken-alert mb-3">
+                Streak broken: post or answer now to start a fresh streak.
+              </div>
+            )}
+
+            {streakAtRisk && (
+              <div className="streak-risk-alert mb-3">
+                Streak at risk: post or answer today to avoid reset. Resets in <span className="fw-semibold text-light">{resetCountdownLabel}</span>.
+              </div>
+            )}
+
+            <div className="mb-3" style={{
+              background: 'rgba(15, 23, 42, 0.55)',
+              border: '1px solid rgba(148, 163, 184, 0.18)',
+              borderRadius: '999px',
+              padding: '0.55rem 0.6rem'
+            }}>
+              <div className="d-flex gap-2">
+                {Array.from({ length: streakStep }).map((_, index) => (
+                  <span
+                    key={index}
+                    className={index < activeSegments ? `streak-segment-active ${streakBroken ? 'streak-segment-broken' : ''}` : ''}
+                    style={{
+                      height: '10px',
+                      flex: 1,
+                      borderRadius: '999px',
+                      background: index < activeSegments
+                        ? (streakBroken ? 'linear-gradient(90deg, #fb7185, #ef4444)' : 'linear-gradient(90deg, #fffc00, #ff7a00)')
+                        : 'rgba(148, 163, 184, 0.24)',
+                      boxShadow: index < activeSegments ? (streakBroken ? '0 0 12px rgba(239, 68, 68, 0.5)' : '0 0 14px rgba(255, 122, 0, 0.5)') : 'none',
+                      transition: 'all 0.3s ease'
+                    }}
+                  />
+                ))}
+              </div>
+              <div className="mt-2" style={{
+                height: '4px',
+                width: `${streakProgress}%`,
+                background: streakBroken ? 'linear-gradient(90deg, #fb7185, #ef4444)' : 'linear-gradient(90deg, #fffc00, #ff7a00)',
+                borderRadius: '999px',
+                transition: 'width 0.35s ease'
+              }}></div>
+            </div>
+
             <p className="text-white-50 mb-0" style={{ fontSize: '0.95rem' }}>
-              Earn reputation by <a href="#ask" className="text-decoration-none text-info">Asking</a>, <a href="#answer" className="text-decoration-none text-info">Answering</a> & <a href="#edit" className="text-decoration-none text-info">Editing</a>.
+              {streakBroken
+                ? <>Your streak timer has reset. Jump back in by <a href="#ask" className="text-decoration-none text-info">Asking</a> or <a href="#answer" className="text-decoration-none text-info">Answering</a> today to rebuild momentum.</>
+                : <>Keep your streak alive by <a href="#ask" className="text-decoration-none text-info">Asking</a>, <a href="#answer" className="text-decoration-none text-info">Answering</a> & <a href="#edit" className="text-decoration-none text-info">Editing</a> every day. Next milestone: <span className="text-light fw-semibold">{nextStreakMilestone} days</span>.</>
+              }
             </p>
           </div>
         </div>
