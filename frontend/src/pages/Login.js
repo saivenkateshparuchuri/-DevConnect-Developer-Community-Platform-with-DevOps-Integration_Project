@@ -81,10 +81,10 @@ function Login() {
               backgroundClip: 'text',
               fontWeight: 'bold'
             }}>
-              DevConnect
+              CodeVerse
             </div>
             <h1 className="text-light fw-bold mb-2" style={{ fontSize: '1.75rem', letterSpacing: '-0.5px' }}>
-              Welcome to DevConnect
+              Welcome to CodeVerse
             </h1>
             <p className="text-light-emphasis mb-0" style={{ fontSize: '0.95rem', opacity: 0.8 }}>
               Connect, collaborate, and grow with developers worldwide
