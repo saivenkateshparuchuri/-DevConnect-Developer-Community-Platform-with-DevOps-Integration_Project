@@ -338,7 +338,10 @@ export const adminDeleteUser = async (userId, adminToken) => {
     method: "DELETE",
     headers: { 'x-admin-auth-token': adminToken }
   });
-  return res.json();
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to delete user");
+  return data;
 };
 
 export const adminDeletePost = async (postId, adminToken) => {
@@ -346,5 +349,8 @@ export const adminDeletePost = async (postId, adminToken) => {
     method: "DELETE",
     headers: { 'x-admin-auth-token': adminToken }
   });
-  return res.json();
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to delete post");
+  return data;
 };

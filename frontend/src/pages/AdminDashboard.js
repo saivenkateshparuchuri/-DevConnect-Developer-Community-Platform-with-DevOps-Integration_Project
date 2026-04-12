@@ -90,16 +90,11 @@ function AdminDashboard() {
 
     try {
       const adminToken = localStorage.getItem("adminToken");
-      const data = await adminDeleteUser(userId, adminToken);
-      
-      if(data._id) {
-        setUsers(users.filter(u => u._id !== userId));
-      } else {
-        alert(`Failed to delete: ${data.message}`);
-      }
+      await adminDeleteUser(userId, adminToken);
+      setUsers((prev) => prev.filter((u) => u._id !== userId));
     } catch (err) {
       console.error("Deletion error:", err);
-      alert("An error occurred during deletion.");
+      alert(err.message || "An error occurred during deletion.");
     }
   };
 
@@ -108,16 +103,11 @@ function AdminDashboard() {
 
     try {
       const adminToken = localStorage.getItem("adminToken");
-      const data = await adminDeletePost(postId, adminToken);
-      
-      if(data._id) {
-        setPosts(posts.filter(p => p._id !== postId));
-      } else {
-        alert(`Failed to delete: ${data.message}`);
-      }
+      await adminDeletePost(postId, adminToken);
+      setPosts((prev) => prev.filter((p) => p._id !== postId));
     } catch (err) {
       console.error("Deletion error:", err);
-      alert("An error occurred during deletion.");
+      alert(err.message || "An error occurred during deletion.");
     }
   };
 

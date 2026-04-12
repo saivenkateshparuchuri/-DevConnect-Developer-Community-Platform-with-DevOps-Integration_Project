@@ -87,7 +87,14 @@ exports.deleteUser = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    res.json({ message: 'User successfully deleted.' });
+    res.json({
+      success: true,
+      message: 'User successfully deleted.',
+      deleted: {
+        id: userId,
+        type: 'user'
+      }
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -108,7 +115,14 @@ exports.deletePost = async (req, res) => {
       return res.status(404).json({ message: 'Post not found' });
     }
 
-    res.json({ message: 'Post successfully deleted.' });
+    res.json({
+      success: true,
+      message: 'Post successfully deleted.',
+      deleted: {
+        id: postId,
+        type: 'post'
+      }
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

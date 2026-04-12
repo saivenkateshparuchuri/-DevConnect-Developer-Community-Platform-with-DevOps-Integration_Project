@@ -146,7 +146,14 @@ const deleteUser = async (req, res) => {
     await user.deleteOne();
     console.log(`[Admin Delete] Successfully deleted ${collectionName} account: ${targetId}`);
 
-    res.json({ message: `${collectionName} and their posts deleted successfully` });
+    res.json({
+      success: true,
+      message: `${collectionName} and their posts deleted successfully`,
+      deleted: {
+        id: targetId,
+        type: collectionName.toLowerCase()
+      }
+    });
   } catch (error) {
     console.error("[Admin Delete] Server error during deletion:", error);
     res.status(500).json({ message: "Server error deleting user. Check logs for details." });

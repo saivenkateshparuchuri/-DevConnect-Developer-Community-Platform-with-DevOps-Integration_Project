@@ -42,6 +42,7 @@ const getPosts = async (req, res) => {
 // ✅ deletePost
 const deletePost = async (req, res) => {
   try {
+    const postId = req.params.id;
     const post = await Post.findById(req.params.id);
 
     if (!post) {
@@ -53,7 +54,14 @@ const deletePost = async (req, res) => {
     }
 
     await post.deleteOne();
-    res.json({ message: 'Post deleted successfully' });
+    res.json({
+      success: true,
+      message: 'Post deleted successfully',
+      deleted: {
+        id: postId,
+        type: 'post'
+      }
+    });
 
   } catch (error) {
     res.status(500).json({ error: error.message });

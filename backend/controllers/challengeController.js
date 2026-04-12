@@ -80,12 +80,20 @@ const createChallenge = async (req, res) => {
 
 const deleteChallenge = async (req, res) => {
   try {
-    const challenge = await Challenge.findByIdAndDelete(req.params.id);
+    const challengeId = req.params.id;
+    const challenge = await Challenge.findByIdAndDelete(challengeId);
     if (!challenge) {
       return res.status(404).json({ message: "Challenge not found" });
     }
 
-    res.json({ message: "Challenge deleted successfully", challengeId: req.params.id });
+    res.json({
+      success: true,
+      message: "Challenge deleted successfully",
+      deleted: {
+        id: challengeId,
+        type: "challenge"
+      }
+    });
   } catch (err) {
     res.status(500).json({ message: "Error deleting challenge" });
   }
