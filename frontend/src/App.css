@@ -141,3 +141,22 @@
     opacity: 0.9;
   }
 }
+
+.btn-submit-glow {
+  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #f97316 100%);
+  border: none;
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.btn-submit-glow:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 35px rgba(99, 102, 241, 0.5);
+  filter: brightness(1.05);
+}
+
+.btn-submit-glow:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+}

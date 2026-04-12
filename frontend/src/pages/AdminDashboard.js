@@ -157,6 +157,16 @@ function AdminDashboard() {
   };
 
   const pendingChallengeSubmissions = challengeSubmissions.filter((s) => s.status === "Pending");
+  const uniqueSubmitterCount = new Set(
+    challengeSubmissions
+      .map((submission) => submission.user?._id || submission.user?.id || submission.user)
+      .filter(Boolean)
+      .map(String)
+  ).size;
+  const reviewedChallengeSubmissions = challengeSubmissions.filter((s) => s.status !== "Pending");
+  const feedbackMarkedSubmissions = challengeSubmissions.filter((s) => (s.feedback || "").trim().length > 0).length;
+  const acceptedCount = challengeSubmissions.filter((s) => s.status === "Accepted").length;
+  const rejectedCount = challengeSubmissions.filter((s) => s.status === "Rejected").length;
 
   if (loading) {
     return <div className="vh-100 d-flex justify-content-center align-items-center bg-white"><div className="spinner-border text-primary"></div></div>;
@@ -223,6 +233,45 @@ function AdminDashboard() {
                  <h2 className="mb-0 fw-bold">{pendingChallengeSubmissions.length}</h2>
                </div>
              </div>
+          </div>
+        </div>
+
+        <div className="row mb-5 g-3">
+          <div className="col-md-3">
+            <div className="card border-0 shadow-sm rounded-4 h-100" style={{ background: "linear-gradient(135deg, #0f172a, #1e293b)" }}>
+              <div className="card-body text-white">
+                <div className="small text-white-50 fw-bold text-uppercase">Unique Submitters</div>
+                <h3 className="mb-1 fw-bold">{uniqueSubmitterCount}</h3>
+                <div className="small text-white-50">Users who have submitted at least once</div>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="card border-0 shadow-sm rounded-4 h-100" style={{ background: "linear-gradient(135deg, #064e3b, #10b981)" }}>
+              <div className="card-body text-white">
+                <div className="small text-white-50 fw-bold text-uppercase">Reviewed Submissions</div>
+                <h3 className="mb-1 fw-bold">{reviewedChallengeSubmissions.length}</h3>
+                <div className="small text-white-50">Accepted + rejected records</div>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="card border-0 shadow-sm rounded-4 h-100" style={{ background: "linear-gradient(135deg, #7c2d12, #fb923c)" }}>
+              <div className="card-body text-white">
+                <div className="small text-white-50 fw-bold text-uppercase">Feedback Marks</div>
+                <h3 className="mb-1 fw-bold">{feedbackMarkedSubmissions}</h3>
+                <div className="small text-white-50">Submissions with reviewer feedback</div>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="card border-0 shadow-sm rounded-4 h-100" style={{ background: "linear-gradient(135deg, #312e81, #818cf8)" }}>
+              <div className="card-body text-white">
+                <div className="small text-white-50 fw-bold text-uppercase">Marks Split</div>
+                <h3 className="mb-1 fw-bold">{acceptedCount} / {rejectedCount}</h3>
+                <div className="small text-white-50">Accepted / rejected</div>
+              </div>
+            </div>
           </div>
         </div>
 

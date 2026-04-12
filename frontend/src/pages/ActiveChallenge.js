@@ -52,6 +52,8 @@ function ActiveChallenge() {
     return `${h > 0 ? `${h}:` : ""}${m < 10 ? "0" : ""}${m}:${s < 10 ? "0" : ""}${s}`;
   };
 
+  const isSubmitted = Boolean(result?.success);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -156,11 +158,31 @@ function ActiveChallenge() {
                </div>
              )}
 
-             <div className="d-flex justify-content-center gap-3">
-                <button type="submit" className="btn btn-primary rounded-pill px-5 fw-bold py-2 shadow-sm" disabled={submitting}>
-                  {submitting ? "Submitting..." : "Submit Final Solution"}
+             <div className="d-flex justify-content-center gap-3 flex-wrap">
+                <button
+                  type="submit"
+                  className={`btn rounded-pill px-5 fw-bold py-3 shadow-sm d-inline-flex align-items-center gap-2 ${isSubmitted ? "btn-success" : "btn-submit-glow"}`}
+                  disabled={submitting}
+                  style={{ minWidth: "240px" }}
+                >
+                  {submitting ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      Submitting...
+                    </>
+                  ) : isSubmitted ? (
+                    <>
+                      <span>✅</span>
+                      Submitted Successfully
+                    </>
+                  ) : (
+                    <>
+                      <span>🚀</span>
+                      Submit Final Solution
+                    </>
+                  )}
                 </button>
-                <button type="button" className="btn btn-outline-danger rounded-pill px-4" onClick={() => navigate("/challenges")}>Give Up</button>
+                <button type="button" className="btn btn-outline-danger rounded-pill px-4 py-3" onClick={() => navigate("/challenges")}>Give Up</button>
              </div>
            </form>
         </div>
