@@ -52,14 +52,25 @@ function ActiveChallenge() {
     return `${h > 0 ? `${h}:` : ""}${m < 10 ? "0" : ""}${m}:${s < 10 ? "0" : ""}${s}`;
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!code.trim()) {
+      setResult({ message: "Please write your solution before submitting." });
+      return;
+    }
+
     try {
       setSubmitting(true);
-      setResult(null);
+      setResult({ message: "Submitting your solution..." });
       const data = await submitChallengeSolution(id, { language, code });
-      setResult(data);
+      setResult({
+        message: data.message || "Solution submitted successfully.",
+        submission: data.submission,
+        success: true
+      });
     } catch (err) {
-      setResult({ message: err.message || "Submission failed" });
+      setResult({ message: err.message || "Submission failed", success: false });
     } finally {
       setSubmitting(false);
     }
@@ -124,32 +135,34 @@ function ActiveChallenge() {
               <div className="small text-muted mt-4">Tech: {(challenge.tech || []).join(", ")}</div>
            </div>
 
-           <div className="mb-4">
-             <label className="form-label fw-semibold">Your Solution</label>
-             <textarea
-               className="form-control font-monospace"
-               style={{ minHeight: "300px" }}
-               value={code}
-               onChange={(e) => setCode(e.target.value)}
-               placeholder="Write your coding solution here..."
-             />
-           </div>
-
-           {result && (
-             <div className={`alert ${result.submission && result.submission.status === "Accepted" ? "alert-success" : "alert-warning"} border-0 rounded-3 mb-4`}>
-               <div className="fw-semibold">{result.message || "Submission completed"}</div>
-               {result.submission && (
-                 <div className="small mt-1">Status: {result.submission.status}</div>
-               )}
+           <form onSubmit={handleSubmit}>
+             <div className="mb-4">
+               <label className="form-label fw-semibold">Your Solution</label>
+               <textarea
+                 className="form-control font-monospace"
+                 style={{ minHeight: "300px" }}
+                 value={code}
+                 onChange={(e) => setCode(e.target.value)}
+                 placeholder="Write your coding solution here..."
+               />
              </div>
-           )}
 
-           <div className="d-flex justify-content-center gap-3">
-              <button className="btn btn-primary rounded-pill px-5 fw-bold py-2 shadow-sm" disabled={submitting} onClick={handleSubmit}>
-                {submitting ? "Submitting..." : "Submit Final Solution"}
-              </button>
-              <button className="btn btn-outline-danger rounded-pill px-4" onClick={() => navigate("/challenges")}>Give Up</button>
-           </div>
+             {result && (
+               <div className={`alert ${result.success ? "alert-success" : "alert-warning"} border-0 rounded-3 mb-4`}>
+                 <div className="fw-semibold">{result.message || "Submission completed"}</div>
+                 {result.submission && (
+                   <div className="small mt-1">Status: {result.submission.status}</div>
+                 )}
+               </div>
+             )}
+
+             <div className="d-flex justify-content-center gap-3">
+                <button type="submit" className="btn btn-primary rounded-pill px-5 fw-bold py-2 shadow-sm" disabled={submitting}>
+                  {submitting ? "Submitting..." : "Submit Final Solution"}
+                </button>
+                <button type="button" className="btn btn-outline-danger rounded-pill px-4" onClick={() => navigate("/challenges")}>Give Up</button>
+             </div>
+           </form>
         </div>
       </div>
       
