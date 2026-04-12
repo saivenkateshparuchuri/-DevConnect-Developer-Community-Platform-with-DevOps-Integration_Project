@@ -53,6 +53,7 @@ Frontend (React - Vercel) --> Backend (Node.js + Express - Render) --> MongoDB A
 ### Backend
 
 backend/
+
 │── server.js
 │── config/
 │── models/
@@ -64,6 +65,7 @@ backend/
 ### Frontend
 
 frontend/
+
 │── src/
 │── components/
 │── pages/
@@ -113,16 +115,16 @@ POST	/api/auth/login	        Authenticate user
 Posts
 
 Method	        Endpoint	        Description
-GET	        /api/posts	        Get all posts
-POST	        /api/posts	        Create a post
-GET	        /api/posts/:id	        Get a specific post
-DELETE	        /api/posts/:id	        Delete a post
+GET	           /api/posts	        Get all posts
+POST	         /api/posts	        Create a post
+GET	           /api/posts/:id	    Get a specific post
+DELETE	       /api/posts/:id	    Delete a post
 
 Comments
 
-Method	        Endpoint	        Description
+Method	        Endpoint	          Description
 POST	        /api/comments	        Add a comment
-GET	        /api/comments/:postId	Get comments for a post
+GET	        /api/comments/:postId	  Get comments for a post
 
 
 🚀 Deployment
