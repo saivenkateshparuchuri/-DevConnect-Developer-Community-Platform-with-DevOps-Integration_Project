@@ -1,4 +1,4 @@
-const BASE_URL = process.env.REACT_APP_API_URL ? `${process.env.REACT_APP_API_URL}/api` : "http://localhost:5001/api";
+const BASE_URL = process.env.REACT_APP_API_URL ? `${process.env.REACT_APP_API_URL}/api` : "https://devconnect-developer-community-platform.onrender.com/api";
 
 
 export const login = async (data) => {
