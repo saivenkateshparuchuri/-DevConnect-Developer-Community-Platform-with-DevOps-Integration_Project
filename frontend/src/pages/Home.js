@@ -63,12 +63,12 @@ function Home() {
 
 
       {/* Metrics Row */}
-      <div className="row g-4 mb-5">
+      <div className="row g-4 mb-5 justify-content-center">
         
         {/* Reputation */}
-        <div className="col-lg-3 col-md-6 slide-in-left delay-1">
-          <div className="card glass-glow border-0 h-100 p-4 rounded-3 hover-move glow-border">
-            <h5 className="fw-bold mb-4 text-light" style={{ fontSize: '1.2rem' }}>Reputation</h5>
+        <div className="col-xl-4 col-lg-5 col-md-6 slide-in-left delay-1">
+          <div className="card glass-glow border-0 h-100 p-4 rounded-3 hover-move glow-border" style={{ minHeight: '260px' }}>
+            <h5 className="fw-bold mb-4 text-light" style={{ fontSize: '1.3rem' }}>Reputation</h5>
             <div className="d-flex align-items-end mb-3">
               <span className="display-2 fw-light me-3 lh-1 text-light floating" style={{ fontSize: '3.5rem' }}>1</span>
               <div 
@@ -88,9 +88,9 @@ function Home() {
         </div>
 
         {/* Badge Progress */}
-        <div className="col-lg-3 col-md-6 fade-in-scale delay-2">
-          <div className="card glass-glow border-0 h-100 p-4 rounded-3 hover-move glow-border">
-            <h5 className="fw-bold mb-4 text-light" style={{ fontSize: '1.2rem' }}>Badge progress</h5>
+        <div className="col-xl-4 col-lg-5 col-md-6 fade-in-scale delay-2">
+          <div className="card glass-glow border-0 h-100 p-4 rounded-3 hover-move glow-border" style={{ minHeight: '260px' }}>
+            <h5 className="fw-bold mb-4 text-light" style={{ fontSize: '1.3rem' }}>Badge progress</h5>
             <p className="text-white-50 mb-4 mt-2" style={{ fontSize: '0.95rem' }}>
               Take the tour to earn your first badge!
             </p>
@@ -101,10 +101,10 @@ function Home() {
         </div>
 
         {/* Watched Tags */}
-        <div className="col-lg-3 col-md-6 slide-in-right delay-3">
-          <div className="card glass-glow border-0 h-100 p-4 rounded-3 position-relative hover-move glow-border">
+        <div className="col-xl-4 col-lg-5 col-md-6 slide-in-right delay-3">
+          <div className="card glass-glow border-0 h-100 p-4 rounded-3 position-relative hover-move glow-border" style={{ minHeight: '260px' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
-              <h5 className="fw-bold mb-0 text-light" style={{ fontSize: '1.2rem' }}>Watched tags</h5>
+              <h5 className="fw-bold mb-0 text-light" style={{ fontSize: '1.3rem' }}>Watched tags</h5>
               <span
                 className="text-muted settings-icon"
                 title="Manage watched tags"
