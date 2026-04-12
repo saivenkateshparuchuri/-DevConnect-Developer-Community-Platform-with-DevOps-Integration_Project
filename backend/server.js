@@ -65,7 +65,7 @@ const authMiddleware = require('./middleware/authMiddleware');
 // database connection
 connectDB();
 
-// test route
+// test route (must be before catch-all)
 app.get('/', (req, res) => {
   res.send('API is running');
 });
