@@ -158,7 +158,8 @@ function Layout({ children }) {
         <div className="layout-main p-0 min-vh-100" style={{ 
           backgroundColor: "transparent", 
           marginLeft: "280px", 
-          width: sidebarOpen ? "calc(100% - 560px)" : "calc(100% - 280px)",
+          marginRight: sidebarOpen ? "280px" : "0",
+          width: "auto",
           transition: "all 0.3s ease"
         }}>
           {/* Top Search Bar / Header */}

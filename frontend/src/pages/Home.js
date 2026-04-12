@@ -1,27 +1,32 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import PostCard from "../components/PostCard";
-import { getPosts, getCurrentUser } from "../services/api";
+import { getPosts, getCurrentUser, getTopUsers } from "../services/api";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
+  const [topUsers, setTopUsers] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const [postsData, userData] = await Promise.all([
+        const [postsData, userData, topUsersData] = await Promise.all([
           getPosts(),
-          getCurrentUser()
+          getCurrentUser(),
+          getTopUsers()
         ]);
         
         setPosts(postsData);
         if (userData && userData.user) {
           setCurrentUser(userData.user);
+        }
+        if (topUsersData && Array.isArray(topUsersData)) {
+          setTopUsers(topUsersData);
         }
       } catch (err) {
         console.error("Failed to fetch dashboard data", err);
@@ -119,6 +124,53 @@ function Home() {
         </div>
 
       </div>
+
+      {/* Top Contributors Section */}
+      {topUsers.length > 0 && (
+        <div className="mb-5 slide-in-up delay-2">
+          <h5 className="fw-bold text-light mb-3 text-glow">🏆 Top Contributors</h5>
+          <div className="row g-3">
+            {topUsers.slice(0, 6).map((user, index) => (
+              <div key={user._id} className="col-md-6 col-lg-4 slide-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
+                <div className="card glass-glow border-0 h-100 p-3 rounded-3 hover-move glow-border" style={{ cursor: 'pointer' }} onClick={() => navigate(`/profile/${user._id}`)}>
+                  <div className="d-flex align-items-center mb-3">
+                    <div className="badge bg-primary me-2" style={{ minWidth: '32px', padding: '0.5rem' }}>#{index + 1}</div>
+                    <div className="avatar-circle me-2" style={{ 
+                      width: '40px', 
+                      height: '40px', 
+                      background: 'linear-gradient(135deg, #60a5fa, #a78bfa)', 
+                      borderRadius: '50%', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      fontSize: '0.9rem', 
+                      fontWeight: 'bold', 
+                      color: 'white',
+                      flexShrink: 0
+                    }}>
+                      {user.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="flex-grow-1">
+                      <h6 className="mb-0 text-light fw-bold">{user.name}</h6>
+                      <small className="text-white-50">{user.email}</small>
+                    </div>
+                  </div>
+                  <div className="d-flex justify-content-between text-center">
+                    <div>
+                      <p className="mb-0 text-light fw-bold">⭐ {user.reputation || 0}</p>
+                      <small className="text-white-50">Reputation</small>
+                    </div>
+                    <div>
+                      <p className="mb-0 text-light fw-bold">📝 {user.postsCount || 0}</p>
+                      <small className="text-white-50">Posts</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Feed Section */}
       <div className="mb-3 slide-in-up delay-1">
