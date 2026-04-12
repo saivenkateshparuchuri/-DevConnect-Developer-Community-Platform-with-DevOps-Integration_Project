@@ -65,7 +65,8 @@ const authMiddleware = require('./middleware/authMiddleware');
 // database connection
 connectDB();
 
-// test route (must be before catch-all)
+
+// Root route returns API status
 app.get('/', (req, res) => {
   res.send('API is running');
 });
@@ -90,7 +91,7 @@ app.get('/api/protected', authMiddleware, async (req, res) => {
 });
 
 // Catch all handler: send back React's index.html file for client-side routing
-app.get('*', (req, res) => {
+app.get(/^\/((?!api).)*$/, (req, res) => {
   res.sendFile(path.join(__dirname, './public/index.html'));
 });
 
