@@ -65,15 +65,75 @@ function AdminLogin() {
         }}>
           {/* Header Section - Admin Specific */}
           <div style={{ 
-            background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(249, 115, 22, 0.25) 100%)',
-            padding: '3rem 2rem 2rem',
+            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%)',
+            padding: '2.5rem 2rem 1.5rem',
             textAlign: 'center',
             borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
           }}>
-            <div style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>🛡️</div>
-            <h1 className="text-light fw-bold mb-2" style={{ fontSize: '2rem', letterSpacing: '-0.5px' }}>Admin Portal</h1>
-            <p className="text-light-emphasis mb-0" style={{ fontSize: '0.95rem', opacity: 0.8 }}>
-              Secure administrative access
+            {/* Custom Logo Design */}
+            <div style={{ 
+              fontSize: '3.5rem',
+              marginBottom: '0.8rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.8rem'
+            }}>
+              <svg width="55" height="55" viewBox="0 0 65 65" style={{ filter: 'drop-shadow(0 2px 8px rgba(99, 102, 241, 0.3))' }}>
+                {/* Background circle */}
+                <circle cx="32.5" cy="32.5" r="30" fill="rgba(99, 102, 241, 0.1)" stroke="url(#logoGradient)" strokeWidth="1.5"/>
+                
+                {/* Top node */}
+                <circle cx="32.5" cy="15" r="3.5" fill="url(#logoGradient)"/>
+                
+                {/* Left node */}
+                <circle cx="15" cy="40" r="3.5" fill="url(#logoGradient)"/>
+                
+                {/* Right node */}
+                <circle cx="50" cy="40" r="3.5" fill="url(#logoGradient)"/>
+                
+                {/* Center node */}
+                <circle cx="32.5" cy="32.5" r="4" fill="url(#logoGradient)"/>
+                
+                {/* Connection lines */}
+                <line x1="32.5" y1="18.5" x2="32.5" y2="28.5" stroke="url(#logoGradient)" strokeWidth="1.5" opacity="0.7"/>
+                <line x1="32.5" y1="18.5" x2="18" y2="37.5" stroke="url(#logoGradient)" strokeWidth="1.5" opacity="0.7"/>
+                <line x1="32.5" y1="18.5" x2="47" y2="37.5" stroke="url(#logoGradient)" strokeWidth="1.5" opacity="0.7"/>
+                <line x1="18" y1="40" x2="29" y2="32.5" stroke="url(#logoGradient)" strokeWidth="1.5" opacity="0.6"/>
+                <line x1="47" y1="40" x2="36" y2="32.5" stroke="url(#logoGradient)" strokeWidth="1.5" opacity="0.6"/>
+                
+                {/* Gradient definitions */}
+                <defs>
+                  <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style={{ stopColor: '#6366f1', stopOpacity: 1 }} />
+                    <stop offset="100%" style={{ stopColor: '#a78bfa', stopOpacity: 1 }} />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <span style={{ 
+                background: 'linear-gradient(135deg, #6366f1 0%, #a78bfa 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                fontWeight: '700',
+                fontSize: '1.5rem',
+                letterSpacing: '0.5px'
+              }}>
+                CodeVerse
+              </span>
+            </div>
+            <h2 className="text-light fw-bold mb-1" style={{ fontSize: '1.1rem', letterSpacing: '-0.3px', opacity: 0.9 }}>
+              Admin Console
+            </h2>
+            <p className="mb-0" style={{ 
+              fontSize: '0.85rem', 
+              background: 'linear-gradient(135deg, #a78bfa 0%, #e0e7ff 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              fontWeight: '500'
+            }}>
+              Connect, collaborate, and grow with developers worldwide
             </p>
           </div>
 
@@ -203,8 +263,8 @@ function AdminLogin() {
                   </>
                 ) : (
                   <>
-                    <span style={{ marginRight: '0.5rem' }}>→</span>
-                    Admin Access
+                    <span style={{ marginRight: '0.3rem' }}>→</span>
+                    Sign In
                   </>
                 )}
               </button>
@@ -218,7 +278,7 @@ function AdminLogin() {
                   border: '1px solid rgba(255, 255, 255, 0.2)',
                   borderRadius: '0.75rem',
                   color: '#e0e7ff',
-                  fontSize: '0.95rem',
+                  fontSize: '0.9rem',
                   transition: 'all 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
@@ -230,27 +290,15 @@ function AdminLogin() {
                   e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)';
                 }}
               >
-                ← Return to Public Platform
+                ← Back to Login
               </Link>
             </form>
-
-            {/* Security Notice */}
-            <div style={{ 
-              marginTop: '2rem',
-              paddingTop: '1.5rem',
-              borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-              textAlign: 'center'
-            }}>
-              <p className="text-light-emphasis mb-0" style={{ fontSize: '0.85rem', opacity: 0.7 }}>
-                <span style={{ marginRight: '0.5rem' }}>🔒</span>This area is restricted to administrators only
-              </p>
-            </div>
           </div>
         </div>
 
         {/* Footer Text */}
         <div className="text-center mt-4 text-light-emphasis" style={{ fontSize: '0.85rem', opacity: 0.7 }}>
-          Secure administrative console
+          <span style={{ marginRight: '0.5rem' }}>🔒</span>This area is restricted to administrators only
         </div>
       </div>
 
