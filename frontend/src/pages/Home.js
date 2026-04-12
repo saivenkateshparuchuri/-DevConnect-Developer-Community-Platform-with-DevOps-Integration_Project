@@ -116,9 +116,9 @@ function Home() {
       <div className="row g-4 mb-5 justify-content-center">
         
         {/* Reputation Streak */}
-        <div className="col-xl-4 col-lg-5 col-md-6">
+        <div className="col-xl-4 col-lg-5 col-md-6 slide-in-left delay-1">
           <div
-            className={`card glass-glow border-0 h-100 p-4 rounded-3 glow-border streak-card-snap ${streakAtRisk ? 'streak-card-risk' : ''} ${streakBroken ? 'streak-card-broken' : ''}`}
+            className={`card glass-glow border-0 h-100 p-4 rounded-3 hover-move glow-border streak-card-snap ${streakAtRisk ? 'streak-card-risk' : ''} ${streakBroken ? 'streak-card-broken' : ''}`}
             style={{ minHeight: '260px' }}
           >
             <h5 className="fw-bold mb-3 text-light" style={{ fontSize: '1.3rem' }}>Streak</h5>
@@ -190,8 +190,8 @@ function Home() {
         </div>
 
         {/* Badge Progress */}
-        <div className="col-xl-4 col-lg-5 col-md-6">
-          <div className="card glass-glow border-0 h-100 p-4 rounded-3 glow-border" style={{ minHeight: '260px' }}>
+        <div className="col-xl-4 col-lg-5 col-md-6 fade-in-scale delay-2">
+          <div className="card glass-glow border-0 h-100 p-4 rounded-3 hover-move glow-border" style={{ minHeight: '260px' }}>
             <h5 className="fw-bold mb-4 text-light" style={{ fontSize: '1.3rem' }}>Badge progress</h5>
             <p className="text-white-50 mb-4 mt-2" style={{ fontSize: '0.95rem' }}>
               Take the tour to earn your first badge!
@@ -203,8 +203,8 @@ function Home() {
         </div>
 
         {/* Watched Tags */}
-        <div className="col-xl-4 col-lg-5 col-md-6">
-          <div className="card glass-glow border-0 h-100 p-4 rounded-3 position-relative glow-border" style={{ minHeight: '260px' }}>
+        <div className="col-xl-4 col-lg-5 col-md-6 slide-in-right delay-3">
+          <div className="card glass-glow border-0 h-100 p-4 rounded-3 position-relative hover-move glow-border" style={{ minHeight: '260px' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
               <h5 className="fw-bold mb-0 text-light" style={{ fontSize: '1.3rem' }}>Watched tags</h5>
               <span
@@ -217,10 +217,10 @@ function Home() {
               </span>
             </div>
             <div className="d-flex flex-wrap gap-2">
-              <span className="tag-badge">css</span>
-              <span className="tag-badge">html</span>
-              <span className="tag-badge">javascript</span>
-              <span className="tag-badge">python</span>
+              <span className="tag-badge slide-in-up delay-4">css</span>
+              <span className="tag-badge slide-in-up delay-1">html</span>
+              <span className="tag-badge slide-in-up delay-2">javascript</span>
+              <span className="tag-badge slide-in-up delay-3">python</span>
             </div>
           </div>
         </div>
@@ -229,12 +229,12 @@ function Home() {
 
       {/* Top Contributors Section */}
       {topUsers.length > 0 && (
-        <div className="mb-5">
+        <div className="mb-5 slide-in-up delay-2">
           <h4 className="fw-bold text-light mb-4 text-glow" style={{ fontSize: '1.5rem' }}>🏆 Top Contributors</h4>
           <div className="row g-4">
             {topUsers.slice(0, 6).map((user, index) => (
-              <div key={user._id} className="col-lg-3 col-md-6 col-sm-6">
-                <div className="card glass-glow border-0 h-100 p-4 rounded-3 glow-border" style={{ cursor: 'pointer', transition: 'all 0.3s ease', minHeight: '220px' }} onClick={() => navigate(`/profile/${user._id}`)}>
+              <div key={user._id} className="col-lg-3 col-md-6 col-sm-6 slide-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
+                <div className="card glass-glow border-0 h-100 p-4 rounded-3 hover-move glow-border" style={{ cursor: 'pointer', transition: 'all 0.3s ease', minHeight: '220px' }} onClick={() => navigate(`/profile/${user._id}`)}>
                   <div className="d-flex flex-column align-items-center text-center mb-4 pb-3 border-bottom" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
                     <div className="badge bg-gradient mb-3" style={{ padding: '0.6rem 0.8rem', fontSize: '0.95rem' }}>#{index + 1}</div>
                     <div className="avatar-circle mb-3" style={{ 
@@ -277,7 +277,7 @@ function Home() {
       )}
 
       {/* Feed Section */}
-      <div className="mb-3">
+      <div className="mb-3 slide-in-up delay-1">
         <h5 className="fw-bold text-light mb-1 text-glow">Interesting posts for you</h5>
         <p className="text-secondary small mb-3">Based on your viewing history and watched tags. <a href="#feed" className="text-decoration-none text-info">Customize your feed</a></p>
       </div>
