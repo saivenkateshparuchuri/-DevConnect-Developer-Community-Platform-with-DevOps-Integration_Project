@@ -13,10 +13,12 @@ const connectDB = require('./config/db');
 const app = express();
 const server = http.createServer(app);
 
-// ✅ middleware FIRST
+
+// ✅ CORS middleware FIRST
 const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim()) : [
   'http://localhost:3000',
-  'http://localhost:5000'
+  'http://localhost:5000',
+  'https://devconnect-developer-community-platform.vercel.app'
 ];
 
 app.use(cors({
@@ -28,8 +30,14 @@ app.use(cors({
       callback(new Error(`CORS policy: origin ${origin} not allowed`));
     }
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
+// Handle all OPTIONS preflight requests
+app.options('*', cors());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
