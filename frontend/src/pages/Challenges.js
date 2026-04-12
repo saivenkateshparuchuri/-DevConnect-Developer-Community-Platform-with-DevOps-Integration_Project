@@ -53,7 +53,7 @@ function Challenges() {
     ? challenges.filter(c => c.category === activeCat)
     : challenges;
 
-  const isAdmin = Boolean(currentUser && currentUser.isAdmin);
+  const isAdmin = Boolean(localStorage.getItem("adminToken") || (currentUser && currentUser.isAdmin));
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;

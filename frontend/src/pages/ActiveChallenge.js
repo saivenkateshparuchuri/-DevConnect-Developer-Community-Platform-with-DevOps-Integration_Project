@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
-import { getChallengeById, submitChallengeSolution } from "../services/api";
+import { getChallengeById, getCurrentUser, submitChallengeSolution } from "../services/api";
 
 function ActiveChallenge() {
   const { id } = useParams();
@@ -18,7 +18,16 @@ function ActiveChallenge() {
     const loadChallenge = async () => {
       try {
         setLoading(true);
-        const data = await getChallengeById(id);
+        const [data, me] = await Promise.all([
+          getChallengeById(id),
+          getCurrentUser()
+        ]);
+
+        if (me && me.user && me.user.isAdmin) {
+          navigate(`/challenges/${id}/results`, { replace: true });
+          return;
+        }
+
         setChallenge(data);
         setCode(data.starterCode || "");
       } catch (err) {
@@ -29,7 +38,7 @@ function ActiveChallenge() {
     };
 
     loadChallenge();
-  }, [id]);
+  }, [id, navigate]);
 
   useEffect(() => {
     let timer = null;
