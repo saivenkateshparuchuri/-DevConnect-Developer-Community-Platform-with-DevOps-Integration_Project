@@ -70,10 +70,24 @@ function Login() {
             textAlign: 'center',
             borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
           }}>
-            <div style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>🚀</div>
-            <h1 className="text-light fw-bold mb-2" style={{ fontSize: '2rem', letterSpacing: '-0.5px' }}>Welcome Back</h1>
+            {/* Custom Logo Design */}
+            <div style={{ 
+              fontSize: '3.5rem',
+              marginBottom: '1rem',
+              display: 'inline-block',
+              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              fontWeight: 'bold'
+            }}>
+              DevConnect
+            </div>
+            <h1 className="text-light fw-bold mb-2" style={{ fontSize: '1.75rem', letterSpacing: '-0.5px' }}>
+              Welcome to DevConnect
+            </h1>
             <p className="text-light-emphasis mb-0" style={{ fontSize: '0.95rem', opacity: 0.8 }}>
-              Access your developer community
+              Connect, collaborate, and grow with developers worldwide
             </p>
           </div>
 
