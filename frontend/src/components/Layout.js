@@ -40,6 +40,20 @@ function Layout({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [topUsers, setTopUsers] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 1200);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1200);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 1200;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setSidebarOpen(true);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -299,7 +313,7 @@ function Layout({ children }) {
         </div>
 
         {/* Mobile Overlay - Closes sidebar when clicked */}
-        {sidebarOpen && (
+        {sidebarOpen && isMobile && (
           <div
             className="position-fixed"
             onClick={() => setSidebarOpen(false)}
