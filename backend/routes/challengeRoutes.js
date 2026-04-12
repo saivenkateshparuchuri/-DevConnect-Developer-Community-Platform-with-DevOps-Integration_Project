@@ -6,6 +6,7 @@ const {
 	getAllChallenges,
 	getChallengeById,
 	createChallenge,
+	deleteChallenge,
 	submitChallengeSolution,
 	getMySubmissions,
 	getAllSubmissionsForAdmin,
@@ -17,6 +18,7 @@ router.get("/my/submissions", authMiddleware, getMySubmissions);
 router.get("/submissions/all", authMiddleware, adminMiddleware, getAllSubmissionsForAdmin);
 router.get("/:id", getChallengeById);
 router.post("/", authMiddleware, adminMiddleware, createChallenge);
+router.delete("/:id", authMiddleware, adminMiddleware, deleteChallenge);
 router.post("/:id/submit", authMiddleware, submitChallengeSolution);
 router.patch("/:challengeId/submissions/:submissionId/review", authMiddleware, adminMiddleware, reviewSubmission);
 

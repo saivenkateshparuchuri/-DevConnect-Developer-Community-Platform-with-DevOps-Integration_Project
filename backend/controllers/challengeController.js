@@ -78,6 +78,19 @@ const createChallenge = async (req, res) => {
   }
 };
 
+const deleteChallenge = async (req, res) => {
+  try {
+    const challenge = await Challenge.findByIdAndDelete(req.params.id);
+    if (!challenge) {
+      return res.status(404).json({ message: "Challenge not found" });
+    }
+
+    res.json({ message: "Challenge deleted successfully", challengeId: req.params.id });
+  } catch (err) {
+    res.status(500).json({ message: "Error deleting challenge" });
+  }
+};
+
 const submitChallengeSolution = async (req, res) => {
   try {
     const { language, code } = req.body;
@@ -218,6 +231,7 @@ module.exports = {
   getAllChallenges,
   getChallengeById,
   createChallenge,
+  deleteChallenge,
   submitChallengeSolution,
   getMySubmissions,
   getAllSubmissionsForAdmin,

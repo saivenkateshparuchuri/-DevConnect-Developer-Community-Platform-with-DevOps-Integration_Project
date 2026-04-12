@@ -5,7 +5,8 @@ import {
   getChallenges,
   getCurrentUser,
   createChallengeQuestion,
-  getMyChallengeSubmissions
+  getMyChallengeSubmissions,
+  deleteChallengeQuestion
 } from "../services/api";
 
 function Challenges() {
@@ -106,6 +107,18 @@ function Challenges() {
       setShowMySubmissions(false);
     } finally {
       setSubmissionsLoading(false);
+    }
+  };
+
+  const handleDeleteChallenge = async (challengeId) => {
+    const confirmed = window.confirm("Delete this challenge permanently?");
+    if (!confirmed) return;
+
+    try {
+      await deleteChallengeQuestion(challengeId);
+      setChallenges((prev) => prev.filter((item) => item._id !== challengeId));
+    } catch (err) {
+      alert(err.message || "Failed to delete challenge");
     }
   };
 
@@ -283,12 +296,22 @@ function Challenges() {
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-1"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                         {challenge.deadline}
                       </div>
-                      <button 
-                        className={`btn btn-sm ${isAdmin ? "btn-warning text-dark" : `btn-${challenge.color}`} rounded-pill px-4 fw-bold`}
-                        onClick={() => navigate(isAdmin ? `/challenges/${challenge._id}/results` : `/challenges/${challenge._id}/view`)}
-                      >
-                        {isAdmin ? "Results (Admin)" : "Start Now"}
-                      </button>
+                      <div className="d-flex gap-2">
+                        <button
+                          className={`btn btn-sm ${isAdmin ? "btn-warning text-dark" : `btn-${challenge.color}`} rounded-pill px-4 fw-bold`}
+                          onClick={() => navigate(isAdmin ? `/challenges/${challenge._id}/results` : `/challenges/${challenge._id}/view`)}
+                        >
+                          {isAdmin ? "Results (Admin)" : "Start Now"}
+                        </button>
+                        {isAdmin && (
+                          <button
+                            className="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold"
+                            onClick={() => handleDeleteChallenge(challenge._id)}
+                          >
+                            Delete
+                          </button>
+                        )}
+                      </div>
                   </div>
                 </div>
               </div>

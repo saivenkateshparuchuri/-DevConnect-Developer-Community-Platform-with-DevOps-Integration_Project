@@ -131,6 +131,20 @@ export const createChallengeQuestion = async (payload) => {
   return data;
 };
 
+export const deleteChallengeQuestion = async (challengeId) => {
+  const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+  const res = await fetch(`${BASE_URL}/challenges/${challengeId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: token
+    }
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to delete challenge question");
+  return data;
+};
+
 export const submitChallengeSolution = async (challengeId, payload) => {
   const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
   const res = await fetch(`${BASE_URL}/challenges/${challengeId}/submit`, {
