@@ -63,17 +63,17 @@ function Home() {
 
 
       {/* Metrics Row */}
-      <div className="row g-3 mb-5">
+      <div className="row g-4 mb-5">
         
         {/* Reputation */}
         <div className="col-lg-3 col-md-6 slide-in-left delay-1">
-          <div className="card glass-glow border-0 h-100 p-3 rounded-3 hover-move glow-border">
-            <h6 className="fw-bold mb-3 text-light">Reputation</h6>
+          <div className="card glass-glow border-0 h-100 p-4 rounded-3 hover-move glow-border">
+            <h5 className="fw-bold mb-4 text-light" style={{ fontSize: '1.2rem' }}>Reputation</h5>
             <div className="d-flex align-items-end mb-3">
-              <span className="display-4 fw-light me-3 lh-1 text-light floating">1</span>
+              <span className="display-2 fw-light me-3 lh-1 text-light floating" style={{ fontSize: '3.5rem' }}>1</span>
               <div 
                 className="w-100" 
-                style={{ height: "40px", background: "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(96, 165, 250, 0.1) 10px, rgba(96, 165, 250, 0.1) 20px)" }}
+                style={{ height: "50px", background: "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(96, 165, 250, 0.1) 10px, rgba(96, 165, 250, 0.1) 20px)" }}
               >
                 {/* Visual dotted Graph Mockup */}
                 <svg viewBox="0 0 100 20" className="w-100 h-100">
@@ -81,7 +81,7 @@ function Home() {
                 </svg>
               </div>
             </div>
-            <p className="small text-white-50 mb-0">
+            <p className="text-white-50 mb-0" style={{ fontSize: '0.95rem' }}>
               Earn reputation by <a href="#ask" className="text-decoration-none text-info">Asking</a>, <a href="#answer" className="text-decoration-none text-info">Answering</a> & <a href="#edit" className="text-decoration-none text-info">Editing</a>.
             </p>
           </div>
@@ -89,12 +89,12 @@ function Home() {
 
         {/* Badge Progress */}
         <div className="col-lg-3 col-md-6 fade-in-scale delay-2">
-          <div className="card glass-glow border-0 h-100 p-3 rounded-3 hover-move glow-border">
-            <h6 className="fw-bold mb-3 text-light">Badge progress</h6>
-            <p className="small text-white-50 mb-4 mt-2">
+          <div className="card glass-glow border-0 h-100 p-4 rounded-3 hover-move glow-border">
+            <h5 className="fw-bold mb-4 text-light" style={{ fontSize: '1.2rem' }}>Badge progress</h5>
+            <p className="text-white-50 mb-4 mt-2" style={{ fontSize: '0.95rem' }}>
               Take the tour to earn your first badge!
             </p>
-            <button className="btn btn-glass btn-sm rounded-pill mt-auto w-75 py-2" onClick={() => navigate('/questions')}>
+            <button className="btn btn-glass rounded-pill mt-auto w-75 py-2" onClick={() => navigate('/questions')} style={{ fontSize: '0.95rem' }}>
               Get started here
             </button>
           </div>
@@ -102,9 +102,9 @@ function Home() {
 
         {/* Watched Tags */}
         <div className="col-lg-3 col-md-6 slide-in-right delay-3">
-          <div className="card glass-glow border-0 h-100 p-3 rounded-3 position-relative hover-move glow-border">
-            <div className="d-flex justify-content-between align-items-center mb-3">
-              <h6 className="fw-bold mb-0 text-light">Watched tags</h6>
+          <div className="card glass-glow border-0 h-100 p-4 rounded-3 position-relative hover-move glow-border">
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <h5 className="fw-bold mb-0 text-light" style={{ fontSize: '1.2rem' }}>Watched tags</h5>
               <span
                 className="text-muted settings-icon"
                 title="Manage watched tags"
@@ -128,41 +128,43 @@ function Home() {
       {/* Top Contributors Section */}
       {topUsers.length > 0 && (
         <div className="mb-5 slide-in-up delay-2">
-          <h5 className="fw-bold text-light mb-3 text-glow">🏆 Top Contributors</h5>
-          <div className="row g-3">
+          <h4 className="fw-bold text-light mb-4 text-glow" style={{ fontSize: '1.5rem' }}>🏆 Top Contributors</h4>
+          <div className="row g-4">
             {topUsers.slice(0, 6).map((user, index) => (
-              <div key={user._id} className="col-lg-2 col-md-4 col-sm-6 slide-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
-                <div className="card glass-glow border-0 h-100 p-3 rounded-3 hover-move glow-border" style={{ cursor: 'pointer' }} onClick={() => navigate(`/profile/${user._id}`)}>
-                  <div className="d-flex align-items-center mb-3">
-                    <div className="badge bg-primary me-2" style={{ minWidth: '32px', padding: '0.5rem' }}>#{index + 1}</div>
-                    <div className="avatar-circle me-2" style={{ 
-                      width: '40px', 
-                      height: '40px', 
+              <div key={user._id} className="col-lg-3 col-md-6 col-sm-6 slide-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
+                <div className="card glass-glow border-0 h-100 p-4 rounded-3 hover-move glow-border" style={{ cursor: 'pointer', transition: 'all 0.3s ease', minHeight: '220px' }} onClick={() => navigate(`/profile/${user._id}`)}>
+                  <div className="d-flex flex-column align-items-center text-center mb-4 pb-3 border-bottom" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
+                    <div className="badge bg-gradient mb-3" style={{ padding: '0.6rem 0.8rem', fontSize: '0.95rem' }}>#{index + 1}</div>
+                    <div className="avatar-circle mb-3" style={{ 
+                      width: '60px', 
+                      height: '60px', 
                       background: 'linear-gradient(135deg, #60a5fa, #a78bfa)', 
                       borderRadius: '50%', 
                       display: 'flex', 
                       alignItems: 'center', 
                       justifyContent: 'center', 
-                      fontSize: '0.9rem', 
+                      fontSize: '1.5rem', 
                       fontWeight: 'bold', 
                       color: 'white',
-                      flexShrink: 0
+                      flexShrink: 0,
+                      boxShadow: '0 4px 15px rgba(96, 165, 250, 0.3)'
                     }}>
                       {user.name.charAt(0).toUpperCase()}
                     </div>
-                    <div className="flex-grow-1">
-                      <h6 className="mb-0 text-light fw-bold">{user.name}</h6>
-                      <small className="text-white-50">{user.email}</small>
-                    </div>
+                    <h6 className="mb-1 text-light fw-bold" style={{ fontSize: '1rem' }}>{user.name}</h6>
+                    <small className="text-white-50" style={{ fontSize: '0.85rem' }}>{user.email}</small>
                   </div>
-                  <div className="d-flex justify-content-between text-center">
+                  <div className="d-flex justify-content-around text-center flex-grow-1">
                     <div>
-                      <p className="mb-0 text-light fw-bold">⭐ {user.reputation || 0}</p>
-                      <small className="text-white-50">Reputation</small>
+                      <p className="mb-1 text-light fw-bold" style={{ fontSize: '1.1rem' }}>⭐</p>
+                      <p className="mb-0 text-light fw-bold" style={{ fontSize: '1.2rem' }}>{user.reputation || 0}</p>
+                      <small className="text-white-50" style={{ fontSize: '0.8rem' }}>Reputation</small>
                     </div>
+                    <div style={{ borderLeft: '1px solid rgba(255, 255, 255, 0.1)' }}></div>
                     <div>
-                      <p className="mb-0 text-light fw-bold">📝 {user.postsCount || 0}</p>
-                      <small className="text-white-50">Posts</small>
+                      <p className="mb-1 text-light fw-bold" style={{ fontSize: '1.1rem' }}>📝</p>
+                      <p className="mb-0 text-light fw-bold" style={{ fontSize: '1.2rem' }}>{user.postsCount || 0}</p>
+                      <small className="text-white-50" style={{ fontSize: '0.8rem' }}>Posts</small>
                     </div>
                   </div>
                 </div>
