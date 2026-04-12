@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   getAllUsers,
@@ -20,7 +20,7 @@ function AdminDashboard() {
   const [currentAdmin, setCurrentAdmin] = useState(null);
   const navigate = useNavigate();
 
-  const fetchAdminData = async () => {
+  const fetchAdminData = useCallback(async () => {
     const adminToken = localStorage.getItem("adminToken");
     if (!adminToken) {
       navigate("/admin");
@@ -45,7 +45,7 @@ function AdminDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
     fetchAdminData();
@@ -72,7 +72,7 @@ function AdminDashboard() {
       window.removeEventListener("focus", handleVisibilityChange);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [navigate]);
+  }, [fetchAdminData]);
 
   const handleDeleteUser = async (userId) => {
     if(!window.confirm("Are you sure you want to permanently delete this user?")) return;
