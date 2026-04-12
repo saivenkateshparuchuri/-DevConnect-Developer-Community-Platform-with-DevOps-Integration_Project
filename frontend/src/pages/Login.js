@@ -125,7 +125,15 @@ function Login() {
             <h1 className="text-light fw-bold mb-2" style={{ fontSize: '1.75rem', letterSpacing: '-0.5px' }}>
               Welcome to CodeVerse
             </h1>
-            <p className="text-light-emphasis mb-0" style={{ fontSize: '0.95rem', opacity: 0.8 }}>
+            <p className="mb-0" style={{ 
+              fontSize: '0.95rem', 
+              background: 'linear-gradient(135deg, #a78bfa 0%, #e0e7ff 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              fontWeight: '500',
+              letterSpacing: '0.3px'
+            }}>
               Connect, collaborate, and grow with developers worldwide
             </p>
           </div>
