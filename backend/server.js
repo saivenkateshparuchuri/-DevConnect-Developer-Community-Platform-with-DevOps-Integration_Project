@@ -57,6 +57,9 @@ app.use("/api/challenges", challengeRoutes);
 const messageRoutes = require("./routes/messageRoutes");
 app.use("/api/messages", messageRoutes);
 
+const aiRoutes = require("./routes/aiRoutes");
+app.use("/api/ai", aiRoutes);
+
 const authMiddleware = require('./middleware/authMiddleware');
 
 // database connection

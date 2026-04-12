@@ -1,50 +1,83 @@
 import { useState } from "react";
 import Layout from "../components/Layout";
+import { askAI } from "../services/api";
 
 function AI() {
   const [input, setInput] = useState("");
-  const [response, setResponse] = useState("");
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleAsk = () => {
+  const handleAsk = async () => {
     if (!input.trim()) return;
+    const prompt = input.trim();
+
+    setMessages((prev) => [...prev, { role: "user", text: prompt }]);
+    setInput("");
+    setError("");
     setLoading(true);
-    // Simulate AI delay
-    setTimeout(() => {
-      setResponse("I'm an AI assistant. I'm currently not connected to an LLM provider, but when I am, I'll be able to help you debug this code!");
+
+    try {
+      const data = await askAI(prompt);
+      setMessages((prev) => [...prev, { role: "assistant", text: data.answer || "No response from AI." }]);
+    } catch (err) {
+      setError(err.message || "Failed to get a response.");
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   return (
     <Layout>
       <div className="d-flex align-items-center justify-content-between mb-4 border-bottom pb-3">
-        <h3 className="fw-bold m-0 text-dark">🤖 AI Assistant</h3>
+        <div>
+          <h3 className="fw-bold m-0 text-light">🤖 AI Assistant</h3>
+          <p className="text-white-50 mb-0">Ask questions, explore code ideas, or get instant guidance.</p>
+        </div>
       </div>
-      
-      <div className="card shadow-sm p-4 mb-4 border-0 rounded-3 bg-light">
-        <h5 className="text-secondary fw-bold mb-3">Ask me anything</h5>
+
+      <div className="card glass-glow border-0 p-4 mb-4 rounded-3">
+        <h5 className="text-light fw-bold mb-3">Ask me anything</h5>
         <textarea
-          className="form-control mb-3"
-          rows="4"
+          className="form-control glass-panel text-white bg-transparent border-0"
+          rows="5"
           placeholder="E.g. How do I reverse a linked list in Python?"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           disabled={loading}
+          style={{ minHeight: '170px', resize: 'vertical', border: '1px solid rgba(255,255,255,0.08)' }}
         />
-        <div className="d-flex justify-content-end">
-          <button className="btn btn-primary px-4 fw-bold" onClick={handleAsk} disabled={loading || !input.trim()}>
+        <div className="d-flex justify-content-between align-items-center mt-3">
+          <small className="text-white-50">AI chat is powered by OpenAI.</small>
+          <button className="btn btn-glass rounded-pill px-4 py-2" onClick={handleAsk} disabled={loading || !input.trim()}>
             {loading ? "Thinking..." : "Ask AI"}
           </button>
         </div>
       </div>
 
-      {response && (
-        <div className="card shadow-sm p-4 border-0 rounded-3 border-start border-4 border-primary">
-          <h6 className="fw-bold text-primary mb-2">AI Response</h6>
-          <p className="mb-0">{response}</p>
+      {error && (
+        <div className="alert alert-danger glass-panel text-white border-0 mb-4" role="alert">
+          {error}
         </div>
       )}
+
+      <div className="d-flex flex-column gap-3">
+        {messages.map((message, index) => (
+          <div
+            key={index}
+            className={`p-4 rounded-3 glass-glow ${message.role === 'assistant' ? 'border-primary' : 'border-white-10'}`}
+            style={{ background: message.role === 'assistant' ? 'rgba(59,130,246,0.08)' : 'rgba(148,163,184,0.08)', border: '1px solid rgba(255,255,255,0.08)' }}
+          >
+            <div className="d-flex align-items-center mb-2">
+              <span className="badge rounded-pill me-2" style={{ background: message.role === 'assistant' ? '#60a5fa' : '#8b5cf6', color: 'white' }}>
+                {message.role === 'assistant' ? 'AI' : 'You'}
+              </span>
+              <small className="text-white-50">{message.role === 'assistant' ? 'AI response' : 'Your prompt'}</small>
+            </div>
+            <p className="mb-0 text-white" style={{ whiteSpace: 'pre-wrap' }}>{message.text}</p>
+          </div>
+        ))}
+      </div>
     </Layout>
   );
 }

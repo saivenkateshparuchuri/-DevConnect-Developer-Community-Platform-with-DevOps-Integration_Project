@@ -127,6 +127,25 @@ export const getConversations = async () => {
   return res.json();
 };
 
+export const askAI = async (prompt) => {
+  const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+  const res = await fetch(`${BASE_URL}/ai/chat`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token
+    },
+    body: JSON.stringify({ prompt })
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    throw new Error(errorText || "Failed to get AI response");
+  }
+
+  return res.json();
+};
+
 export const sendMessage = async (receiverId, text) => {
   const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
   const res = await fetch(`${BASE_URL}/messages`, {
