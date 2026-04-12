@@ -183,13 +183,21 @@ function AdminDashboard() {
           
           <div className="d-flex align-items-center gap-3">
              {currentAdmin && (
-               <div className="d-flex align-items-center gap-2 border-end pe-3 me-1">
+               <div className="d-flex align-items-center gap-3 border-end pe-3 me-1">
                   <div className="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style={{ width: "32px", height: "32px", fontSize: "0.8rem" }}>
                     {currentAdmin.name.charAt(0).toUpperCase()}
                   </div>
                   <div className="d-flex flex-column lh-1">
                     <span className="small fw-bold text-dark">{currentAdmin.name}</span>
                     <span className="text-muted" style={{ fontSize: "0.65rem" }}>{currentAdmin.role}</span>
+                    <div className="d-flex flex-wrap gap-1 mt-2">
+                      <span className="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle" style={{ fontSize: "0.65rem" }}>
+                        {challengeSubmissions.length} submissions
+                      </span>
+                      <span className="badge rounded-pill bg-success-subtle text-success border border-success-subtle" style={{ fontSize: "0.65rem" }}>
+                        {feedbackMarkedSubmissions} feedback marks
+                      </span>
+                    </div>
                   </div>
                </div>
              )}

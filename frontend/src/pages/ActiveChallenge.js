@@ -161,9 +161,14 @@ function ActiveChallenge() {
              <div className="d-flex justify-content-center gap-3 flex-wrap">
                 <button
                   type="submit"
-                  className={`btn rounded-pill px-5 fw-bold py-3 shadow-sm d-inline-flex align-items-center gap-2 ${isSubmitted ? "btn-success" : "btn-submit-glow"}`}
+                  className={`btn rounded-pill px-5 fw-bold py-3 shadow-sm d-inline-flex align-items-center justify-content-center gap-2 ${isSubmitted ? "btn-success" : "btn-submit-glow"}`}
                   disabled={submitting}
-                  style={{ minWidth: "240px" }}
+                  style={{
+                    minWidth: "280px",
+                    letterSpacing: "0.04em",
+                    textTransform: "uppercase",
+                    fontSize: "0.95rem"
+                  }}
                 >
                   {submitting ? (
                     <>
@@ -177,8 +182,8 @@ function ActiveChallenge() {
                     </>
                   ) : (
                     <>
-                      <span>🚀</span>
-                      Submit Final Solution
+                      <span>⚡</span>
+                      Submit Your Code
                     </>
                   )}
                 </button>
