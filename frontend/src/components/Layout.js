@@ -151,7 +151,6 @@ function Layout({ children }) {
              </div>
              <div>
                <h5 className="fw-bold m-0 animated-text text-glow" style={{ letterSpacing: "0.5px", fontSize: "1.3rem", background: 'linear-gradient(135deg, #6366f1 0%, #a78bfa 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>CodeVerse</h5>
-               <small className="text-white-50" style={{ fontSize: "0.7rem", opacity: 0.9 }}>Code • Connect • Create</small>
              </div>
           </div>
 
