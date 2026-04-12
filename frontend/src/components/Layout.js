@@ -155,8 +155,9 @@ function Layout({ children }) {
         </div>
 
         {/* Center Main Content */}
-        <div className="layout-main p-0 min-vh-100" style={{ 
-          backgroundColor: "transparent", 
+        <div className="layout-main p-0" style={{ 
+          backgroundColor: "transparent",
+          minHeight: "100vh",
           marginLeft: "280px", 
           marginRight: sidebarOpen ? "280px" : "0",
           width: "auto",
@@ -206,7 +207,7 @@ function Layout({ children }) {
                </svg>
              </button>
           </div>
-          <div className="p-4">
+          <div className="p-4" style={{ maxWidth: "100%", width: "100%" }}>
             {children}
           </div>
         </div>

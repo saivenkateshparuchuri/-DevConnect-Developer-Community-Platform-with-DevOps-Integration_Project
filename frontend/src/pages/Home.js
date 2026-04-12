@@ -66,7 +66,7 @@ function Home() {
       <div className="row g-3 mb-5">
         
         {/* Reputation */}
-        <div className="col-md-4 slide-in-left delay-1">
+        <div className="col-lg-3 col-md-6 slide-in-left delay-1">
           <div className="card glass-glow border-0 h-100 p-3 rounded-3 hover-move glow-border">
             <h6 className="fw-bold mb-3 text-light">Reputation</h6>
             <div className="d-flex align-items-end mb-3">
@@ -88,7 +88,7 @@ function Home() {
         </div>
 
         {/* Badge Progress */}
-        <div className="col-md-4 fade-in-scale delay-2">
+        <div className="col-lg-3 col-md-6 fade-in-scale delay-2">
           <div className="card glass-glow border-0 h-100 p-3 rounded-3 hover-move glow-border">
             <h6 className="fw-bold mb-3 text-light">Badge progress</h6>
             <p className="small text-white-50 mb-4 mt-2">
@@ -101,7 +101,7 @@ function Home() {
         </div>
 
         {/* Watched Tags */}
-        <div className="col-md-4 slide-in-right delay-3">
+        <div className="col-lg-3 col-md-6 slide-in-right delay-3">
           <div className="card glass-glow border-0 h-100 p-3 rounded-3 position-relative hover-move glow-border">
             <div className="d-flex justify-content-between align-items-center mb-3">
               <h6 className="fw-bold mb-0 text-light">Watched tags</h6>
@@ -131,7 +131,7 @@ function Home() {
           <h5 className="fw-bold text-light mb-3 text-glow">🏆 Top Contributors</h5>
           <div className="row g-3">
             {topUsers.slice(0, 6).map((user, index) => (
-              <div key={user._id} className="col-md-6 col-lg-4 slide-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
+              <div key={user._id} className="col-lg-2 col-md-4 col-sm-6 slide-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
                 <div className="card glass-glow border-0 h-100 p-3 rounded-3 hover-move glow-border" style={{ cursor: 'pointer' }} onClick={() => navigate(`/profile/${user._id}`)}>
                   <div className="d-flex align-items-center mb-3">
                     <div className="badge bg-primary me-2" style={{ minWidth: '32px', padding: '0.5rem' }}>#{index + 1}</div>
