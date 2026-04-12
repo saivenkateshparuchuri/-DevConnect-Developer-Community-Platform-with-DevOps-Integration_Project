@@ -86,7 +86,7 @@ function Layout({ children }) {
   };
 
   return (
-    <div className="container-fluid" style={{ fontFamily: "Inter, sans-serif" }}>
+    <div className="container-fluid" style={{ fontFamily: "Inter, sans-serif", padding: 0, margin: 0, minHeight: '100vh', background: 'transparent' }}>
       {/* Floating Particles */}
       <div className="position-fixed top-0 start-0 w-100 h-100 pointer-events-none" style={{ zIndex: 1 }}>
         <div className="floating position-absolute" style={{ top: '10%', left: '10%', fontSize: '2rem', opacity: 0.1 }}>✨</div>
@@ -94,10 +94,10 @@ function Layout({ children }) {
         <div className="floating delay-2 position-absolute" style={{ bottom: '30%', left: '20%', fontSize: '1.8rem', opacity: 0.1 }}>💫</div>
         <div className="floating position-absolute" style={{ bottom: '20%', right: '10%', fontSize: '1.2rem', opacity: 0.1 }}>⭐</div>
       </div>
-      <div className="row vh-100">
+      <div className="row" style={{ margin: 0, minHeight: '100vh' }}>
         
         {/* Left Panel - Navigation Sidebar */}
-        <div className="layout-left-panel vh-100 p-4 position-fixed glass-panel order-1" style={{ zIndex: 1000, overflowY: "auto", left: "0", width: "280px", top: "0" }}>
+        <div className="layout-left-panel p-4 position-fixed" style={{ zIndex: 1000, overflowY: "auto", left: "0", width: "280px", top: "0", height: '100vh', background: 'rgba(15, 23, 42, 0.3)', backdropFilter: 'blur(10px)', borderRight: '1px solid rgba(255, 255, 255, 0.05)' }}>
           {/* Logo */}
           <div className="d-flex align-items-center mb-4 px-3 py-2" style={{ cursor: "pointer", borderRadius: "12px", transition: "all 0.3s ease" }} onClick={() => navigate('/home')}
                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(96, 165, 250, 0.1)'}
@@ -155,14 +155,14 @@ function Layout({ children }) {
         </div>
 
         {/* Center Main Content */}
-        <div className="layout-main p-0 min-vh-100 glass-panel order-2" style={{ 
+        <div className="layout-main p-0 min-vh-100" style={{ 
           backgroundColor: "transparent", 
           marginLeft: "280px", 
           width: sidebarOpen ? "calc(100% - 560px)" : "calc(100% - 280px)",
           transition: "all 0.3s ease"
         }}>
           {/* Top Search Bar / Header */}
-          <div className="sticky-top glass-glow border-bottom px-4 py-3 d-flex align-items-center justify-content-between" style={{ zIndex: 900, backdropFilter: "blur(20px)" }}>
+          <div className="sticky-top border-bottom px-4 py-3 d-flex align-items-center justify-content-between" style={{ zIndex: 900, backdropFilter: "blur(20px)", background: 'rgba(15, 23, 42, 0.2)', borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
              <div className="input-group search-bar flex-grow-1" style={{ maxWidth: "600px" }}>
                 <span className="input-group-text glass-panel border-end-0 d-flex align-items-center justify-content-center" style={{ background: "rgba(96, 165, 250, 0.1)", border: "none", borderRadius: "12px 0 0 12px" }}>
                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -211,15 +211,19 @@ function Layout({ children }) {
         </div>
 
         {/* Right Panel - User Actions */}
-        <div className="layout-right-panel vh-100 p-4 position-fixed glass-panel order-3" style={{ 
+        <div className="layout-right-panel p-4 position-fixed" style={{ 
           zIndex: 1000, 
           overflowY: "auto", 
           right: "0", 
           width: "280px", 
           top: "0",
+          height: '100vh',
+          background: 'rgba(15, 23, 42, 0.3)',
+          backdropFilter: 'blur(10px)',
+          borderLeft: '1px solid rgba(255, 255, 255, 0.05)',
           transform: sidebarOpen ? 'translateX(0)' : 'translateX(100%)',
           transition: 'transform 0.3s ease',
-          boxShadow: sidebarOpen ? '-2px 0 15px rgba(0,0,0,0.2)' : 'none'
+          boxShadow: sidebarOpen ? '-2px 0 15px rgba(0,0,0,0.3)' : 'none'
         }}>
           {/* User Profile Section */}
           {currentUser && (
@@ -301,9 +305,10 @@ function Layout({ children }) {
               left: 0,
               right: 0,
               bottom: 0,
-              background: 'rgba(0,0,0,0.5)',
+              background: 'rgba(0,0,0,0.3)',
               zIndex: 999,
-              animation: 'fadeIn 0.3s ease'
+              animation: 'fadeIn 0.3s ease',
+              backdropFilter: 'blur(2px)'
             }}
           ></div>
         )}
