@@ -39,6 +39,7 @@ function Layout({ children }) {
   const location = useLocation();
   const [currentUser, setCurrentUser] = useState(null);
   const [topUsers, setTopUsers] = useState([]);
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 1200);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -154,9 +155,9 @@ function Layout({ children }) {
         </div>
 
         {/* Center Main Content */}
-        <div className="layout-main p-0 min-vh-100 glass-panel order-2" style={{ backgroundColor: "transparent", marginLeft: "280px", width: "calc(100% - 560px)" }}>
+        <div className="layout-main p-0 min-vh-100 glass-panel order-2" style={{ backgroundColor: "transparent", marginLeft: "280px", width: "calc(100% - 560px)", transition: "all 0.3s ease" }}>
           {/* Top Search Bar / Header */}
-          <div className="sticky-top glass-glow border-bottom px-4 py-3 d-flex align-items-center" style={{ zIndex: 900, backdropFilter: "blur(20px)" }}>
+          <div className="sticky-top glass-glow border-bottom px-4 py-3 d-flex align-items-center justify-content-between" style={{ zIndex: 900, backdropFilter: "blur(20px)" }}>
              <div className="input-group search-bar flex-grow-1" style={{ maxWidth: "600px" }}>
                 <span className="input-group-text glass-panel border-end-0 d-flex align-items-center justify-content-center" style={{ background: "rgba(96, 165, 250, 0.1)", border: "none", borderRadius: "12px 0 0 12px" }}>
                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -176,6 +177,28 @@ function Layout({ children }) {
                   }}
                 />
              </div>
+             <button
+               className="btn btn-glass ms-3"
+               onClick={() => setSidebarOpen(!sidebarOpen)}
+               style={{
+                 background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                 border: 'none',
+                 borderRadius: '0.75rem',
+                 padding: '0.6rem 0.8rem',
+                 cursor: 'pointer',
+                 transition: 'all 0.3s ease',
+                 display: 'flex',
+                 alignItems: 'center',
+                 justifyContent: 'center'
+               }}
+               title="Toggle sidebar"
+             >
+               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                 <line x1="8" y1="6" x2="21" y2="6"></line>
+                 <line x1="8" y1="12" x2="21" y2="12"></line>
+                 <line x1="8" y1="18" x2="21" y2="18"></line>
+               </svg>
+             </button>
           </div>
           <div className="p-4">
             {children}
@@ -183,7 +206,16 @@ function Layout({ children }) {
         </div>
 
         {/* Right Panel - User Actions */}
-        <div className="layout-right-panel vh-100 p-4 position-fixed glass-panel order-3" style={{ zIndex: 1000, overflowY: "auto", right: "0", width: "280px", top: "0" }}>
+        <div className="layout-right-panel vh-100 p-4 position-fixed glass-panel order-3" style={{ 
+          zIndex: 1000, 
+          overflowY: "auto", 
+          right: "0", 
+          width: "280px", 
+          top: "0",
+          transform: sidebarOpen ? 'translateX(0)' : 'translateX(100%)',
+          transition: 'transform 0.3s ease',
+          boxShadow: sidebarOpen ? '-2px 0 15px rgba(0,0,0,0.2)' : 'none'
+        }}>
           {/* User Profile Section */}
           {currentUser && (
             <div className="mb-4">
@@ -253,7 +285,57 @@ function Layout({ children }) {
             </div>
           </div>
         </div>
+
+        {/* Mobile Overlay - Closes sidebar when clicked */}
+        {sidebarOpen && (
+          <div
+            className="position-fixed"
+            onClick={() => setSidebarOpen(false)}
+            style={{
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(0,0,0,0.5)',
+              zIndex: 999,
+              animation: 'fadeIn 0.3s ease'
+            }}
+          ></div>
+        )}
       </div>
+
+      {/* Animations */}
+      <style>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @media (max-width: 1200px) {
+          .layout-main {
+            width: calc(100% - 280px) !important;
+            margin-left: 280px !important;
+          }
+          .layout-right-panel {
+            position: fixed !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .layout-main {
+            width: 100% !important;
+            margin-left: 0 !important;
+          }
+          .layout-left-panel {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+          }
+        }
+      `}</style>
     </div>
   );
 }
