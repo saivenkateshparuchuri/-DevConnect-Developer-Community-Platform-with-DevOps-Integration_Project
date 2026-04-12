@@ -34,6 +34,12 @@ function Home() {
   const countdownMinutes = resetCountdownMs !== null ? Math.floor((resetCountdownMs % (1000 * 60 * 60)) / (1000 * 60)) : 0;
   const countdownSeconds = resetCountdownMs !== null ? Math.floor((resetCountdownMs % (1000 * 60)) / 1000) : 0;
   const resetCountdownLabel = `${String(countdownHours).padStart(2, "0")}:${String(countdownMinutes).padStart(2, "0")}:${String(countdownSeconds).padStart(2, "0")}`;
+  const getPlaceLabel = (rank) => {
+    if (rank === 1) return "1st place";
+    if (rank === 2) return "2nd place";
+    if (rank === 3) return "3rd place";
+    return `${rank}th place`;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -253,7 +259,7 @@ function Home() {
               <div key={user._id} className="col-lg-3 col-md-6 col-sm-6 slide-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
                 <div className="card glass-glow border-0 h-100 p-4 rounded-3 hover-move glow-border" style={{ cursor: 'pointer', transition: 'all 0.3s ease', minHeight: '220px' }} onClick={() => navigate(`/profile/${user._id}`)}>
                   <div className="d-flex flex-column align-items-center text-center mb-4 pb-3 border-bottom" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
-                    <div className="badge bg-gradient mb-3" style={{ padding: '0.6rem 0.8rem', fontSize: '0.95rem' }}>#{index + 1}</div>
+                    <div className="badge bg-gradient mb-3" style={{ padding: '0.6rem 0.8rem', fontSize: '0.95rem' }}>{getPlaceLabel(index + 1)}</div>
                     <div className="avatar-circle mb-3" style={{ 
                       width: '60px', 
                       height: '60px', 
@@ -271,7 +277,6 @@ function Home() {
                       {user.name.charAt(0).toUpperCase()}
                     </div>
                     <h6 className="mb-1 text-light fw-bold" style={{ fontSize: '1rem' }}>{user.name}</h6>
-                    <small className="text-white-50" style={{ fontSize: '0.85rem' }}>{user.email}</small>
                   </div>
                   <div className="d-flex justify-content-around text-center flex-grow-1">
                     <div>
