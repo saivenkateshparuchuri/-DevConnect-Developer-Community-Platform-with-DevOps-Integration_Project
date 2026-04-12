@@ -1,10 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getAllUsers, getPosts, adminGetMe, adminDeleteUser, adminDeletePost } from "../services/api";
+import {
+  getAllUsers,
+  getPosts,
+  adminGetMe,
+  adminDeleteUser,
+  adminDeletePost,
+  getAllChallengeSubmissions,
+  adminReviewChallengeSubmission
+} from "../services/api";
 
 function AdminDashboard() {
   const [users, setUsers] = useState([]);
   const [posts, setPosts] = useState([]);
+  const [challengeSubmissions, setChallengeSubmissions] = useState([]);
+  const [feedbackBySubmission, setFeedbackBySubmission] = useState({});
+  const [reviewingSubmissionId, setReviewingSubmissionId] = useState("");
   const [loading, setLoading] = useState(true);
   const [currentAdmin, setCurrentAdmin] = useState(null);
   const navigate = useNavigate();
@@ -20,14 +31,16 @@ function AdminDashboard() {
 
       try {
         setLoading(true);
-        const [usersList, postsList, adminMe] = await Promise.all([
+        const [usersList, postsList, submissionsList, adminMe] = await Promise.all([
           getAllUsers(),
           getPosts(),
+          getAllChallengeSubmissions(),
           adminGetMe(adminToken)
         ]);
 
         setUsers(usersList);
         setPosts(postsList);
+        setChallengeSubmissions(Array.isArray(submissionsList) ? submissionsList : []);
         if (adminMe.user) setCurrentAdmin(adminMe.user);
       } catch (err) {
         console.error("Error fetching admin data:", err);
@@ -80,6 +93,42 @@ function AdminDashboard() {
     navigate("/admin");
   };
 
+  const handleFeedbackChange = (submissionId, value) => {
+    setFeedbackBySubmission((prev) => ({ ...prev, [submissionId]: value }));
+  };
+
+  const handleReviewSubmission = async (submission, status) => {
+    try {
+      setReviewingSubmissionId(submission.submissionId);
+      const feedback = feedbackBySubmission[submission.submissionId] || "";
+
+      const response = await adminReviewChallengeSubmission(
+        submission.challengeId,
+        submission.submissionId,
+        { status, feedback }
+      );
+
+      setChallengeSubmissions((prev) =>
+        prev.map((item) =>
+          item.submissionId === submission.submissionId
+            ? {
+                ...item,
+                status: response.submission.status,
+                feedback: response.submission.feedback,
+                reviewedAt: response.submission.reviewedAt
+              }
+            : item
+        )
+      );
+    } catch (err) {
+      alert(err.message || "Failed to review submission");
+    } finally {
+      setReviewingSubmissionId("");
+    }
+  };
+
+  const pendingChallengeSubmissions = challengeSubmissions.filter((s) => s.status === "Pending");
+
   if (loading) {
     return <div className="vh-100 d-flex justify-content-center align-items-center bg-white"><div className="spinner-border text-primary"></div></div>;
   }
@@ -127,6 +176,22 @@ function AdminDashboard() {
                <div className="card-body">
                  <h6 className="text-light text-opacity-75 small fw-bold">TOTAL POSTS</h6>
                  <h2 className="mb-0 fw-bold">{posts.length}</h2>
+               </div>
+             </div>
+          </div>
+          <div className="col-md-3">
+             <div className="card border-0 text-white shadow-sm" style={{ background: "linear-gradient(135deg, #ea580c, #f97316)" }}>
+               <div className="card-body">
+                 <h6 className="text-light text-opacity-75 small fw-bold">CODING SUBMISSIONS</h6>
+                 <h2 className="mb-0 fw-bold">{challengeSubmissions.length}</h2>
+               </div>
+             </div>
+          </div>
+          <div className="col-md-3">
+             <div className="card border-0 text-white shadow-sm" style={{ background: "linear-gradient(135deg, #b91c1c, #ef4444)" }}>
+               <div className="card-body">
+                 <h6 className="text-light text-opacity-75 small fw-bold">PENDING REVIEW</h6>
+                 <h2 className="mb-0 fw-bold">{pendingChallengeSubmissions.length}</h2>
                </div>
              </div>
           </div>
@@ -228,6 +293,85 @@ function AdminDashboard() {
                        ))}
                        {posts.length === 0 && (
                          <tr><td colSpan="5" className="text-center text-muted py-3">No posts found.</td></tr>
+                       )}
+                     </tbody>
+                   </table>
+                 </div>
+               </div>
+             </div>
+           </div>
+        </div>
+
+        <div className="row mt-5 pb-4">
+           <div className="col-md-12">
+             <div className="card bg-white border-0 shadow-sm rounded-3">
+               <div className="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                 <h5 className="mb-0 fw-bold text-dark">Coding Submissions Review</h5>
+                 <span className="badge bg-warning text-dark">Pending: {pendingChallengeSubmissions.length}</span>
+               </div>
+               <div className="card-body p-0">
+                 <div className="table-responsive">
+                   <table className="table table-hover mb-0">
+                     <thead className="bg-light text-secondary text-uppercase small fw-bold">
+                       <tr>
+                         <th>Challenge</th>
+                         <th>User</th>
+                         <th>Language</th>
+                         <th>Status</th>
+                         <th>Submitted</th>
+                         <th style={{ minWidth: "270px" }}>Feedback</th>
+                         <th style={{ minWidth: "180px" }}>Actions</th>
+                       </tr>
+                     </thead>
+                     <tbody>
+                       {challengeSubmissions.slice(0, 20).map((submission) => (
+                         <tr key={submission.submissionId}>
+                           <td>
+                             <div className="fw-semibold small">{submission.challengeTitle}</div>
+                             <div className="text-muted" style={{ fontSize: "0.7rem" }}>{submission.level} • {submission.points} pts</div>
+                           </td>
+                           <td>
+                             <div className="small fw-semibold">{submission.user?.name || "Unknown"}</div>
+                             <div className="text-muted" style={{ fontSize: "0.7rem" }}>{submission.user?.email || ""}</div>
+                           </td>
+                           <td className="text-lowercase small">{submission.language}</td>
+                           <td>
+                             <span className={`badge ${submission.status === "Accepted" ? "bg-success" : submission.status === "Rejected" ? "bg-danger" : "bg-warning text-dark"}`}>
+                               {submission.status}
+                             </span>
+                           </td>
+                           <td className="small">{new Date(submission.submittedAt).toLocaleString()}</td>
+                           <td>
+                             <textarea
+                               className="form-control form-control-sm"
+                               rows="2"
+                               placeholder="Add review feedback"
+                               value={feedbackBySubmission[submission.submissionId] ?? submission.feedback ?? ""}
+                               onChange={(e) => handleFeedbackChange(submission.submissionId, e.target.value)}
+                             />
+                           </td>
+                           <td>
+                             <div className="d-flex gap-2">
+                               <button
+                                 className="btn btn-sm btn-success"
+                                 disabled={reviewingSubmissionId === submission.submissionId}
+                                 onClick={() => handleReviewSubmission(submission, "Accepted")}
+                               >
+                                 Accept
+                               </button>
+                               <button
+                                 className="btn btn-sm btn-danger"
+                                 disabled={reviewingSubmissionId === submission.submissionId}
+                                 onClick={() => handleReviewSubmission(submission, "Rejected")}
+                               >
+                                 Reject
+                               </button>
+                             </div>
+                           </td>
+                         </tr>
+                       ))}
+                       {challengeSubmissions.length === 0 && (
+                         <tr><td colSpan="7" className="text-center text-muted py-3">No coding submissions found.</td></tr>
                        )}
                      </tbody>
                    </table>

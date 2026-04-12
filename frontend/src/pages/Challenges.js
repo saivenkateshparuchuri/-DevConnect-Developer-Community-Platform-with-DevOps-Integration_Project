@@ -1,21 +1,45 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
-import { getChallenges } from "../services/api";
+import {
+  getChallenges,
+  getCurrentUser,
+  createChallengeQuestion,
+  getMyChallengeSubmissions
+} from "../services/api";
 
 function Challenges() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const activeCat = searchParams.get("cat") || "";
   const [challenges, setChallenges] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showMySubmissions, setShowMySubmissions] = useState(false);
+  const [mySubmissions, setMySubmissions] = useState([]);
+  const [creating, setCreating] = useState(false);
+  const [submissionsLoading, setSubmissionsLoading] = useState(false);
+  const [form, setForm] = useState({
+    title: "",
+    level: "Easy",
+    points: 50,
+    tech: "javascript",
+    deadline: "No deadline",
+    color: "primary",
+    category: "Practice",
+    problemStatement: "",
+    constraints: "",
+    starterCode: ""
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchChallenges = async () => {
       try {
         setLoading(true);
-        const data = await getChallenges();
-        setChallenges(data);
+        const [data, me] = await Promise.all([getChallenges(), getCurrentUser()]);
+        setChallenges(Array.isArray(data) ? data : []);
+        if (me && me.user) setCurrentUser(me.user);
       } catch (err) {
         console.error("Error fetching challenges:", err);
       } finally {
@@ -29,6 +53,62 @@ function Challenges() {
     ? challenges.filter(c => c.category === activeCat)
     : challenges;
 
+  const isAdmin = Boolean(currentUser && currentUser.isAdmin);
+
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCreateChallenge = async (e) => {
+    e.preventDefault();
+    try {
+      setCreating(true);
+      const payload = {
+        ...form,
+        points: Number(form.points),
+        tech: form.tech,
+        constraints: form.constraints
+      };
+      const created = await createChallengeQuestion(payload);
+      setChallenges((prev) => [created, ...prev]);
+      setForm({
+        title: "",
+        level: "Easy",
+        points: 50,
+        tech: "javascript",
+        deadline: "No deadline",
+        color: "primary",
+        category: "Practice",
+        problemStatement: "",
+        constraints: "",
+        starterCode: ""
+      });
+      setShowCreateForm(false);
+    } catch (err) {
+      alert(err.message || "Failed to create coding question");
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  const handleToggleSubmissions = async () => {
+    const next = !showMySubmissions;
+    setShowMySubmissions(next);
+    if (!next) return;
+
+    try {
+      setSubmissionsLoading(true);
+      const data = await getMyChallengeSubmissions();
+      setMySubmissions(Array.isArray(data) ? data : []);
+    } catch (err) {
+      alert("Failed to fetch your submissions");
+      setShowMySubmissions(false);
+    } finally {
+      setSubmissionsLoading(false);
+    }
+  };
+
   return (
     <Layout>
       <div className="d-flex align-items-center justify-content-between mb-4 border-bottom pb-3">
@@ -38,8 +118,129 @@ function Challenges() {
              {activeCat ? `Showing ${activeCat} challenges.` : "Compete with the best and earn exclusive badges."}
            </p>
         </div>
-        <button className="btn btn-outline-primary btn-sm rounded-pill px-3">View My Submissions</button>
+        <div className="d-flex gap-2">
+          <button className="btn btn-outline-primary btn-sm rounded-pill px-3" onClick={handleToggleSubmissions}>
+            {showMySubmissions ? "Hide My Submissions" : "View My Submissions"}
+          </button>
+          {isAdmin && (
+            <button className="btn btn-primary btn-sm rounded-pill px-3" onClick={() => setShowCreateForm((prev) => !prev)}>
+              {showCreateForm ? "Close" : "Post Coding Question"}
+            </button>
+          )}
+        </div>
       </div>
+
+      {showCreateForm && isAdmin && (
+        <div className="card border-0 shadow-sm rounded-4 mb-4">
+          <div className="card-body p-4">
+            <h5 className="fw-bold mb-3 text-dark">Create Coding Question</h5>
+            <form onSubmit={handleCreateChallenge}>
+              <div className="row g-3">
+                <div className="col-md-6">
+                  <label className="form-label small fw-semibold">Title</label>
+                  <input className="form-control" name="title" value={form.title} onChange={handleFormChange} required />
+                </div>
+                <div className="col-md-2">
+                  <label className="form-label small fw-semibold">Level</label>
+                  <select className="form-select" name="level" value={form.level} onChange={handleFormChange}>
+                    <option>Easy</option>
+                    <option>Medium</option>
+                    <option>Hard</option>
+                  </select>
+                </div>
+                <div className="col-md-2">
+                  <label className="form-label small fw-semibold">Points</label>
+                  <input type="number" min="1" className="form-control" name="points" value={form.points} onChange={handleFormChange} />
+                </div>
+                <div className="col-md-2">
+                  <label className="form-label small fw-semibold">Category</label>
+                  <select className="form-select" name="category" value={form.category} onChange={handleFormChange}>
+                    <option>Frontend</option>
+                    <option>Backend</option>
+                    <option>AI</option>
+                    <option>Practice</option>
+                  </select>
+                </div>
+                <div className="col-md-6">
+                  <label className="form-label small fw-semibold">Tech (comma-separated)</label>
+                  <input className="form-control" name="tech" value={form.tech} onChange={handleFormChange} />
+                </div>
+                <div className="col-md-3">
+                  <label className="form-label small fw-semibold">Deadline</label>
+                  <input className="form-control" name="deadline" value={form.deadline} onChange={handleFormChange} />
+                </div>
+                <div className="col-md-3">
+                  <label className="form-label small fw-semibold">Color</label>
+                  <select className="form-select" name="color" value={form.color} onChange={handleFormChange}>
+                    <option value="primary">Primary</option>
+                    <option value="success">Success</option>
+                    <option value="warning">Warning</option>
+                    <option value="danger">Danger</option>
+                    <option value="info">Info</option>
+                  </select>
+                </div>
+                <div className="col-12">
+                  <label className="form-label small fw-semibold">Problem Statement</label>
+                  <textarea className="form-control" rows="4" name="problemStatement" value={form.problemStatement} onChange={handleFormChange} required />
+                </div>
+                <div className="col-12">
+                  <label className="form-label small fw-semibold">Constraints (one per line)</label>
+                  <textarea className="form-control" rows="3" name="constraints" value={form.constraints} onChange={handleFormChange} />
+                </div>
+                <div className="col-12">
+                  <label className="form-label small fw-semibold">Starter Code</label>
+                  <textarea className="form-control font-monospace" rows="5" name="starterCode" value={form.starterCode} onChange={handleFormChange} />
+                </div>
+              </div>
+              <div className="mt-3 d-flex justify-content-end">
+                <button className="btn btn-primary rounded-pill px-4" type="submit" disabled={creating}>
+                  {creating ? "Posting..." : "Post Question"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showMySubmissions && (
+        <div className="card border-0 shadow-sm rounded-4 mb-4">
+          <div className="card-body p-4">
+            <h5 className="fw-bold mb-3 text-dark">My Challenge Submissions</h5>
+            {submissionsLoading ? (
+              <div className="text-center py-3"><div className="spinner-border text-primary" role="status"></div></div>
+            ) : mySubmissions.length === 0 ? (
+              <p className="mb-0 text-muted">No submissions yet.</p>
+            ) : (
+              <div className="table-responsive">
+                <table className="table table-sm align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Challenge</th>
+                      <th>Status</th>
+                      <th>Language</th>
+                      <th>Submitted</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {mySubmissions.map((item) => (
+                      <tr key={item.submissionId}>
+                        <td>{item.challengeTitle}</td>
+                        <td>
+                          <span className={`badge ${item.status === "Accepted" ? "bg-success" : item.status === "Rejected" ? "bg-danger" : "bg-warning text-dark"}`}>
+                            {item.status}
+                          </span>
+                        </td>
+                        <td className="text-lowercase">{item.language}</td>
+                        <td>{new Date(item.submittedAt).toLocaleString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {loading ? (
         <div className="text-center py-5">
@@ -65,6 +266,11 @@ function Challenges() {
                   </div>
                   
                   <h5 className="fw-bold mb-2 text-dark">{challenge.title}</h5>
+                  {challenge.problemStatement && (
+                    <p className="small text-muted mb-2" style={{ minHeight: "42px" }}>
+                      {challenge.problemStatement.slice(0, 100)}{challenge.problemStatement.length > 100 ? "..." : ""}
+                    </p>
+                  )}
                   
                   <div className="d-flex flex-wrap gap-1 mb-3">
                       {challenge.tech.map(t => (

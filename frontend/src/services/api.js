@@ -109,6 +109,84 @@ export const getChallenges = async () => {
   return res.json();
 };
 
+export const getChallengeById = async (id) => {
+  const res = await fetch(`${BASE_URL}/challenges/${id}`);
+  if (!res.ok) throw new Error("Failed to fetch challenge");
+  return res.json();
+};
+
+export const createChallengeQuestion = async (payload) => {
+  const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+  const res = await fetch(`${BASE_URL}/challenges`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to create challenge question");
+  return data;
+};
+
+export const submitChallengeSolution = async (challengeId, payload) => {
+  const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+  const res = await fetch(`${BASE_URL}/challenges/${challengeId}/submit`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to submit challenge solution");
+  return data;
+};
+
+export const getMyChallengeSubmissions = async () => {
+  const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+  const res = await fetch(`${BASE_URL}/challenges/my/submissions`, {
+    headers: {
+      Authorization: token
+    }
+  });
+
+  if (!res.ok) throw new Error("Failed to fetch challenge submissions");
+  return res.json();
+};
+
+export const getAllChallengeSubmissions = async () => {
+  const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+  const res = await fetch(`${BASE_URL}/challenges/submissions/all`, {
+    headers: {
+      Authorization: token
+    }
+  });
+
+  if (!res.ok) throw new Error("Failed to fetch all challenge submissions");
+  return res.json();
+};
+
+export const adminReviewChallengeSubmission = async (challengeId, submissionId, payload) => {
+  const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+  const res = await fetch(`${BASE_URL}/challenges/${challengeId}/submissions/${submissionId}/review`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to review submission");
+  return data;
+};
+
 export const getMessages = async (userId) => {
   const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
   const res = await fetch(`${BASE_URL}/messages/${userId}`, {
