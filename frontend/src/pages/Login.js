@@ -105,7 +105,7 @@ function Login() {
                   <span style={{ marginRight: '0.5rem' }}>📧</span>Email Address
                 </label>
                 <input
-                  placeholder="developer@example.com"
+                  placeholder="Enter your email"
                   type="email"
                   required
                   value={email}
@@ -141,7 +141,7 @@ function Login() {
                 </label>
                 <input
                   type="password"
-                  placeholder="••••••••"
+                  placeholder="Enter your password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}

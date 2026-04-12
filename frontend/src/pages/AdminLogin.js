@@ -105,7 +105,7 @@ function AdminLogin() {
                   <span style={{ marginRight: '0.5rem' }}>📧</span>Administrator Email
                 </label>
                 <input
-                  placeholder="admin@devconnect.com"
+                  placeholder="Enter your email"
                   type="email"
                   required
                   value={email}
@@ -141,7 +141,7 @@ function AdminLogin() {
                 </label>
                 <input
                   type="password"
-                  placeholder="••••••••"
+                  placeholder="Enter your password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}

@@ -110,7 +110,7 @@ function Signup() {
                   <span style={{ marginRight: '0.5rem' }}>👤</span>Full Name
                 </label>
                 <input
-                  placeholder="John Doe"
+                  placeholder="Enter your full name"
                   type="text"
                   required
                   value={name}
@@ -145,7 +145,7 @@ function Signup() {
                   <span style={{ marginRight: '0.5rem' }}>📧</span>Email Address
                 </label>
                 <input
-                  placeholder="developer@example.com"
+                  placeholder="Enter your email"
                   type="email"
                   required
                   value={email}
@@ -181,7 +181,7 @@ function Signup() {
                 </label>
                 <input
                   type="password"
-                  placeholder="••••••••"
+                  placeholder="Enter your password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -216,7 +216,7 @@ function Signup() {
                 </label>
                 <input
                   type="password"
-                  placeholder="••••••••"
+                  placeholder="Confirm your password"
                   required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
