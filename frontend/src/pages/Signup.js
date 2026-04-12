@@ -322,6 +322,22 @@ function Signup() {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(30px); }
         }
+        input::placeholder {
+          color: rgba(255, 255, 255, 0.6) !important;
+          opacity: 1;
+        }
+        input::-webkit-input-placeholder {
+          color: rgba(255, 255, 255, 0.6) !important;
+          opacity: 1;
+        }
+        input:-moz-placeholder {
+          color: rgba(255, 255, 255, 0.6) !important;
+          opacity: 1;
+        }
+        input::-moz-placeholder {
+          color: rgba(255, 255, 255, 0.6) !important;
+          opacity: 1;
+        }
       `}</style>
     </div>
   );
