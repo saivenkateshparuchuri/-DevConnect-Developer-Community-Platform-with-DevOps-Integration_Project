@@ -167,8 +167,41 @@ export const getAllChallengeSubmissions = async () => {
     }
   });
 
-  if (!res.ok) throw new Error("Failed to fetch all challenge submissions");
-  return res.json();
+  if (res.ok) {
+    return res.json();
+  }
+
+  // Fallback for deployments where admin submissions endpoint is not available yet.
+  const fallbackRes = await fetch(`${BASE_URL}/challenges/all`);
+  if (!fallbackRes.ok) throw new Error("Failed to fetch all challenge submissions");
+
+  const challengeList = await fallbackRes.json();
+  const records = [];
+
+  (Array.isArray(challengeList) ? challengeList : []).forEach((challenge) => {
+    (challenge.submissions || []).forEach((submission) => {
+      records.push({
+        challengeId: challenge._id,
+        challengeTitle: challenge.title,
+        level: challenge.level,
+        points: challenge.points,
+        category: challenge.category,
+        submissionId: submission._id,
+        user: submission.user,
+        language: submission.language,
+        code: submission.code,
+        status: submission.status || "Pending",
+        feedback: submission.feedback || "",
+        awardedMarks: submission.awardedMarks || 0,
+        reviewedBy: submission.reviewedBy || null,
+        reviewedAt: submission.reviewedAt || null,
+        submittedAt: submission.submittedAt
+      });
+    });
+  });
+
+  records.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+  return records;
 };
 
 export const adminReviewChallengeSubmission = async (challengeId, submissionId, payload) => {

@@ -29,17 +29,28 @@ function AdminDashboard() {
 
     try {
       setLoading(true);
-      const [usersList, postsList, submissionsList, adminMe] = await Promise.all([
+      const [usersResult, postsResult, submissionsResult, adminMeResult] = await Promise.allSettled([
         getAllUsers(),
         getPosts(),
         getAllChallengeSubmissions(),
         adminGetMe(adminToken)
       ]);
 
-      setUsers(usersList);
-      setPosts(postsList);
-      setChallengeSubmissions(Array.isArray(submissionsList) ? submissionsList : []);
-      if (adminMe.user) setCurrentAdmin(adminMe.user);
+      if (usersResult.status === "fulfilled") {
+        setUsers(Array.isArray(usersResult.value) ? usersResult.value : []);
+      }
+
+      if (postsResult.status === "fulfilled") {
+        setPosts(Array.isArray(postsResult.value) ? postsResult.value : []);
+      }
+
+      if (submissionsResult.status === "fulfilled") {
+        setChallengeSubmissions(Array.isArray(submissionsResult.value) ? submissionsResult.value : []);
+      }
+
+      if (adminMeResult.status === "fulfilled" && adminMeResult.value && adminMeResult.value.user) {
+        setCurrentAdmin(adminMeResult.value.user);
+      }
     } catch (err) {
       console.error("Error fetching admin data:", err);
     } finally {
