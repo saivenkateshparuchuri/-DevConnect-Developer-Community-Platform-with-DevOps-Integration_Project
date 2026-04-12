@@ -9,8 +9,10 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
   const [topUsers, setTopUsers] = useState([]);
+  const [typedGreeting, setTypedGreeting] = useState("");
   const [nowTs, setNowTs] = useState(Date.now());
   const navigate = useNavigate();
+  const fullGreeting = `Hey ${currentUser ? currentUser.name : "Developer"}, what do you want to learn today?`;
   const reputationScore = currentUser?.reputation || 0;
   const streakDays = Math.max(1, reputationScore);
   const streakStep = 7;
@@ -70,13 +72,29 @@ function Home() {
     return () => clearInterval(ticker);
   }, [streakAtRisk]);
 
+  useEffect(() => {
+    setTypedGreeting("");
+    let index = 0;
+
+    const typeTimer = setInterval(() => {
+      index += 1;
+      setTypedGreeting(fullGreeting.slice(0, index));
+
+      if (index >= fullGreeting.length) {
+        clearInterval(typeTimer);
+      }
+    }, 32);
+
+    return () => clearInterval(typeTimer);
+  }, [fullGreeting]);
+
   return (
     <Layout>
       {/* Title Section */}
       <div className="mb-4 d-flex justify-content-between align-items-start flex-wrap gap-3 slide-in-down">
         <div style={{ maxWidth: '760px' }}>
           <h4 className="fw-bold text-light mb-1 text-glow" style={{ fontSize: '2rem', lineHeight: '1.15', maxWidth: '100%', wordBreak: 'break-word' }}>
-             Hey {currentUser ? currentUser.name : "Developer"}, what do you want to learn today?
+             {typedGreeting}
           </h4>
           <p className="text-white-50 small mb-0 slide-in-left delay-1" style={{ maxWidth: '680px' }}>
              Get instant answers from the community, grounded in verified knowledge.
