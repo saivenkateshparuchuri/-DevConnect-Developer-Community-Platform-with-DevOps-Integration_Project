@@ -284,10 +284,10 @@ function Challenges() {
                         {challenge.deadline}
                       </div>
                       <button 
-                        className={`btn btn-sm btn-${challenge.color} rounded-pill px-4 fw-bold`}
-                        onClick={() => navigate(`/challenges/${challenge._id}/view`)}
+                        className={`btn btn-sm ${isAdmin ? "btn-outline-primary" : `btn-${challenge.color}`} rounded-pill px-4 fw-bold`}
+                        onClick={() => navigate(isAdmin ? `/challenges/${challenge._id}/results` : `/challenges/${challenge._id}/view`)}
                       >
-                        Start Now
+                        {isAdmin ? "View Results" : "Start Now"}
                       </button>
                   </div>
                 </div>
