@@ -74,14 +74,47 @@ function Login() {
             <div style={{ 
               fontSize: '3.5rem',
               marginBottom: '1rem',
-              display: 'inline-block',
-              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              fontWeight: 'bold'
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem'
             }}>
-              CodeVerse
+              <svg width="60" height="60" viewBox="0 0 60 60" style={{ filter: 'drop-shadow(0 0 10px rgba(99, 102, 241, 0.4))' }}>
+                {/* Outer circle */}
+                <circle cx="30" cy="30" r="28" fill="none" stroke="url(#gradient1)" strokeWidth="2"/>
+                
+                {/* Code brackets */}
+                <text x="15" y="38" fontSize="24" fontWeight="bold" fill="url(#gradient1)" fontFamily="monospace">&lt;</text>
+                <text x="40" y="38" fontSize="24" fontWeight="bold" fill="url(#gradient2)" fontFamily="monospace">/&gt;</text>
+                
+                {/* Stars for universe concept */}
+                <circle cx="12" cy="12" r="1.5" fill="#a78bfa" opacity="0.8"/>
+                <circle cx="48" cy="10" r="1" fill="#c4b5fd" opacity="0.6"/>
+                <circle cx="50" cy="40" r="1.2" fill="#a78bfa" opacity="0.7"/>
+                <circle cx="14" cy="48" r="1" fill="#c4b5fd" opacity="0.6"/>
+                
+                {/* Gradient definitions */}
+                <defs>
+                  <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style={{ stopColor: '#6366f1', stopOpacity: 1 }} />
+                    <stop offset="100%" style={{ stopColor: '#8b5cf6', stopOpacity: 1 }} />
+                  </linearGradient>
+                  <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style={{ stopColor: '#8b5cf6', stopOpacity: 1 }} />
+                    <stop offset="100%" style={{ stopColor: '#a78bfa', stopOpacity: 1 }} />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <span style={{ 
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                fontWeight: 'bold',
+                fontSize: '2rem'
+              }}>
+                CodeVerse
+              </span>
             </div>
             <h1 className="text-light fw-bold mb-2" style={{ fontSize: '1.75rem', letterSpacing: '-0.5px' }}>
               Welcome to CodeVerse
