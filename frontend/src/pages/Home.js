@@ -250,10 +250,10 @@ function Home() {
 
       </div>
 
-      {/* Top Contributors Section */}
+      {/* Top Community Members Section */}
       {topUsers.length > 0 && (
         <div className="mb-5 slide-in-up delay-2">
-          <h4 className="fw-bold text-light mb-4 text-glow" style={{ fontSize: '1.5rem' }}>🏆 Top Contributors</h4>
+          <h4 className="fw-bold text-light mb-4 text-glow" style={{ fontSize: '1.5rem' }}>🏆 Top Community Members</h4>
           <div className="row g-4">
             {topUsers.slice(0, 6).map((user, index) => (
               <div key={user._id} className="col-lg-3 col-md-6 col-sm-6 slide-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
