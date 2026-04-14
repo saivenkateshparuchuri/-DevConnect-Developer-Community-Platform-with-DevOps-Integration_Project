@@ -68,18 +68,37 @@ function Landing() {
                 borderRight: "1px solid rgba(255,255,255,0.12)",
               }}
             >
-              <p
-                style={{
-                  marginBottom: "0.9rem",
-                  letterSpacing: "0.12em",
-                  fontWeight: 700,
-                  color: "#99f6e4",
-                  fontSize: "0.75rem",
-                  textTransform: "uppercase",
-                }}
-              >
-                DevConnect Platform
-              </p>
+              <div className="d-inline-flex align-items-center gap-2" style={{ marginBottom: "0.9rem" }}>
+                <svg width="20" height="20" viewBox="0 0 65 65" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="landingLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#5eead4" />
+                      <stop offset="100%" stopColor="#84cc16" />
+                    </linearGradient>
+                  </defs>
+                  <circle cx="32.5" cy="32.5" r="30" fill="rgba(94, 234, 212, 0.08)" stroke="url(#landingLogoGradient)" strokeWidth="1.5"/>
+                  <circle cx="32.5" cy="15" r="3.5" fill="url(#landingLogoGradient)"/>
+                  <circle cx="15" cy="40" r="3.5" fill="url(#landingLogoGradient)"/>
+                  <circle cx="50" cy="40" r="3.5" fill="url(#landingLogoGradient)"/>
+                  <circle cx="32.5" cy="32.5" r="4" fill="url(#landingLogoGradient)"/>
+                  <line x1="32.5" y1="18.5" x2="32.5" y2="28.5" stroke="url(#landingLogoGradient)" strokeWidth="1.5" opacity="0.7"/>
+                  <line x1="32.5" y1="18.5" x2="18" y2="37.5" stroke="url(#landingLogoGradient)" strokeWidth="1.5" opacity="0.7"/>
+                  <line x1="32.5" y1="18.5" x2="47" y2="37.5" stroke="url(#landingLogoGradient)" strokeWidth="1.5" opacity="0.7"/>
+                  <line x1="18" y1="40" x2="29" y2="32.5" stroke="url(#landingLogoGradient)" strokeWidth="1.5" opacity="0.6"/>
+                  <line x1="47" y1="40" x2="36" y2="32.5" stroke="url(#landingLogoGradient)" strokeWidth="1.5" opacity="0.6"/>
+                </svg>
+                <span
+                  style={{
+                    letterSpacing: "0.12em",
+                    fontWeight: 700,
+                    color: "#99f6e4",
+                    fontSize: "0.75rem",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  CodeVerse Platform
+                </span>
+              </div>
               <h1
                 className="text-light fw-bold"
                 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", lineHeight: 1.1, marginBottom: "1rem" }}
@@ -97,7 +116,7 @@ function Landing() {
                   marginBottom: "1.5rem",
                 }}
               >
-                DevConnect is a community platform where developers ask and answer questions,
+                CodeVerse is a community platform where developers ask and answer questions,
                 share articles, join coding challenges, chat with peers, and explore AI-assisted
                 workflows in one place.
               </p>
