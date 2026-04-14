@@ -170,11 +170,26 @@ function AdminDashboard() {
   const rejectedCount = challengeSubmissions.filter((s) => s.status === "Rejected").length;
 
   if (loading) {
-    return <div className="vh-100 d-flex justify-content-center align-items-center bg-white"><div className="spinner-border text-primary"></div></div>;
+    return (
+      <div
+        className="vh-100 d-flex justify-content-center align-items-center"
+        style={{
+          background: "linear-gradient(130deg, #071c26 0%, #0c2d3a 34%, #134e4a 72%, #3f6212 100%)"
+        }}
+      >
+        <div className="spinner-border text-info"></div>
+      </div>
+    );
   }
 
   return (
-    <div className="min-vh-100 bg-light text-dark border-top border-4 border-primary">
+    <div
+      className="min-vh-100 admin-dashboard-page"
+      style={{
+        background: "linear-gradient(130deg, #071c26 0%, #0c2d3a 34%, #134e4a 72%, #3f6212 100%)",
+        color: "#e2e8f0"
+      }}
+    >
       {/* Admin Navbar */}
       <nav className="navbar navbar-light bg-white border-bottom shadow-sm mb-4 py-2">
         <div className="container px-4">
@@ -468,6 +483,70 @@ function AdminDashboard() {
            </div>
         </div>
       </div>
+
+      <style>{`
+        .admin-dashboard-page .navbar,
+        .admin-dashboard-page .card,
+        .admin-dashboard-page .card-header,
+        .admin-dashboard-page .bg-white {
+          background: rgba(15, 23, 42, 0.74) !important;
+          border-color: rgba(148, 163, 184, 0.22) !important;
+          color: #e2e8f0 !important;
+          backdrop-filter: blur(14px);
+        }
+
+        .admin-dashboard-page .bg-light {
+          background: rgba(30, 41, 59, 0.62) !important;
+          color: #cbd5e1 !important;
+        }
+
+        .admin-dashboard-page .text-dark {
+          color: #e2e8f0 !important;
+        }
+
+        .admin-dashboard-page .text-muted,
+        .admin-dashboard-page .text-secondary {
+          color: #cbd5e1 !important;
+        }
+
+        .admin-dashboard-page .table {
+          color: #e2e8f0;
+          margin-bottom: 0;
+        }
+
+        .admin-dashboard-page .table > :not(caption) > * > * {
+          background-color: transparent !important;
+          border-color: rgba(148, 163, 184, 0.2) !important;
+          color: #e2e8f0 !important;
+        }
+
+        .admin-dashboard-page .table-hover tbody tr:hover > * {
+          background: rgba(51, 65, 85, 0.55) !important;
+        }
+
+        .admin-dashboard-page .form-control,
+        .admin-dashboard-page .form-control-sm {
+          background: rgba(15, 23, 42, 0.9) !important;
+          border: 1px solid rgba(148, 163, 184, 0.3) !important;
+          color: #e2e8f0 !important;
+        }
+
+        .admin-dashboard-page .form-control::placeholder {
+          color: rgba(203, 213, 225, 0.7) !important;
+        }
+
+        .admin-dashboard-page .btn-outline-secondary,
+        .admin-dashboard-page .btn-outline-danger {
+          border-color: rgba(148, 163, 184, 0.4);
+          color: #e2e8f0;
+        }
+
+        .admin-dashboard-page .btn-outline-secondary:hover,
+        .admin-dashboard-page .btn-outline-danger:hover {
+          background: rgba(51, 65, 85, 0.6);
+          color: #ffffff;
+        }
+      `}</style>
     </div>
   );
 }
