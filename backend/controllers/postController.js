@@ -1,8 +1,8 @@
 const Post = require('../models/Post');
-const User = require('../models/User');
+const { trackUserStreakActivity } = require('../utils/streakActivity');
 
 const touchUserActivity = async (userId) => {
-  await User.findByIdAndUpdate(userId, { $set: { lastActivityAt: new Date() } });
+  await trackUserStreakActivity(userId);
 };
 
 // ✅ createPost

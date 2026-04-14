@@ -10,30 +10,23 @@ function Home() {
   const [currentUser, setCurrentUser] = useState(null);
   const [topUsers, setTopUsers] = useState([]);
   const [typedGreeting, setTypedGreeting] = useState("");
-  const [nowTs, setNowTs] = useState(Date.now());
   const navigate = useNavigate();
   const fullGreeting = `Hey ${currentUser ? currentUser.name : "Developer"}, what do you want to learn today?`;
-  const reputationScore = currentUser?.reputation || 0;
-  const streakDays = Math.max(1, reputationScore);
+  const streakDaysStored = Math.max(0, currentUser?.streakCount || 0);
   const streakStep = 7;
-  const streakSegment = streakDays % streakStep;
-  const activeSegments = streakSegment === 0 ? streakStep : streakSegment;
-  const streakProgress = (activeSegments / streakStep) * 100;
-  const nextStreakMilestone = streakDays + (streakStep - activeSegments);
   const lastActivityDate = currentUser?.lastActivityAt ? new Date(currentUser.lastActivityAt) : null;
   const isLastActivityValid = lastActivityDate && !Number.isNaN(lastActivityDate.getTime());
   const msSinceLastActivity = isLastActivityValid ? (Date.now() - lastActivityDate.getTime()) : null;
+  const daysSinceLastActivity = msSinceLastActivity !== null ? Math.floor(msSinceLastActivity / (1000 * 60 * 60 * 24)) : 0;
   const hoursSinceLastActivity = msSinceLastActivity !== null ? msSinceLastActivity / (1000 * 60 * 60) : null;
-  const streakBroken = hoursSinceLastActivity !== null ? hoursSinceLastActivity >= 48 : false;
-  const streakAtRisk = hoursSinceLastActivity !== null ? (hoursSinceLastActivity >= 24 && hoursSinceLastActivity < 48) : false;
-  const flameSpeed = streakBroken ? '3s' : (streakAtRisk ? '1s' : '2.2s');
-  const streakResetWindowMs = 48 * 60 * 60 * 1000;
-  const resetAtTs = isLastActivityValid ? lastActivityDate.getTime() + streakResetWindowMs : null;
-  const resetCountdownMs = resetAtTs ? Math.max(0, resetAtTs - nowTs) : null;
-  const countdownHours = resetCountdownMs !== null ? Math.floor(resetCountdownMs / (1000 * 60 * 60)) : 0;
-  const countdownMinutes = resetCountdownMs !== null ? Math.floor((resetCountdownMs % (1000 * 60 * 60)) / (1000 * 60)) : 0;
-  const countdownSeconds = resetCountdownMs !== null ? Math.floor((resetCountdownMs % (1000 * 60)) / 1000) : 0;
-  const resetCountdownLabel = `${String(countdownHours).padStart(2, "0")}:${String(countdownMinutes).padStart(2, "0")}:${String(countdownSeconds).padStart(2, "0")}`;
+  const streakDays = Math.max(0, streakDaysStored - Math.max(0, daysSinceLastActivity));
+  const streakDropped = daysSinceLastActivity > 0;
+  const streakAtRisk = hoursSinceLastActivity !== null ? (hoursSinceLastActivity >= 20 && hoursSinceLastActivity < 24) : false;
+  const flameSpeed = streakDropped ? '3s' : (streakAtRisk ? '1s' : '2.2s');
+  const streakSegment = streakDays % streakStep;
+  const activeSegments = streakDays === 0 ? 0 : (streakSegment === 0 ? streakStep : streakSegment);
+  const streakProgress = (activeSegments / streakStep) * 100;
+  const nextStreakMilestone = streakDays === 0 ? streakStep : streakDays + (streakStep - activeSegments);
   const getPlaceLabel = (rank) => {
     if (rank === 1) return "1st place";
     if (rank === 2) return "2nd place";
@@ -67,16 +60,6 @@ function Home() {
     
     fetchData();
   }, []);
-
-  useEffect(() => {
-    if (!streakAtRisk) return undefined;
-
-    const ticker = setInterval(() => {
-      setNowTs(Date.now());
-    }, 1000);
-
-    return () => clearInterval(ticker);
-  }, [streakAtRisk]);
 
   useEffect(() => {
     setTypedGreeting("");
@@ -124,32 +107,32 @@ function Home() {
         {/* Reputation Streak */}
         <div className="col-xl-4 col-lg-5 col-md-6 slide-in-left delay-1">
           <div
-            className={`card glass-glow border-0 h-100 p-4 rounded-3 hover-move glow-border streak-card-snap ${streakAtRisk ? 'streak-card-risk' : ''} ${streakBroken ? 'streak-card-broken' : ''}`}
+            className={`card glass-glow border-0 h-100 p-4 rounded-3 hover-move glow-border streak-card-snap ${streakAtRisk ? 'streak-card-risk' : ''} ${streakDropped ? 'streak-card-broken' : ''}`}
             style={{ minHeight: '260px' }}
           >
             <h5 className="fw-bold mb-3 text-light" style={{ fontSize: '1.3rem' }}>Streak</h5>
             <div className="d-flex align-items-center justify-content-between mb-3">
               <div className="d-flex align-items-end">
-                <span className={`me-3 streak-flame ${streakBroken ? 'streak-flame-broken' : ''}`} style={{ fontSize: '2.3rem', lineHeight: 1, '--streak-flame-speed': flameSpeed }} role="img" aria-label="Streak">🔥</span>
+                <span className={`me-3 streak-flame ${streakDropped ? 'streak-flame-broken' : ''}`} style={{ fontSize: '2.3rem', lineHeight: 1, '--streak-flame-speed': flameSpeed }} role="img" aria-label="Streak">🔥</span>
                 <div>
                   <p className="mb-0 text-light fw-bold" style={{ fontSize: '2.4rem', lineHeight: 1 }}>{streakDays}</p>
                   <small className="text-white-50 text-uppercase" style={{ letterSpacing: '0.08em' }}>days in a row</small>
                 </div>
               </div>
-              <span className="badge rounded-pill" style={{ background: streakBroken ? 'rgba(248, 113, 113, 0.2)' : 'rgba(255, 252, 0, 0.12)', color: streakBroken ? '#fecaca' : '#ffc34d', padding: '0.5rem 0.8rem' }}>
-                +{reputationScore} rep
+              <span className="badge rounded-pill" style={{ background: streakDropped ? 'rgba(248, 113, 113, 0.2)' : 'rgba(255, 252, 0, 0.12)', color: streakDropped ? '#fecaca' : '#ffc34d', padding: '0.5rem 0.8rem' }}>
+                ask + answer + practice
               </span>
             </div>
 
-            {streakBroken && (
+            {streakDropped && (
               <div className="streak-broken-alert mb-3">
-                Streak broken: post or answer now to start a fresh streak.
+                You missed {daysSinceLastActivity} day{daysSinceLastActivity > 1 ? 's' : ''}, so your streak dropped by {daysSinceLastActivity}.
               </div>
             )}
 
             {streakAtRisk && (
               <div className="streak-risk-alert mb-3">
-                Streak at risk: post or answer today to avoid reset. Resets in <span className="fw-semibold text-light">{resetCountdownLabel}</span>.
+                Streak at risk: complete activity in the next few hours to avoid losing 1 streak day.
               </div>
             )}
 
@@ -163,15 +146,15 @@ function Home() {
                 {Array.from({ length: streakStep }).map((_, index) => (
                   <span
                     key={index}
-                    className={index < activeSegments ? `streak-segment-active ${streakBroken ? 'streak-segment-broken' : ''}` : ''}
+                    className={index < activeSegments ? `streak-segment-active ${streakDropped ? 'streak-segment-broken' : ''}` : ''}
                     style={{
                       height: '10px',
                       flex: 1,
                       borderRadius: '999px',
                       background: index < activeSegments
-                        ? (streakBroken ? 'linear-gradient(90deg, #fb7185, #ef4444)' : 'linear-gradient(90deg, #fffc00, #ff7a00)')
+                        ? (streakDropped ? 'linear-gradient(90deg, #fb7185, #ef4444)' : 'linear-gradient(90deg, #fffc00, #ff7a00)')
                         : 'rgba(148, 163, 184, 0.24)',
-                      boxShadow: index < activeSegments ? (streakBroken ? '0 0 12px rgba(239, 68, 68, 0.5)' : '0 0 14px rgba(255, 122, 0, 0.5)') : 'none',
+                      boxShadow: index < activeSegments ? (streakDropped ? '0 0 12px rgba(239, 68, 68, 0.5)' : '0 0 14px rgba(255, 122, 0, 0.5)') : 'none',
                       transition: 'all 0.3s ease'
                     }}
                   />
@@ -180,16 +163,16 @@ function Home() {
               <div className="mt-2" style={{
                 height: '4px',
                 width: `${streakProgress}%`,
-                background: streakBroken ? 'linear-gradient(90deg, #fb7185, #ef4444)' : 'linear-gradient(90deg, #fffc00, #ff7a00)',
+                background: streakDropped ? 'linear-gradient(90deg, #fb7185, #ef4444)' : 'linear-gradient(90deg, #fffc00, #ff7a00)',
                 borderRadius: '999px',
                 transition: 'width 0.35s ease'
               }}></div>
             </div>
 
             <p className="text-white-50 mb-0" style={{ fontSize: '0.95rem' }}>
-              {streakBroken
-                ? <>Your streak timer has reset. Jump back in by <a href="#ask" className="text-decoration-none text-info">Asking</a> or <a href="#answer" className="text-decoration-none text-info">Answering</a> today to rebuild momentum.</>
-                : <>Keep your streak alive by <a href="#ask" className="text-decoration-none text-info">Asking</a>, <a href="#answer" className="text-decoration-none text-info">Answering</a> & <a href="#edit" className="text-decoration-none text-info">Editing</a> every day. Next milestone: <span className="text-light fw-semibold">{nextStreakMilestone} days</span>.</>
+              {streakDropped
+                ? <>Streak decreases by 1 for each missed day. Add activity now by <a href="#ask" className="text-decoration-none text-info">Asking</a>, <a href="#answer" className="text-decoration-none text-info">Answering</a>, or submitting in <a href="#practice" className="text-decoration-none text-info">Practice</a>.</>
+                : <>Keep your streak alive with <a href="#ask" className="text-decoration-none text-info">Asking</a>, <a href="#answer" className="text-decoration-none text-info">Answering</a>, or solving a <a href="#practice" className="text-decoration-none text-info">Practice</a> problem. Next milestone: <span className="text-light fw-semibold">{nextStreakMilestone} days</span>.</>
               }
             </p>
           </div>

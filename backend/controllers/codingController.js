@@ -4,6 +4,7 @@ const CodingProblem = require("../models/CodingProblem");
 const CodingSubmission = require("../models/CodingSubmission");
 const User = require("../models/User");
 const Admin = require("../models/Admin");
+const { trackUserStreakActivity } = require("../utils/streakActivity");
 
 const SUPPORTED_LANGUAGES = ["javascript", "python", "java", "cpp"];
 
@@ -313,7 +314,7 @@ const submitCodingSolution = async (req, res) => {
       });
     }
 
-    await User.findByIdAndUpdate(req.user.id, { $set: { lastActivityAt: new Date() } });
+    await trackUserStreakActivity(req.user.id);
 
     res.status(201).json({
       message: "Submission saved",

@@ -43,6 +43,14 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
+  streakCount: {
+    type: Number,
+    default: 0
+  },
+  lastStreakDate: {
+    type: Date,
+    default: null
+  },
   codingScore: {
     type: Number,
     default: 0
