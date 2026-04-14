@@ -103,9 +103,9 @@ function Landing() {
                 className="text-light fw-bold"
                 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", lineHeight: 1.1, marginBottom: "1rem" }}
               >
-                Build Your Developer Identity.
+                Build, learn, and grow
                 <br />
-                Learn. Collaborate. Ship.
+                with one developer space.
               </h1>
               <p
                 style={{
@@ -116,16 +116,22 @@ function Landing() {
                   marginBottom: "1.5rem",
                 }}
               >
-                CodeVerse is a community platform where developers ask and answer questions,
-                share articles, join coding challenges, chat with peers, and explore AI-assisted
-                workflows in one place.
+                CodeVerse brings your learning flow into one place: ask questions, share answers,
+                practice coding, join challenges, and connect with other developers without leaving the platform.
               </p>
 
+              <div className="d-flex flex-wrap gap-2 mb-4">
+                <span className="badge rounded-pill" style={{ background: "rgba(94, 234, 212, 0.15)", color: "#a7f3d0", padding: "0.6rem 0.85rem" }}>Questions</span>
+                <span className="badge rounded-pill" style={{ background: "rgba(59, 130, 246, 0.15)", color: "#bfdbfe", padding: "0.6rem 0.85rem" }}>Practice</span>
+                <span className="badge rounded-pill" style={{ background: "rgba(251, 191, 36, 0.15)", color: "#fde68a", padding: "0.6rem 0.85rem" }}>Challenges</span>
+                <span className="badge rounded-pill" style={{ background: "rgba(168, 85, 247, 0.15)", color: "#ddd6fe", padding: "0.6rem 0.85rem" }}>AI Help</span>
+              </div>
+
               <div className="d-flex flex-column gap-2" style={{ color: "#e2e8f0" }}>
-                <div>- Ask questions, post solutions, and grow your reputation.</div>
-                <div>- Participate in challenges and track your progress.</div>
-                <div>- Connect with developers through real-time chat.</div>
-                <div>- Explore curated technical articles and AI support tools.</div>
+                <div>- Learn by asking targeted questions and reviewing answers.</div>
+                <div>- Improve consistency with a daily coding practice flow.</div>
+                <div>- Track progress with challenges, streaks, and submissions.</div>
+                <div>- Keep everything organized in one community workspace.</div>
               </div>
             </div>
 
@@ -145,6 +151,66 @@ function Landing() {
                   Designed for students, freshers, and working developers to practice, network,
                   and build a stronger technical portfolio through consistent activity.
                 </p>
+              </div>
+
+              <div className="row g-3 mb-3">
+                <div className="col-4">
+                  <div style={{ borderRadius: "1rem", padding: "0.95rem 0.75rem", background: "rgba(15, 23, 42, 0.45)", border: "1px solid rgba(94, 234, 212, 0.16)", color: "#e2e8f0", textAlign: "center" }}>
+                    <div className="fw-bold" style={{ fontSize: "1.35rem" }}>10k+</div>
+                    <div style={{ fontSize: "0.78rem", opacity: 0.8 }}>Learners</div>
+                  </div>
+                </div>
+                <div className="col-4">
+                  <div style={{ borderRadius: "1rem", padding: "0.95rem 0.75rem", background: "rgba(15, 23, 42, 0.45)", border: "1px solid rgba(59, 130, 246, 0.16)", color: "#e2e8f0", textAlign: "center" }}>
+                    <div className="fw-bold" style={{ fontSize: "1.35rem" }}>500+</div>
+                    <div style={{ fontSize: "0.78rem", opacity: 0.8 }}>Problems</div>
+                  </div>
+                </div>
+                <div className="col-4">
+                  <div style={{ borderRadius: "1rem", padding: "0.95rem 0.75rem", background: "rgba(15, 23, 42, 0.45)", border: "1px solid rgba(251, 191, 36, 0.16)", color: "#e2e8f0", textAlign: "center" }}>
+                    <div className="fw-bold" style={{ fontSize: "1.35rem" }}>95%</div>
+                    <div style={{ fontSize: "0.78rem", opacity: 0.8 }}>Active Rate</div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  borderRadius: "1.25rem",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  background: "linear-gradient(135deg, rgba(15, 23, 42, 0.7), rgba(6, 20, 28, 0.52))",
+                  padding: "1rem 1.1rem",
+                  marginBottom: "1.2rem",
+                  color: "#e2e8f0",
+                }}
+              >
+                <div style={{ fontSize: "0.78rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#99f6e4", marginBottom: "0.55rem" }}>
+                  What users say
+                </div>
+                <div style={{ fontSize: "0.95rem", lineHeight: 1.5, opacity: 0.92 }}>
+                  “CodeVerse keeps everything in one place. I can ask questions, practice coding, and track progress without switching tools.”
+                </div>
+                <div className="mt-2" style={{ fontSize: "0.82rem", color: "#cbd5e1" }}>
+                  - Developer community member
+                </div>
+              </div>
+
+              <div
+                style={{
+                  borderRadius: "1.25rem",
+                  border: "1px solid rgba(255,255,255,0.14)",
+                  background: "rgba(15, 23, 42, 0.55)",
+                  padding: "1.25rem",
+                  marginBottom: "1.2rem",
+                  color: "#e2e8f0",
+                }}
+              >
+                <h2 className="h5 fw-semibold text-light mb-3">Get Started</h2>
+                <div className="d-flex flex-column gap-2" style={{ fontSize: "0.95rem" }}>
+                  <div>1. Sign in or create your account.</div>
+                  <div>2. Explore questions, practice problems, and challenges.</div>
+                  <div>3. Build your streak, score, and profile reputation.</div>
+                </div>
               </div>
 
               <div className="d-grid gap-3">
@@ -188,6 +254,20 @@ function Landing() {
                   }}
                 >
                   Create An Account
+                </Link>
+
+                <Link
+                  to="/practice"
+                  className="btn fw-bold py-2"
+                  style={{
+                    borderRadius: "0.9rem",
+                    color: "#e2e8f0",
+                    border: "1px solid rgba(96, 165, 250, 0.35)",
+                    background: "linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(29, 78, 216, 0.65))",
+                    boxShadow: "0 10px 22px rgba(29, 78, 216, 0.2)",
+                  }}
+                >
+                  Start Practice
                 </Link>
               </div>
             </div>
