@@ -37,25 +37,52 @@ function Signup() {
   };
 
   return (
-    <div className="min-vh-100 d-flex align-items-center justify-content-center position-relative overflow-hidden py-5" style={{ background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)', minHeight: '100vh' }}>
-      {/* Animated Background Orbs */}
-      <div className="position-absolute" style={{ 
-        top: '-5%', 
-        right: '-10%', 
-        width: '400px', 
-        height: '400px', 
-        background: 'radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%)',
+    <div className="min-vh-100 d-flex align-items-center justify-content-center position-relative overflow-hidden py-5" style={{
+      background: 'linear-gradient(130deg, #071c26 0%, #0c2d3a 34%, #134e4a 72%, #3f6212 100%)',
+      minHeight: '100vh'
+    }}>
+      {/* Aurora glow layers */}
+      <div className="position-absolute" style={{
+        top: '-15%',
+        left: '-18%',
+        width: '44vw',
+        maxWidth: '520px',
+        minWidth: '260px',
+        aspectRatio: '1 / 1',
+        background: 'radial-gradient(circle, rgba(45, 212, 191, 0.28) 0%, transparent 70%)',
         borderRadius: '50%',
-        animation: 'float 8s ease-in-out infinite'
+        animation: 'drift 14s ease-in-out infinite'
       }}></div>
-      <div className="position-absolute" style={{ 
-        bottom: '-10%', 
-        left: '-5%', 
-        width: '350px', 
-        height: '350px', 
-        background: 'radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%)',
+      <div className="position-absolute" style={{
+        bottom: '-18%',
+        right: '-14%',
+        width: '48vw',
+        maxWidth: '560px',
+        minWidth: '280px',
+        aspectRatio: '1 / 1',
+        background: 'radial-gradient(circle, rgba(163, 230, 53, 0.24) 0%, transparent 72%)',
         borderRadius: '50%',
-        animation: 'float 10s ease-in-out infinite reverse'
+        animation: 'drift 18s ease-in-out infinite reverse'
+      }}></div>
+      <div className="position-absolute" style={{
+        top: '12%',
+        right: '20%',
+        width: '20vw',
+        maxWidth: '240px',
+        minWidth: '140px',
+        aspectRatio: '1 / 1',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(251, 191, 36, 0.16) 0%, transparent 72%)',
+        animation: 'pulseGlow 10s ease-in-out infinite'
+      }}></div>
+      <div className="position-absolute" style={{
+        inset: 0,
+        backgroundImage: 'linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px)',
+        backgroundSize: '48px 48px',
+        maskImage: 'radial-gradient(ellipse at center, rgba(0,0,0,0.9) 48%, rgba(0,0,0,0.12) 100%)',
+        WebkitMaskImage: 'radial-gradient(ellipse at center, rgba(0,0,0,0.9) 48%, rgba(0,0,0,0.12) 100%)',
+        opacity: 0.3,
+        pointerEvents: 'none'
       }}></div>
 
       {/* Main Container */}
@@ -318,9 +345,13 @@ function Signup() {
       </div>
 
       <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(30px); }
+        @keyframes drift {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          50% { transform: translate(20px, 28px) scale(1.08); }
+        }
+        @keyframes pulseGlow {
+          0%, 100% { opacity: 0.65; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.15); }
         }
         input::placeholder {
           color: rgba(255, 255, 255, 0.6) !important;
