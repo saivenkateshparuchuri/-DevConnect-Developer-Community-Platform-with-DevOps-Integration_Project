@@ -2,15 +2,35 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import AnswerBox from "./AnswerBox";
 import AnswerList from "./AnswerList";
+import { adminDeletePost } from "../services/api";
 
-function PostCard({ post, onAnswerAdded }) {
+function PostCard({ post, onAnswerAdded, onPostDeleted }) {
   const [showAnswers, setShowAnswers] = useState(false);
   const [showAnswerBox, setShowAnswerBox] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  const isAdmin = Boolean(localStorage.getItem("adminToken"));
 
   // StackOverflow dummy stats
   const votes = Math.floor(Math.random() * 50) + 1;
   const views = Math.floor(Math.random() * 500) + 20;
   const answerCount = post.answers?.length || 0;
+
+  const handleDelete = async () => {
+    if (!isAdmin || deleting) return;
+    if (!window.confirm("Delete this question post?")) return;
+
+    try {
+      setDeleting(true);
+      const adminToken = localStorage.getItem("adminToken");
+      await adminDeletePost(post._id, adminToken);
+      if (onPostDeleted) onPostDeleted(post._id);
+    } catch (err) {
+      alert(err.message || "Failed to delete post");
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   return (
     <div className="card glass-glow mb-4 border-0 border-bottom border-secondary border-opacity-25 pb-3 hover-move glow-border fade-in-scale">
@@ -47,6 +67,15 @@ function PostCard({ post, onAnswerAdded }) {
               >
                 {showAnswerBox ? "Cancel" : "Add Answer"}
               </button>
+              {isAdmin && (
+                <button
+                  onClick={handleDelete}
+                  disabled={deleting}
+                  className="btn btn-sm btn-outline-danger rounded-pill px-3"
+                >
+                  {deleting ? "Deleting..." : "Delete"}
+                </button>
+              )}
             </div>
 
             <div className="bg-light p-2 rounded small" style={{ minWidth: "150px" }}>

@@ -104,7 +104,7 @@ function Questions() {
               post.content.toLowerCase().includes(searchQuery.toLowerCase())
             )
             .map((post) => (
-              <PostCard key={post._id} post={post} onAnswerAdded={fetchPosts} />
+              <PostCard key={post._id} post={post} onAnswerAdded={fetchPosts} onPostDeleted={fetchPosts} />
             ))
           }
           {posts.filter(post => 
