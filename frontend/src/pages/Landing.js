@@ -187,11 +187,43 @@ function Landing() {
                 <div style={{ fontSize: "0.78rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#99f6e4", marginBottom: "0.55rem" }}>
                   What users say
                 </div>
-                <div style={{ fontSize: "0.95rem", lineHeight: 1.5, opacity: 0.92 }}>
-                  “CodeVerse keeps everything in one place. I can ask questions, practice coding, and track progress without switching tools.”
-                </div>
-                <div className="mt-2" style={{ fontSize: "0.82rem", color: "#cbd5e1" }}>
-                  - Developer community member
+                <div className="d-flex flex-column gap-2">
+                  <div style={{ borderRadius: "0.95rem", padding: "0.85rem 0.9rem", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(148,163,184,0.14)" }}>
+                    <div className="d-flex align-items-center justify-content-between mb-2">
+                      <div className="d-flex align-items-center gap-2">
+                        <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "linear-gradient(135deg, #5eead4, #3b82f6)", color: "#04111a", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: "0.8rem" }}>A</div>
+                        <div style={{ fontSize: "0.82rem", color: "#cbd5e1", fontWeight: 600 }}>Aisha</div>
+                      </div>
+                      <div style={{ fontSize: "0.8rem", color: "#fbbf24" }}>★★★★★</div>
+                    </div>
+                    <div style={{ fontSize: "0.92rem", lineHeight: 1.5, opacity: 0.94 }}>
+                      “The practice page helped me build a daily routine. It feels focused and actually useful.”
+                    </div>
+                  </div>
+                  <div style={{ borderRadius: "0.95rem", padding: "0.85rem 0.9rem", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(148,163,184,0.14)" }}>
+                    <div className="d-flex align-items-center justify-content-between mb-2">
+                      <div className="d-flex align-items-center gap-2">
+                        <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "linear-gradient(135deg, #60a5fa, #a78bfa)", color: "#04111a", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: "0.8rem" }}>R</div>
+                        <div style={{ fontSize: "0.82rem", color: "#cbd5e1", fontWeight: 600 }}>Rahul</div>
+                      </div>
+                      <div style={{ fontSize: "0.8rem", color: "#fbbf24" }}>★★★★★</div>
+                    </div>
+                    <div style={{ fontSize: "0.92rem", lineHeight: 1.5, opacity: 0.94 }}>
+                      “I like that I can ask questions, solve challenges, and keep my progress in one place.”
+                    </div>
+                  </div>
+                  <div style={{ borderRadius: "0.95rem", padding: "0.85rem 0.9rem", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(148,163,184,0.14)" }}>
+                    <div className="d-flex align-items-center justify-content-between mb-2">
+                      <div className="d-flex align-items-center gap-2">
+                        <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "linear-gradient(135deg, #fbbf24, #fb7185)", color: "#04111a", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: "0.8rem" }}>M</div>
+                        <div style={{ fontSize: "0.82rem", color: "#cbd5e1", fontWeight: 600 }}>Meera</div>
+                      </div>
+                      <div style={{ fontSize: "0.8rem", color: "#fbbf24" }}>★★★★★</div>
+                    </div>
+                    <div style={{ fontSize: "0.92rem", lineHeight: 1.5, opacity: 0.94 }}>
+                      “The intro page is clean, and the platform feels built for real learners, not just a demo.”
+                    </div>
+                  </div>
                 </div>
               </div>
 
