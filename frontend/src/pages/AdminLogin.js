@@ -298,7 +298,7 @@ function AdminLogin() {
 
               {/* Return Link */}
               <Link 
-                to="/" 
+                to="/login" 
                 className="btn w-100 d-block text-center text-decoration-none fw-500 py-2 slide-in-up delay-4"
                 style={{
                   background: 'rgba(255, 255, 255, 0.05)',

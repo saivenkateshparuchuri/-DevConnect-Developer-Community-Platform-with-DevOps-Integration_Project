@@ -25,7 +25,7 @@ function Signup() {
       const data = await signup({ name, email, password });
 
       if (data.message === "User registered successfully") {
-        navigate("/");
+        navigate("/login");
       } else {
         setError(data.message || "Registration failed");
       }
@@ -313,7 +313,7 @@ function Signup() {
               
               {/* Sign In Link */}
               <Link 
-                to="/" 
+                to="/login" 
                 className="btn w-100 d-block text-center text-decoration-none fw-500 py-2 slide-in-up delay-4"
                 style={{
                   background: 'rgba(255, 255, 255, 0.05)',

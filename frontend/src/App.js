@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import Landing from "./pages/Landing";
 import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Profile from "./pages/Profile";
@@ -50,7 +51,8 @@ function App() {
       <Routes>
 
         {/* Public */}
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
 
         {/* Protected */}
         <Route path="/home" element={
