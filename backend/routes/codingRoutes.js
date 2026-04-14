@@ -7,6 +7,7 @@ const {
   getCodingProblemById,
   createCodingProblem,
   updateCodingProblem,
+  deleteCodingProblem,
   submitCodingSolution,
   getMyCodingSubmissions,
   getMyCodingStats,
@@ -18,6 +19,7 @@ router.get("/problems", authMiddleware, getCodingProblems);
 router.get("/problems/:id", authMiddleware, getCodingProblemById);
 router.post("/problems", authMiddleware, adminMiddleware, createCodingProblem);
 router.put("/problems/:id", authMiddleware, adminMiddleware, updateCodingProblem);
+router.delete("/problems/:id", authMiddleware, adminMiddleware, deleteCodingProblem);
 
 router.post("/problems/:id/submit", authMiddleware, submitCodingSolution);
 router.get("/submissions/me", authMiddleware, getMyCodingSubmissions);

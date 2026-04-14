@@ -252,6 +252,27 @@ const updateCodingProblem = async (req, res) => {
   }
 };
 
+const deleteCodingProblem = async (req, res) => {
+  try {
+    const deleted = await CodingProblem.findByIdAndDelete(req.params.id).select("_id title");
+    if (!deleted) {
+      return res.status(404).json({ message: "Coding problem not found" });
+    }
+
+    await CodingSubmission.deleteMany({ problem: req.params.id });
+
+    res.json({
+      message: "Coding problem deleted",
+      deleted: {
+        id: deleted._id,
+        title: deleted.title
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Error deleting coding problem" });
+  }
+};
+
 const submitCodingSolution = async (req, res) => {
   try {
     const { language, code } = req.body;
@@ -433,6 +454,7 @@ module.exports = {
   getCodingProblemById,
   createCodingProblem,
   updateCodingProblem,
+  deleteCodingProblem,
   submitCodingSolution,
   getMyCodingSubmissions,
   getMyCodingStats,

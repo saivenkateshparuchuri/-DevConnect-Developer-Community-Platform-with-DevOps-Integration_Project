@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import Layout from "../components/Layout";
 import {
   createCodingProblem,
+  deleteCodingProblem,
   getCodingProblemById,
   getCodingProblems,
   getMyCodingStats,
@@ -235,6 +236,30 @@ function CodingPractice() {
     }
   };
 
+  const onAdminDelete = async () => {
+    const targetId = selectedProblem?._id || adminForm.id;
+    if (!targetId) {
+      setError("Select a problem first to delete");
+      return;
+    }
+
+    if (!window.confirm("Delete this practice problem permanently?")) return;
+
+    setAdminLoading(true);
+    setError("");
+    try {
+      await deleteCodingProblem(targetId);
+      resetAdminForm();
+      setSelectedProblem(null);
+      setSelectedProblemId(null);
+      await loadAll();
+    } catch (err) {
+      setError(err.message || "Failed to delete coding problem");
+    } finally {
+      setAdminLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <Layout>
@@ -439,6 +464,14 @@ function CodingPractice() {
                 </div>
                 <button type="button" className="btn btn-success btn-sm" onClick={onAdminSave} disabled={adminLoading}>
                   {adminLoading ? "Saving..." : adminForm.id ? "Update Problem" : "Create Problem"}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger btn-sm"
+                  onClick={onAdminDelete}
+                  disabled={adminLoading || (!selectedProblem?._id && !adminForm.id)}
+                >
+                  Delete Selected Problem
                 </button>
               </div>
             </div>

@@ -157,6 +157,19 @@ export const updateCodingProblem = async (problemId, payload) => {
   return data;
 };
 
+export const deleteCodingProblem = async (problemId) => {
+  const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+  const res = await fetch(`${BASE_URL}/coding/problems/${problemId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: token
+    }
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to delete coding problem");
+  return data;
+};
+
 export const submitCodingSolution = async (problemId, payload) => {
   const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
   const res = await fetch(`${BASE_URL}/coding/problems/${problemId}/submit`, {
