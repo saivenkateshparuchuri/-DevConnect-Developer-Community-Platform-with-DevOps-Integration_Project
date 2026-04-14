@@ -21,6 +21,9 @@ const SvgCompany = () => (
 const SvgChallenge = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-1.02.9C6.46 17.5 4 15 4 12V9h16v3c0 3-2.46 5.5-4.98 5.9-.55.08-1.02-.35-1.02-.9v-2.34"></path></svg>
 );
+const SvgCode = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+);
 const SvgChat = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
 );
@@ -197,6 +200,7 @@ function Layout({ children }) {
               </div>
             </div>
             {renderLink("Challenges", "/challenges", <SvgChallenge />)}
+            {renderLink("Practice", "/practice", <SvgCode />)}
             <div className="mt-4 mb-3 px-3">
               <div className="sidebar-section-divider">
                 <span className="sidebar-section-title">RESOURCES</span>

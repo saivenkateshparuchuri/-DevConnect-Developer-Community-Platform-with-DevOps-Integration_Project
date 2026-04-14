@@ -109,6 +109,87 @@ export const getChallenges = async () => {
   return res.json();
 };
 
+export const getCodingProblems = async () => {
+  const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+  const res = await fetch(`${BASE_URL}/coding/problems`, {
+    headers: { Authorization: token }
+  });
+  if (!res.ok) throw new Error("Failed to fetch coding problems");
+  return res.json();
+};
+
+export const getCodingProblemById = async (problemId) => {
+  const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+  const res = await fetch(`${BASE_URL}/coding/problems/${problemId}`, {
+    headers: { Authorization: token }
+  });
+  if (!res.ok) throw new Error("Failed to fetch coding problem");
+  return res.json();
+};
+
+export const createCodingProblem = async (payload) => {
+  const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+  const res = await fetch(`${BASE_URL}/coding/problems`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token
+    },
+    body: JSON.stringify(payload)
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to create coding problem");
+  return data;
+};
+
+export const updateCodingProblem = async (problemId, payload) => {
+  const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+  const res = await fetch(`${BASE_URL}/coding/problems/${problemId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token
+    },
+    body: JSON.stringify(payload)
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to update coding problem");
+  return data;
+};
+
+export const submitCodingSolution = async (problemId, payload) => {
+  const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+  const res = await fetch(`${BASE_URL}/coding/problems/${problemId}/submit`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token
+    },
+    body: JSON.stringify(payload)
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to submit coding solution");
+  return data;
+};
+
+export const getMyCodingSubmissions = async () => {
+  const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+  const res = await fetch(`${BASE_URL}/coding/submissions/me`, {
+    headers: { Authorization: token }
+  });
+  if (!res.ok) throw new Error("Failed to fetch coding submissions");
+  return res.json();
+};
+
+export const getMyCodingStats = async () => {
+  const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+  const res = await fetch(`${BASE_URL}/coding/stats/me`, {
+    headers: { Authorization: token }
+  });
+  if (!res.ok) throw new Error("Failed to fetch coding stats");
+  return res.json();
+};
+
 export const getChallengeById = async (id) => {
   const res = await fetch(`${BASE_URL}/challenges/${id}`);
   if (!res.ok) throw new Error("Failed to fetch challenge");

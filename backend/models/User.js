@@ -42,6 +42,14 @@ const userSchema = new mongoose.Schema({
   lastActivityAt: {
     type: Date,
     default: Date.now
+  },
+  codingScore: {
+    type: Number,
+    default: 0
+  },
+  codingSolvedCount: {
+    type: Number,
+    default: 0
   }
 });
 

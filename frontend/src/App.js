@@ -16,6 +16,7 @@ import AI from "./pages/AI";
 import Challenges from "./pages/Challenges";
 import ActiveChallenge from "./pages/ActiveChallenge";
 import ChallengeResults from "./pages/ChallengeResults";
+import CodingPractice from "./pages/CodingPractice";
 import { getCurrentUser } from "./services/api";
 
 import AdminLogin from "./pages/AdminLogin";
@@ -102,6 +103,9 @@ function App() {
         } />
         <Route path="/challenges/:id/results" element={
           <ProtectedRoute><ChallengeResults /></ProtectedRoute>
+        } />
+        <Route path="/practice" element={
+          <ProtectedRoute><CodingPractice /></ProtectedRoute>
         } />
         
         <Route path="/signup" element={<Signup />} />
