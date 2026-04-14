@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 function Landing() {
   const navigate = useNavigate();
-  const isAuthenticated = Boolean(localStorage.getItem("token") || localStorage.getItem("adminToken"));
 
   return (
     <div
@@ -219,7 +218,7 @@ function Landing() {
 
                 <button
                   type="button"
-                  onClick={() => navigate(isAuthenticated ? "/practice" : "/login")}
+                  onClick={() => navigate("/practice")}
                   className="btn fw-bold py-2"
                   style={{
                     borderRadius: "0.9rem",
