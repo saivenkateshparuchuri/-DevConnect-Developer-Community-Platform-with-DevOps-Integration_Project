@@ -70,8 +70,8 @@ function Landing() {
                 borderRight: "1px solid rgba(255,255,255,0.12)",
               }}
             >
-              <div className="d-inline-flex align-items-center gap-2" style={{ marginBottom: "0.9rem" }}>
-                <svg width="20" height="20" viewBox="0 0 65 65" aria-hidden="true">
+              <div className="d-inline-flex align-items-center gap-3" style={{ marginBottom: "1.15rem" }}>
+                <svg width="52" height="52" viewBox="0 0 65 65" aria-hidden="true">
                   <defs>
                     <linearGradient id="landingLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stopColor="#5eead4" />
@@ -94,11 +94,12 @@ function Landing() {
                     letterSpacing: "0.12em",
                     fontWeight: 700,
                     color: "#99f6e4",
-                    fontSize: "0.75rem",
+                    fontSize: "clamp(1.35rem, 2.2vw, 1.9rem)",
                     textTransform: "uppercase",
+                    textShadow: "0 6px 18px rgba(6, 182, 212, 0.25)",
                   }}
                 >
-                  CodeVerse Platform
+                  CodeVerse
                 </span>
               </div>
               <h1
