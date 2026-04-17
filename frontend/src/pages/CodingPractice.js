@@ -59,6 +59,23 @@ const parseExamplesText = (value) =>
     })
     .filter((example) => example.input && example.output);
 
+const DIFFICULTY_ORDER = {
+  Easy: 0,
+  Medium: 1,
+  Hard: 2
+};
+
+const sortProblemsByDifficulty = (problems) =>
+  [...problems].sort((left, right) => {
+    const difficultyDelta = (DIFFICULTY_ORDER[left.difficulty] ?? 99) - (DIFFICULTY_ORDER[right.difficulty] ?? 99);
+    if (difficultyDelta !== 0) return difficultyDelta;
+
+    const pointsDelta = (left.points || 0) - (right.points || 0);
+    if (pointsDelta !== 0) return pointsDelta;
+
+    return (left.title || "").localeCompare(right.title || "");
+  });
+
 function CodingPractice() {
   const [problems, setProblems] = useState([]);
   const [selectedProblemId, setSelectedProblemId] = useState(null);
@@ -75,6 +92,12 @@ function CodingPractice() {
   const isAdmin = Boolean(localStorage.getItem("adminToken"));
   const [adminForm, setAdminForm] = useState(defaultAdminForm);
   const [adminLoading, setAdminLoading] = useState(false);
+
+  const orderedProblems = useMemo(() => sortProblemsByDifficulty(problems), [problems]);
+  const visibleProblems = useMemo(
+    () => (isAdmin ? orderedProblems : orderedProblems.slice(0, 10)),
+    [isAdmin, orderedProblems]
+  );
 
   const selectedStarterCode = useMemo(() => {
     if (!selectedProblem?.starterCode) return "";
@@ -99,14 +122,17 @@ function CodingPractice() {
         getMyCodingStats()
       ]);
 
-      setProblems(problemList);
+      const sortedProblems = sortProblemsByDifficulty(problemList);
+      setProblems(sortedProblems);
       setSubmissions(mySubmissions);
       setStats(myStats);
 
-      if (problemList.length > 0) {
-        const nextId = selectedProblemId && problemList.some((problem) => problem._id === selectedProblemId)
+      const availableProblems = isAdmin ? sortedProblems : sortedProblems.slice(0, 10);
+
+      if (availableProblems.length > 0) {
+        const nextId = selectedProblemId && availableProblems.some((problem) => problem._id === selectedProblemId)
           ? selectedProblemId
-          : problemList[0]._id;
+          : availableProblems[0]._id;
 
         setSelectedProblemId(nextId);
         await loadProblemDetails(nextId);
@@ -297,7 +323,7 @@ function CodingPractice() {
           <div className="p-3 rounded-4" style={{ background: "rgba(15, 23, 42, 0.72)", border: "1px solid rgba(148, 163, 184, 0.2)" }}>
             <h5 className="text-light fw-semibold mb-3">Problem Sets</h5>
             <div className="d-flex flex-column gap-2">
-              {problems.map((problem) => {
+              {visibleProblems.map((problem) => {
                 const active = selectedProblemId === problem._id;
                 return (
                   <button
