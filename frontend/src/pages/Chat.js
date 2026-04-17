@@ -441,9 +441,9 @@ function Chat() {
                   </div>
                   <div className="d-flex flex-column lh-sm overflow-hidden w-100">
                     <div className="d-flex justify-content-between align-items-center">
-                      <span className={`fw-bold small ${activeContact?.id === c.id ? "text-dark" : "text-dark"}`}>{c.name}</span>
+                      <span className={`fw-bold small ${activeContact?.id === c.id ? "text-white" : "text-light"}`}>{c.name}</span>
                       {c.lastTime && (
-                        <span className="text-muted" style={{ fontSize: "0.65rem", flexShrink: 0 }}>
+                        <span className="text-white-50" style={{ fontSize: "0.65rem", flexShrink: 0 }}>
                           {formatTime(c.lastTime)}
                         </span>
                       )}
