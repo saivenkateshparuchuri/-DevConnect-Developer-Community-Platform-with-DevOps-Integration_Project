@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import PostCard from "../components/PostCard";
-import { getPosts, getCurrentUser, getTopUsers } from "../services/api";
+import { getPosts, getCurrentUser, getTopUsers, getMyCodingStats } from "../services/api";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
@@ -9,6 +9,7 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
   const [topUsers, setTopUsers] = useState([]);
+  const [codingStats, setCodingStats] = useState(null);
   const [typedGreeting, setTypedGreeting] = useState("");
   const navigate = useNavigate();
   const fullGreeting = `Hey ${currentUser ? currentUser.name : "Developer"}, what do you want to learn today?`;
@@ -38,10 +39,11 @@ function Home() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const [postsData, userData, topUsersData] = await Promise.all([
+        const [postsData, userData, topUsersData, codingStatsData] = await Promise.all([
           getPosts(),
           getCurrentUser(),
-          getTopUsers()
+          getTopUsers(),
+          getMyCodingStats().catch(() => null)
         ]);
         
         setPosts(postsData);
@@ -51,6 +53,7 @@ function Home() {
         if (topUsersData && Array.isArray(topUsersData)) {
           setTopUsers(topUsersData);
         }
+        setCodingStats(codingStatsData);
       } catch (err) {
         console.error("Failed to fetch dashboard data", err);
       } finally {
@@ -93,9 +96,9 @@ function Home() {
           type="button"
           className="btn btn-glass shadow-sm hover-move slide-in-right delay-2"
           style={{ minWidth: '170px', padding: '0.9rem 1.4rem' }}
-          onClick={() => navigate('/questions')}
+          onClick={() => navigate('/practice')}
         >
-          Ask Question
+          Start Practice
         </button>
       </div>
 
@@ -180,18 +183,29 @@ function Home() {
 
         {/* Challenge Spotlight */}
         <div className="col-xl-4 col-lg-5 col-md-6 fade-in-scale delay-2">
-          <div className="card glass-glow border-0 h-100 p-4 rounded-3 position-relative hover-move glow-border" style={{ minHeight: '260px' }}>
+          <div
+            className="card border-0 h-100 p-4 rounded-3 position-relative hover-move"
+            style={{
+              minHeight: '260px',
+              overflow: 'hidden',
+              background: 'linear-gradient(160deg, rgba(249, 115, 22, 0.18) 0%, rgba(244, 63, 94, 0.08) 35%, rgba(15, 23, 42, 0.96) 100%)',
+              border: '1px solid rgba(251, 146, 60, 0.24)',
+              boxShadow: '0 20px 45px rgba(249, 115, 22, 0.16)'
+            }}
+          >
+            <div style={{ position: 'absolute', top: '-30px', right: '-35px', width: '120px', height: '120px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(251, 146, 60, 0.28), rgba(251, 146, 60, 0))', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', bottom: '-42px', left: '-30px', width: '130px', height: '130px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(244, 114, 182, 0.14), rgba(244, 114, 182, 0))', pointerEvents: 'none' }} />
             <div className="d-flex justify-content-between align-items-center mb-4">
               <h5 className="fw-bold mb-0 text-light" style={{ fontSize: '1.3rem' }}>Challenge spotlight</h5>
-              <span className="text-warning fw-semibold" style={{ letterSpacing: '0.04em' }}>Live</span>
+              <span className="badge rounded-pill" style={{ background: 'rgba(251, 146, 60, 0.16)', color: '#fed7aa', padding: '0.55rem 0.85rem' }}>Featured path</span>
             </div>
             <p className="text-white-50 mb-4" style={{ fontSize: '0.95rem' }}>
               Build momentum with a focused challenge, sharpen your skills, and earn visible progress.
             </p>
             <div className="d-flex flex-wrap gap-2 mb-4">
-              <span className="tag-badge slide-in-up delay-1">daily practice</span>
-              <span className="tag-badge slide-in-up delay-2">skill growth</span>
-              <span className="tag-badge slide-in-up delay-3">reputation boost</span>
+              <span className="tag-badge slide-in-up delay-1" style={{ background: 'rgba(251, 146, 60, 0.18)', color: '#fed7aa' }}>daily practice</span>
+              <span className="tag-badge slide-in-up delay-2" style={{ background: 'rgba(244, 63, 94, 0.14)', color: '#fecdd3' }}>skill growth</span>
+              <span className="tag-badge slide-in-up delay-3" style={{ background: 'rgba(234, 179, 8, 0.14)', color: '#fde68a' }}>reputation boost</span>
             </div>
             <button className="btn btn-glass rounded-pill mt-auto w-75 py-2" onClick={() => navigate('/challenges')} style={{ fontSize: '0.95rem' }}>
               View challenges
@@ -199,34 +213,59 @@ function Home() {
           </div>
         </div>
 
-        {/* AI Assistant */}
+        {/* Coding Progress */}
         <div className="col-xl-4 col-lg-5 col-md-6 slide-in-right delay-3">
-          <div className="card glass-glow border-0 h-100 p-4 rounded-3 hover-move glow-border" style={{ minHeight: '260px' }}>
+          <div
+            className="card border-0 h-100 p-4 rounded-3 hover-move"
+            style={{
+              minHeight: '260px',
+              overflow: 'hidden',
+              background: 'linear-gradient(180deg, rgba(34, 197, 94, 0.12) 0%, rgba(15, 23, 42, 0.95) 100%)',
+              border: '1px solid rgba(74, 222, 128, 0.2)',
+              boxShadow: '0 20px 45px rgba(34, 197, 94, 0.12)'
+            }}
+          >
+            <div style={{ position: 'absolute', top: '-28px', left: '-28px', width: '110px', height: '110px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(74, 222, 128, 0.24), rgba(74, 222, 128, 0))', pointerEvents: 'none' }} />
             <div className="d-flex align-items-center justify-content-between mb-3">
-              <h5 className="fw-bold mb-0 text-light" style={{ fontSize: '1.3rem' }}>AI assistant</h5>
-              <span className="badge rounded-pill" style={{ background: 'rgba(59, 130, 246, 0.18)', color: '#bfdbfe', padding: '0.5rem 0.8rem' }}>
-                Fast answers
+              <h5 className="fw-bold mb-0 text-light" style={{ fontSize: '1.3rem' }}>Coding progress</h5>
+              <span className="badge rounded-pill" style={{ background: 'rgba(34, 197, 94, 0.18)', color: '#bbf7d0', padding: '0.5rem 0.8rem' }}>
+                Live stats
               </span>
             </div>
             <p className="text-white-50 mb-4 mt-2" style={{ fontSize: '0.95rem' }}>
-              Draft questions, refine answers, or get a quick explanation before you post.
+              Track how your practice is translating into solved problems and accepted submissions.
             </p>
-            <div className="d-flex flex-column gap-2 mb-4">
-              <div className="d-flex align-items-center gap-2 text-light small">
-                <span>•</span>
-                <span>Summarize complex topics in seconds</span>
+            <div className="mb-4" style={{ height: '8px', borderRadius: '999px', background: 'rgba(148, 163, 184, 0.16)', overflow: 'hidden' }}>
+              <div style={{ width: `${Math.min(100, (codingStats?.acceptedSubmissions || 0) * 12)}%`, height: '100%', borderRadius: '999px', background: 'linear-gradient(90deg, #34d399, #22c55e, #86efac)', boxShadow: '0 0 16px rgba(34, 197, 94, 0.4)' }} />
+            </div>
+            <div className="row g-2 mb-4">
+              <div className="col-6">
+                <div className="rounded-3 p-3" style={{ background: 'rgba(6, 78, 59, 0.22)', border: '1px solid rgba(74, 222, 128, 0.18)' }}>
+                  <div className="text-white-50 small">Coding score</div>
+                  <div className="text-light fw-bold fs-4">{codingStats?.codingScore ?? "--"}</div>
+                </div>
               </div>
-              <div className="d-flex align-items-center gap-2 text-light small">
-                <span>•</span>
-                <span>Turn rough notes into clear questions</span>
+              <div className="col-6">
+                <div className="rounded-3 p-3" style={{ background: 'rgba(6, 78, 59, 0.22)', border: '1px solid rgba(74, 222, 128, 0.18)' }}>
+                  <div className="text-white-50 small">Solved</div>
+                  <div className="text-light fw-bold fs-4">{codingStats?.solvedProblems ?? "--"}</div>
+                </div>
               </div>
-              <div className="d-flex align-items-center gap-2 text-light small">
-                <span>•</span>
-                <span>Jump directly into the AI workspace</span>
+              <div className="col-6">
+                <div className="rounded-3 p-3" style={{ background: 'rgba(6, 78, 59, 0.22)', border: '1px solid rgba(74, 222, 128, 0.18)' }}>
+                  <div className="text-white-50 small">Accepted</div>
+                  <div className="text-light fw-bold fs-4">{codingStats?.acceptedSubmissions ?? "--"}</div>
+                </div>
+              </div>
+              <div className="col-6">
+                <div className="rounded-3 p-3" style={{ background: 'rgba(6, 78, 59, 0.22)', border: '1px solid rgba(74, 222, 128, 0.18)' }}>
+                  <div className="text-white-50 small">Submissions</div>
+                  <div className="text-light fw-bold fs-4">{codingStats?.totalSubmissions ?? "--"}</div>
+                </div>
               </div>
             </div>
-            <button className="btn btn-glass rounded-pill mt-auto w-75 py-2" onClick={() => navigate('/ai')} style={{ fontSize: '0.95rem' }}>
-              Open AI helper
+            <button className="btn btn-glass rounded-pill mt-auto w-75 py-2" onClick={() => navigate('/practice')} style={{ fontSize: '0.95rem' }}>
+              Open practice
             </button>
           </div>
         </div>
@@ -293,7 +332,7 @@ function Home() {
         </div>
       ) : posts.length === 0 ? (
         <div className="text-center text-light py-5 card glass-panel border-0 bg-transparent">
-           No matching posts found based on your history. Let's ask a question!
+           No matching posts found based on your history. Let's start a practice round!
         </div>
       ) : (
         <div className="d-flex flex-column gap-1">

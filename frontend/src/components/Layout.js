@@ -377,8 +377,8 @@ function Layout({ children }) {
           <div className="mb-4">
             <h6 className="text-light fw-bold mb-3">⚡ Quick Actions</h6>
             <div className="d-grid gap-2">
-              <button className="btn btn-glass btn-sm text-start" onClick={() => navigate('/questions')}>
-                <SvgZap /> Ask Question
+              <button className="btn btn-glass btn-sm text-start" onClick={() => navigate('/practice')}>
+                <SvgZap /> Start Practice
               </button>
               <button className="btn btn-glass btn-sm text-start" onClick={() => navigate('/challenges')}>
                 <SvgChallenge /> View Challenges
