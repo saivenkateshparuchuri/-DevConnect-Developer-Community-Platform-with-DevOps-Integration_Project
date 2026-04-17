@@ -358,11 +358,25 @@ function CodingPractice() {
 
                 <div className="mb-3">
                   <div className="small text-info fw-semibold text-uppercase mb-1">Examples</div>
-                  {(selectedProblem.examples || []).map((example, index) => (
-                    <div key={`${example.input}-${index}`} className="text-white-50" style={{ fontSize: "0.9rem" }}>
-                      - {example.input}{" -> "}{example.output}
+                  {(selectedProblem.examples || []).length > 0 ? (
+                    <div className="d-flex flex-column gap-2">
+                      {(selectedProblem.examples || []).map((example, index) => (
+                        <div
+                          key={`${example.input}-${index}`}
+                          className="rounded-3 p-3"
+                          style={{ background: "rgba(15, 23, 42, 0.55)", border: "1px solid rgba(148, 163, 184, 0.18)" }}
+                        >
+                          <div className="text-white-50 small mb-1">Example {index + 1}</div>
+                          <div className="text-light mb-2"><span className="text-info fw-semibold">Input:</span> {example.input}</div>
+                          <div className="text-light"><span className="text-info fw-semibold">Output:</span> {example.output}</div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  ) : (
+                    <div className="text-white-50" style={{ fontSize: "0.9rem" }}>
+                      No example is available for this problem yet.
+                    </div>
+                  )}
                 </div>
 
                 <div className="mb-3">
